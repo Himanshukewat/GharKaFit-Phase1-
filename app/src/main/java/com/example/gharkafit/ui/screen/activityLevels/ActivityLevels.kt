@@ -1,5 +1,4 @@
-package com.example.gharkafit.Screens
-
+package com.example.gharkafit.ui.screen.activityLevels
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,16 +7,24 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.gharkafit.core.ActivityLevel
-
-
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gharkafit.data.MainDatabase
+import com.example.gharkafit.model.ActivityLevel
+import com.example.gharkafit.ui.component.ActivityCard
+import com.example.gharkafit.ui.screen.activityLevel.ActivityLevelsVM
+import com.example.gharkafit.ui.screen.activityLevel.ActivityLevelsVMF
 
 @Composable
-fun ActivityLevels(
-    onContinue: (ActivityLevel) -> Unit
-) {
+fun ActivityLevels() {
+
+    val context = LocalContext.current
+    val db = MainDatabase.getDatabase(context)
+
+    val viewModel: ActivityLevelsVM = viewModel(
+        factory = ActivityLevelsVMF(db.userDao())
+    )
 
     var selectedActivity by remember { mutableStateOf<ActivityLevel?>(null) }
 
@@ -67,7 +74,9 @@ fun ActivityLevels(
 
         Button(
             onClick = {
-                selectedActivity?.let { onContinue(it) }
+                selectedActivity?.let {
+                    viewModel.saveActivity(it.name)
+                }
             },
             enabled = selectedActivity != null,
             modifier = Modifier.fillMaxWidth()
@@ -75,48 +84,4 @@ fun ActivityLevels(
             Text("Continue")
         }
     }
-}
-
-
-@Composable
-fun ActivityCard(
-    title: String,
-    description: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    val bgColor = if (isSelected) Color(0xFFE8F5E9) else Color.White
-    val borderColor = if (isSelected) Color(0xFF4CAF50) else Color.LightGray
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = bgColor),
-        border = CardDefaults.outlinedCardBorder().copy(
-            width = 1.dp,
-            brush = androidx.compose.ui.graphics.SolidColor(borderColor)
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Text(text = title, style = MaterialTheme.typography.titleMedium)
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ActivityRoutineScreenPreview() {
-    ActivityLevels(
-        onContinue = { /* preview ke liye empty */ }
-    )
 }
