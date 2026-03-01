@@ -1,26 +1,25 @@
-package com.example.gharkafit.Screens
+package com.example.gharkafit.ui.screen.dietHabit
 
-
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
-enum class DietHabit {
-    PROCESSED,
-    MIXED,
-    HOME
-}
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gharkafit.data.MainDatabase
+import com.example.gharkafit.model.DietHabit
+import com.example.gharkafit.ui.component.DietHabitCard
 
 @Composable
-fun DietHabbit(
-    onContinue: (DietHabit) -> Unit
-) {
+fun DietHabit() {
+
+    val context = LocalContext.current
+    val db = MainDatabase.getDatabase(context)
+
+    val viewModel: DietHabitVM = viewModel(
+        factory = DietHabitVMF(db.userDao())
+    )
 
     var selectedHabit by remember { mutableStateOf<DietHabit?>(null) }
 
@@ -28,6 +27,7 @@ fun DietHabbit(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp),
+
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
 
@@ -39,7 +39,7 @@ fun DietHabbit(
         Text(
             text = "No judgment. We’ll improve step by step 😊",
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.Gray
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         DietHabitCard(
@@ -70,55 +70,16 @@ fun DietHabbit(
 
         Button(
             onClick = {
-                selectedHabit?.let { onContinue(it) }
+                selectedHabit?.let {
+                    viewModel.saveHabit(it.name)
+                }
             },
+
             enabled = selectedHabit != null,
+
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("See My Plan")
         }
     }
-}
-
-@Composable
-fun DietHabitCard(
-    title: String,
-    description: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    val bgColor = if (isSelected) Color(0xFFE8F5E9) else Color.White
-    val borderColor = if (isSelected) Color(0xFF4CAF50) else Color.LightGray
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = bgColor),
-        border = CardDefaults.outlinedCardBorder().copy(
-            width = 1.dp,
-            brush = androidx.compose.ui.graphics.SolidColor(borderColor)
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Text(text = title, style = MaterialTheme.typography.titleMedium)
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DietHabitsScreenPreview() {
-    DietHabbit(
-        onContinue = { /* preview ke liye empty */ }
-    )
 }
