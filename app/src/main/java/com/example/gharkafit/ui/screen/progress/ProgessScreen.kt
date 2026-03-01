@@ -1,25 +1,35 @@
-package com.example.gharkafit.Screens
-
+package com.example.gharkafit.ui.screen.progress
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gharkafit.data.MainDatabase
+import com.example.gharkafit.ui.component.InsightCard
 
 @Composable
-fun ProgressInsightScreen(
-    currentBmi: Double,
-    weeklyProteinAvg: Double,
-    weeklyCalorieAvg: Int,
-    calorieTarget: Int
-) {
+fun ProgressScreen() {
+
+    val context = LocalContext.current
+    val db = MainDatabase.getDatabase(context)
+
+    val viewModel: ProgressVM = viewModel(
+        factory = ProgressVMF(db.mealDao(), db.userDao())
+    )
+
+    val bmi by viewModel.bmi.collectAsState()
+    val weeklyCalories by viewModel.weeklyCalories.collectAsState()
+    val weeklyProtein by viewModel.weeklyProtein.collectAsState()
+    val calorieTarget by viewModel.calorieTarget.collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
+
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
 
@@ -28,31 +38,28 @@ fun ProgressInsightScreen(
             style = MaterialTheme.typography.headlineSmall
         )
 
-        // 🔹 BODY INSIGHT
         InsightCard(
             title = "Body Insight",
             content = """
-                Current BMI: ${String.format("%.1f", currentBmi)}
+                Current BMI: ${String.format("%.1f", bmi)}
                 Healthy BMI Range: 18.5 – 24.9
                 
                 This is a reference range, not a pressure target.
             """.trimIndent()
         )
 
-        // 🔹 WEEKLY NUTRITION
         InsightCard(
             title = "Weekly Nutrition Summary",
             content = """
-                Avg Calories: $weeklyCalorieAvg kcal
-                Avg Protein: ${weeklyProteinAvg.toInt()} g
+                Avg Calories: $weeklyCalories kcal
+                Avg Protein: ${weeklyProtein.toInt()} g
                 
                 Consistency matters more than perfection 👍
             """.trimIndent()
         )
 
-        // 🔹 CALORIE CONTROL
         val controlMessage =
-            if (weeklyCalorieAvg <= calorieTarget)
+            if (weeklyCalories <= calorieTarget)
                 "Good calorie control this week 👏"
             else
                 "Calories thode zyada rahe, next week better kar sakte ho 😊"
@@ -65,28 +72,9 @@ fun ProgressInsightScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
-            text = "You’re building habits, not chasing numbers 💪",
+            text = "You're building habits, not chasing numbers 💪",
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.Gray
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-    }
-}
-
-
-@Composable
-fun InsightCard(
-    title: String,
-    content: String
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(title, style = MaterialTheme.typography.titleMedium)
-            Text(content, style = MaterialTheme.typography.bodyMedium)
-        }
     }
 }
