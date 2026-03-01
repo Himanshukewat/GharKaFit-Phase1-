@@ -28,7 +28,8 @@ class UserDetailVM(
                 activityLevel = "sedentary",
                 targetCalories = 0,
                 targetProtein = 0.0,
-                name = ""
+                name = "",
+                dietHabit = ""
             )
 
             userDao.insertUser(user)
