@@ -13,8 +13,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             GharKaFitTheme {
-                val navController = rememberNavController()
-                AppNavHost(navController)
+
             }
         }
     }
