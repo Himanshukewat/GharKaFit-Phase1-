@@ -17,7 +17,7 @@ import com.example.gharkafit.data.user.UserEntity
         FoodEntity::class,
         MealLogEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class MainDatabase : RoomDatabase() {
