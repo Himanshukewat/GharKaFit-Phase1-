@@ -24,4 +24,22 @@ object Calculator {
 
         return (bmr * activityMultiplier).toInt()
     }
+
+    fun calculateDailyProtein(user: UserEntity): Double {
+
+        val weight = user.weightKg
+
+        val multiplier = when (user.goal) {
+
+            "FAT_LOSS" -> 1.6
+
+            "MUSCLE_GAIN" -> 2.0
+
+            "MAINTAIN" -> 1.2
+
+            else -> 1.2
+        }
+
+        return weight * multiplier
+    }
 }
