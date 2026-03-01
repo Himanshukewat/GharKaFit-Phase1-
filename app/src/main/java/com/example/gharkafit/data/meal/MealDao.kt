@@ -12,7 +12,7 @@ interface MealDao {
     suspend fun insertMeal(meal: MealLogEntity)
 
     @Query("SELECT * FROM meal_logs")
-    suspend fun getAllMeals(): List<MealLogEntity>
+    suspend fun getTodayMeals(): List<MealLogEntity>
 
     @Delete
     suspend fun deleteMeal(meal: MealLogEntity)
