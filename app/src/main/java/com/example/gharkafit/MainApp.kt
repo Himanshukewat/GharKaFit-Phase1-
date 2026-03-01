@@ -49,31 +49,41 @@ fun MainApp() {
                 when (key) {
                     is UserDetailKey -> NavEntry(key) {
                         UserDetail(
-
+                            onContinue = {
+                                backStack.add(ActivityLevelKey)
+                            }
                         )
                     }
 
                     is ActivityLevelKey -> NavEntry(key) {
                         ActivityLevels(
-
+                            onContinue = {
+                                backStack.add(GoalSelectionKey)
+                            }
                         )
                     }
 
                     is GoalSelectionKey -> NavEntry(key) {
                         GoalSelection(
-
+                            onGoalSelected = {
+                                backStack.add(DietHabitKey)
+                            }
                         )
                     }
 
                     is DietHabitKey -> NavEntry(key) {
                         DietHabit(
-
+                            onContinue = {
+                                backStack.add(BMIScreenKey)
+                            }
                         )
                     }
 
                     is BMIScreenKey -> NavEntry(key) {
                         BMIScreen(
-
+                            onContinue = {
+                                backStack.add(ResultBMIKey)
+                            }
                         )
                     }
 
@@ -97,12 +107,18 @@ fun MainApp() {
                     }
 
                     is FoodPickerKey -> NavEntry(key) {
-                        FoodPickerScreen()
+                        FoodPickerScreen(
+                            onFoodAdded = {_,_ ->
+                                backStack.add(DailySummaryKey)
+                            }
+                        )
                     }
 
                     is DailySummaryKey -> NavEntry(key) {
                         DailySummaryScreen(
-
+                            onDone = {
+                                backStack.add(HomeDashKey)
+                            }
                         )
                     }
 

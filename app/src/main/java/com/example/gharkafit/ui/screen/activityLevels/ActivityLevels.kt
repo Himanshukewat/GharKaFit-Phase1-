@@ -17,7 +17,9 @@ import com.example.gharkafit.ui.screen.activityLevel.ActivityLevelsVM
 import com.example.gharkafit.ui.screen.activityLevel.ActivityLevelsVMF
 
 @Composable
-fun ActivityLevels() {
+fun ActivityLevels(
+    onContinue: () -> Unit
+) {
 
     val context = LocalContext.current
     val db = MainDatabase.getDatabase(context)
@@ -77,6 +79,7 @@ fun ActivityLevels() {
                 selectedActivity?.let {
                     viewModel.saveActivity(it.name)
                 }
+                onContinue()
             },
             enabled = selectedActivity != null,
             modifier = Modifier.fillMaxWidth()

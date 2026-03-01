@@ -72,7 +72,7 @@ fun ResultBMIScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
-                onClick = onStartTracking,
+                onClick = { onStartTracking() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Start Daily Tracking")

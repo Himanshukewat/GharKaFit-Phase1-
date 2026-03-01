@@ -66,14 +66,14 @@ fun HomeScreenDash(
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
-            onClick = onAddFoodClick,
+            onClick = { onAddFoodClick() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Add Food")
         }
 
         Button(
-            onClick = onViewProgressClick,
+            onClick = { onViewProgressClick() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("View Progress")

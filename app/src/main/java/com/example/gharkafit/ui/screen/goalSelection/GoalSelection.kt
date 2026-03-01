@@ -12,7 +12,9 @@ import com.example.gharkafit.model.Goal
 import com.example.gharkafit.ui.component.GoalCard
 
 @Composable
-fun GoalSelection() {
+fun GoalSelection(
+    onGoalSelected: () -> Unit
+) {
 
     val context = LocalContext.current
     val db = MainDatabase.getDatabase(context)
@@ -73,6 +75,7 @@ fun GoalSelection() {
                 selectedGoal?.let {
                     viewModel.saveGoal(it.name)
                 }
+                onGoalSelected()
             },
 
             enabled = selectedGoal != null,

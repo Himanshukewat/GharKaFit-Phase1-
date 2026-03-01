@@ -13,7 +13,9 @@ import com.example.gharkafit.data.MainDatabase
 import com.example.gharkafit.ui.component.ResultCard
 
 @Composable
-fun BMIScreen() {
+fun BMIScreen(
+    onContinue: ()-> Unit
+) {
 
     val context = LocalContext.current
     val db = MainDatabase.getDatabase(context)
@@ -74,7 +76,9 @@ fun BMIScreen() {
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
-            onClick = {},
+            onClick = {
+                onContinue()
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Choose My Goal")

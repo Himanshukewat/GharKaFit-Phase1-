@@ -14,7 +14,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gharkafit.model.Gender
 import com.example.gharkafit.data.MainDatabase
 @Composable
-fun UserDetail() {
+fun UserDetail(
+    onContinue: () -> Unit
+) {
 
     val context = LocalContext.current
 
@@ -77,14 +79,13 @@ fun UserDetail() {
 
         Button(
             onClick = {
-
                 viewModel.saveUser(
                     age = age.toInt(),
                     height = height.toDouble(),
                     weight = weight.toDouble(),
                     gender = selectedGender.name
                 )
-
+                onContinue()
             },
             enabled = age.isNotBlank() && height.isNotBlank() && weight.isNotBlank(),
             modifier = Modifier.fillMaxWidth()

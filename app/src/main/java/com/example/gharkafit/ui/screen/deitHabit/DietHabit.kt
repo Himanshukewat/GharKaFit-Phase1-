@@ -12,7 +12,9 @@ import com.example.gharkafit.model.DietHabit
 import com.example.gharkafit.ui.component.DietHabitCard
 
 @Composable
-fun DietHabit() {
+fun DietHabit(
+    onContinue: () -> Unit
+) {
 
     val context = LocalContext.current
     val db = MainDatabase.getDatabase(context)
@@ -73,6 +75,7 @@ fun DietHabit() {
                 selectedHabit?.let {
                     viewModel.saveHabit(it.name)
                 }
+                onContinue()
             },
 
             enabled = selectedHabit != null,

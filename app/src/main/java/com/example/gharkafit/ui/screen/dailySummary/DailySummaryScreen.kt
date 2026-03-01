@@ -12,7 +12,9 @@ import com.example.gharkafit.ui.component.SummaryCard
 import com.example.gharkafit.ui.component.FeedbackCard
 
 @Composable
-fun DailySummaryScreen() {
+fun DailySummaryScreen(
+    onDone: () -> Unit
+) {
 
     val context = LocalContext.current
     val db = MainDatabase.getDatabase(context)
@@ -54,7 +56,9 @@ fun DailySummaryScreen() {
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
-            onClick = {},
+            onClick = {
+                onDone()
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Done for Today")
