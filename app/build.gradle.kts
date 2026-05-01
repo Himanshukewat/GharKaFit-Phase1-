@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.gharKaFit"
+    namespace = "com.example.gharkafit"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.gharKaFit"
+        applicationId = "com.example.gharkafit"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
