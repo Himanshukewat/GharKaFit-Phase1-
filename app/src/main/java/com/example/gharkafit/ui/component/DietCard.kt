@@ -1,60 +1,56 @@
 package com.example.gharkafit.ui.component
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun GoalCard(
+fun DietCard(
     title: String,
     description: String,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
 
-    val containerColor =
-        if (isSelected)
-            Color(0xFF4CAF50)
-        else
-            Color(0xFFE8F5E9)
-
-    val borderColor =
-        if (isSelected)
-            MaterialTheme.colorScheme.primary
-        else
-            MaterialTheme.colorScheme.outline
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() },
-
-        shape = RoundedCornerShape(16.dp),
-
+            .clickable {
+                onClick()
+            },
         colors = CardDefaults.cardColors(
-            containerColor = containerColor
+            containerColor =
+                if (isSelected)
+                    Color(0xFF4CAF50)
+                else
+                    Color(0xFFE8F5E9)
         ),
-
-        border = CardDefaults.outlinedCardBorder().copy(
-            width = 1.dp,
-            brush = androidx.compose.ui.graphics.SolidColor(borderColor)
-        )
+        shape = RoundedCornerShape(20.dp)
     ) {
 
         Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
 
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium
             )
+
+            Spacer(modifier = Modifier.height(4.dp))
 
             Text(
                 text = description,
