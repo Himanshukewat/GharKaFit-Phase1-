@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.compose.material.icons.extended)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.runtime)
 
     //testing
     testImplementation(libs.junit)
