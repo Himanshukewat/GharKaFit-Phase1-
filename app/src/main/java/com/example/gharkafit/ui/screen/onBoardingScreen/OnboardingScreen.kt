@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -28,8 +29,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.gharkafit.model.ActivityLevel
+import com.example.gharkafit.model.DietHabit
 import com.example.gharkafit.ui.component.DietCard
 import com.example.gharkafit.ui.component.GoalCard
+import com.example.gharkafit.model.Gender
+import com.example.gharkafit.model.Goal
 import com.example.gharkafit.ui.component.SelectionCard
 
 @Composable
@@ -37,25 +42,25 @@ fun OnboardingScreen(
     modifier: Modifier = Modifier
 ) {
 
-    var name by rememberSaveable { mutableStateOf("") }
-    var age by rememberSaveable { mutableStateOf("") }
-    var height by rememberSaveable { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var age by remember { mutableStateOf("") }
+    var height by remember{ mutableStateOf("") }
     var weight by rememberSaveable { mutableStateOf("") }
 
-    var selectedGender by rememberSaveable {
-        mutableStateOf("Male")
+    var selectedGender by remember {
+        mutableStateOf(Gender.MALE)
     }
 
-    var selectedGoal by rememberSaveable {
-        mutableStateOf("Fat Loss")
+    var selectedGoal by remember {
+        mutableStateOf(Goal.FAT_LOSS)
     }
 
-    var selectedActivity by rememberSaveable {
-        mutableStateOf("Moderate")
+    var selectedActivity by remember {
+        mutableStateOf(ActivityLevel.MODERATE)
     }
 
-    var selectedDiet by rememberSaveable {
-        mutableStateOf("Mostly Home Food")
+    var selectedDiet by remember {
+        mutableStateOf(DietHabit.HOME)
     }
 
     LazyColumn(
@@ -133,14 +138,14 @@ fun OnboardingScreen(
                     ) {
 
                         SelectionCard(
-                            title = "Male", isSelected = selectedGender == "Male", onClick = {
-                                selectedGender = "Male"
+                            title = "Male", isSelected = selectedGender == Gender.MALE, onClick = {
+                                selectedGender = Gender.MALE
                             }, modifier = Modifier.weight(1f)
                         )
 
                         SelectionCard(
-                            title = "Female", isSelected = selectedGender == "Female", onClick = {
-                                selectedGender = "Female"
+                            title = "Female", isSelected = selectedGender == Gender.FEMALE, onClick = {
+                                selectedGender = Gender.FEMALE
                             }, modifier = Modifier.weight(1f)
                         )
                     }
@@ -219,25 +224,25 @@ fun OnboardingScreen(
                     GoalCard(
                         title = "Fat Loss",
                         description = "Lose weight while maintaining muscle",
-                        isSelected = selectedGoal == "Fat Loss",
+                        isSelected = selectedGoal == Goal.FAT_LOSS,
                         onClick = {
-                            selectedGoal = "Fat Loss"
+                            selectedGoal = Goal.FAT_LOSS
                         })
 
                     GoalCard(
                         title = "Maintain",
                         description = "Stay healthy and active",
-                        isSelected = selectedGoal == "Maintain",
+                        isSelected = selectedGoal == Goal.MAINTAIN,
                         onClick = {
-                            selectedGoal = "Maintain"
+                            selectedGoal = Goal.MAINTAIN
                         })
 
                     GoalCard(
                         title = "Muscle Gain",
                         description = "Increase strength and muscle mass",
-                        isSelected = selectedGoal == "Muscle Gain",
+                        isSelected = selectedGoal == Goal.MUSCLE_GAIN,
                         onClick = {
-                            selectedGoal = "Muscle Gain"
+                            selectedGoal = Goal.MUSCLE_GAIN
                         })
                 }
             }
@@ -265,25 +270,25 @@ fun OnboardingScreen(
                     GoalCard(
                         title = "Mostly Sitting",
                         description = "Desk work and low movement",
-                        isSelected = selectedActivity == "Mostly Sitting",
+                        isSelected = selectedActivity == ActivityLevel.SEDENTARY,
                         onClick = {
-                            selectedActivity = "Mostly Sitting"
+                            selectedActivity = ActivityLevel.SEDENTARY
                         })
 
                     GoalCard(
                         title = "Lightly Active",
                         description = "Walks and light daily activity",
-                        isSelected = selectedActivity == "Lightly Active",
+                        isSelected = selectedActivity == ActivityLevel.MODERATE,
                         onClick = {
-                            selectedActivity = "Lightly Active"
+                            selectedActivity = ActivityLevel.MODERATE
                         })
 
                     GoalCard(
                         title = "Very Active",
                         description = "Workout and high daily movement",
-                        isSelected = selectedActivity == "Very Active",
+                        isSelected = selectedActivity == ActivityLevel.ACTIVE,
                         onClick = {
-                            selectedActivity = "Very Active"
+                            selectedActivity = ActivityLevel.ACTIVE
                         })
                 }
             }
@@ -312,25 +317,25 @@ fun OnboardingScreen(
                     DietCard (
                         title = "Mostly Home Food",
                         description = "Roti, sabzi, dal, rice",
-                        isSelected = selectedDiet == "Mostly Home Food",
+                        isSelected = selectedDiet == DietHabit.HOME,
                         onClick = {
-                            selectedDiet = "Mostly Home Food"
+                            selectedDiet = DietHabit.HOME
                         })
 
                     DietCard(
                         title = "Mixed Diet",
                         description = "Some home food and some outside food",
-                        isSelected = selectedDiet == "Mixed Diet",
+                        isSelected = selectedDiet == DietHabit.MIXED,
                         onClick = {
-                            selectedDiet = "Mixed Diet"
+                            selectedDiet = DietHabit.MIXED
                         })
 
                     DietCard (
                         title = "Mostly Processed Food",
                         description = "Fast food and packaged snacks",
-                        isSelected = selectedDiet == "Mostly Processed Food",
+                        isSelected = selectedDiet == DietHabit.PROCESSED,
                         onClick = {
-                            selectedDiet = "Mostly Processed Food"
+                            selectedDiet = DietHabit.PROCESSED
                         })
                 }
             }
