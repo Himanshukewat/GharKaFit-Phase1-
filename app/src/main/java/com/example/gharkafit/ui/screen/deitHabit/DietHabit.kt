@@ -9,7 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gharkafit.data.MainDatabase
 import com.example.gharkafit.model.DietHabit
-import com.example.gharkafit.ui.component.DietHabitCard
+import com.example.gharkafit.ui.component.DietCard
 
 @Composable
 fun DietHabit(
@@ -44,7 +44,7 @@ fun DietHabit(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        DietHabitCard(
+        DietCard(
             title = "Mostly Processed Food",
             description = "Fast food, packaged snacks, sugary drinks",
             isSelected = selectedHabit == DietHabit.PROCESSED
@@ -52,7 +52,7 @@ fun DietHabit(
             selectedHabit = DietHabit.PROCESSED
         }
 
-        DietHabitCard(
+        DietCard(
             title = "Mixed Diet",
             description = "Some home food, some outside food",
             isSelected = selectedHabit == DietHabit.MIXED
@@ -60,7 +60,7 @@ fun DietHabit(
             selectedHabit = DietHabit.MIXED
         }
 
-        DietHabitCard(
+        DietCard(
             title = "Mostly Home Food",
             description = "Roti, sabzi, dal, rice, ghar ka khana",
             isSelected = selectedHabit == DietHabit.HOME
