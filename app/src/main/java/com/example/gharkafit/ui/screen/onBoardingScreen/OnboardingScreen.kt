@@ -36,6 +36,7 @@ import com.example.gharkafit.ui.component.GoalCard
 import com.example.gharkafit.model.Gender
 import com.example.gharkafit.model.Goal
 import com.example.gharkafit.ui.component.SelectionCard
+import com.example.gharkafit.ui.theme.GharKaFitTheme
 
 @Composable
 fun OnboardingScreen(
@@ -69,8 +70,6 @@ fun OnboardingScreen(
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
 
-        // HEADER
-
         item {
 
             Column(
@@ -90,7 +89,6 @@ fun OnboardingScreen(
         }
 
 
-        // PERSONAL INFO
 
         item {
 
@@ -351,7 +349,7 @@ fun OnboardingScreen(
 
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF4CAF50)
+                    containerColor =  MaterialTheme.colorScheme.primary
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -372,7 +370,7 @@ fun OnboardingScreen(
 @Composable
 fun OnboardingScreenPreview() {
 
-    MaterialTheme {
+    GharKaFitTheme {
         OnboardingScreen()
     }
 }

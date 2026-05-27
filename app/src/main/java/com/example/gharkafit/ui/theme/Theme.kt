@@ -1,6 +1,5 @@
 package com.example.gharkafit.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -9,25 +8,51 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryGreen80,
-    secondary = SecondaryGreen80,
-    tertiary = AccentGreen80
+
+    primary = PrimaryGreenDark,
+
+    secondary = SecondaryGreenDark,
+
+    tertiary = AccentGreenDark,
+
+    background = DarkBackground,
+
+    surface = DarkSurface,
+
+    surfaceVariant = DarkSurfaceVariant,
+
+    onPrimary = Color.Black,
+
+    onSurface = LightText
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = PrimaryGreen40,
-    secondary = SecondaryGreen40,
-    tertiary = AccentGreen40
-)
 
+    primary = PrimaryGreen,
+
+    secondary = SecondaryGreen,
+
+    tertiary = AccentGreen,
+
+    background = LightGreenBackground,
+
+    surface = LightGreenSurface,
+
+    surfaceVariant = LightGreenSurfaceVariant,
+
+    onPrimary = Color.White,
+
+    onSurface = DarkText
+)
 @Composable
 fun GharKaFitTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
