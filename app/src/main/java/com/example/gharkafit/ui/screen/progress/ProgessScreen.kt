@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gharkafit.data.MainDatabase
-import com.example.gharkafit.ui.component.InsightCard
+import com.example.gharkafit.ui.component.AnalysisCard
 
 @Composable
 fun ProgressScreen() {
@@ -37,25 +37,21 @@ fun ProgressScreen() {
             text = "Your Progress & Insights 📈",
             style = MaterialTheme.typography.headlineSmall
         )
-
-        InsightCard(
+        AnalysisCard (
             title = "Body Insight",
-            content = """
+            content = {
+                """
                 Current BMI: ${String.format("%.1f", bmi)}
                 Healthy BMI Range: 18.5 – 24.9
                 
                 This is a reference range, not a pressure target.
             """.trimIndent()
+            }
         )
 
-        InsightCard(
+        AnalysisCard (
             title = "Weekly Nutrition Summary",
-            content = """
-                Avg Calories: $weeklyCalories kcal
-                Avg Protein: ${weeklyProtein.toInt()} g
-                
-                Consistency matters more than perfection 👍
-            """.trimIndent()
+            content = {}
         )
 
         val controlMessage =
@@ -64,9 +60,9 @@ fun ProgressScreen() {
             else
                 "Calories thode zyada rahe, next week better kar sakte ho 😊"
 
-        InsightCard(
+        AnalysisCard (
             title = "Calorie Control",
-            content = controlMessage
+            content = { controlMessage }
         )
 
         Spacer(modifier = Modifier.weight(1f))
