@@ -12,22 +12,16 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.gharkafit.ui.navKeys.*
-import com.example.gharkafit.ui.screen.activityLevels.ActivityLevels
-import com.example.gharkafit.ui.screen.bmi.BMIScreen
-import com.example.gharkafit.ui.screen.dailySummary.DailySummaryScreen
-import com.example.gharkafit.ui.screen.dietHabit.DietHabit
-import com.example.gharkafit.ui.screen.foodPicker.FoodPickerScreen
-import com.example.gharkafit.ui.screen.goalSelection.GoalSelection
-import com.example.gharkafit.ui.screen.homeDash.HomeScreenDash
-import com.example.gharkafit.ui.screen.progress.ProgressScreen
-import com.example.gharkafit.ui.screen.resultBMI.ResultBMIScreen
-import com.example.gharkafit.ui.screen.userDetail.UserDetail
+import com.example.gharkafit.ui.screen.healthAnalysicsScreen.HealthAnalysisScreen
+import com.example.gharkafit.ui.screen.onBoardingScreen.OnboardingScreen
+import com.example.gharkafit.ui.screen.personalizedScreen.PersonalizedPlanScreen
+import com.example.gharkafit.ui.screen.welcomeScreen.WelcomeScreen
 
 @Composable
 fun MainApp() {
 
     val backStack = remember {
-        mutableStateListOf<Any>(UserDetailKey)
+        mutableStateListOf<Any>(WelcomeKey)
     }
 
     Scaffold { paddingValues ->
@@ -47,83 +41,46 @@ fun MainApp() {
             entryProvider = { key ->
 
                 when (key) {
-                    is UserDetailKey -> NavEntry(key) {
-                        UserDetail(
-                            onContinue = {
-                                backStack.add(ActivityLevelKey)
+                     WelcomeKey -> NavEntry(key) {
+                        WelcomeScreen(
+                            onStartClick = {
+                                backStack.add(OnboardingKey)
                             }
                         )
                     }
 
-                    is ActivityLevelKey -> NavEntry(key) {
-                        ActivityLevels(
-                            onContinue = {
-                                backStack.add(GoalSelectionKey)
+                    is OnboardingKey -> NavEntry(key) {
+                        OnboardingScreen(
+                            onContinueClick = {
+                                backStack.add(HealthAnalysisKey)
                             }
                         )
                     }
 
-                    is GoalSelectionKey -> NavEntry(key) {
-                        GoalSelection(
-                            onGoalSelected = {
-                                backStack.add(DietHabitKey)
+                    is HealthAnalysisKey -> NavEntry(key) {
+                        HealthAnalysisScreen(
+                            bmi = 17.4,
+                            bmiStatus = "Normal Weight ✅",
+                            healthyRange = "18.5 - 24.9",
+                            recommendedWeight = "58kg - 68kg",
+                            calories = 2400,
+                            protein = 95,
+                            suggestions = listOf(
+                                "Increase protein intake",
+                                "Stay hydrated"
+                            ),
+                            onViewPlanClick = {
+                                backStack.add(PersonalizedPlanKey)
                             }
                         )
                     }
 
-                    is DietHabitKey -> NavEntry(key) {
-                        DietHabit(
-                            onContinue = {
-                                backStack.add(BMIScreenKey)
+                    is PersonalizedPlanKey -> NavEntry(key) {
+                        PersonalizedPlanScreen(
+                            onStartTrackingClick = {
+                                backStack.add(DashboardKey)
                             }
                         )
-                    }
-
-                    is BMIScreenKey -> NavEntry(key) {
-                        BMIScreen(
-                            onContinue = {
-                                backStack.add(ResultBMIKey)
-                            }
-                        )
-                    }
-
-                    is ResultBMIKey -> NavEntry(key) {
-                        ResultBMIScreen(
-                            onStartTracking = {
-                                backStack.add(HomeDashKey)
-                            }
-                        )
-                    }
-
-                    is HomeDashKey -> NavEntry(key) {
-                        HomeScreenDash(
-                            onAddFoodClick = {
-                                backStack.add(FoodPickerKey)
-                            },
-                            onViewProgressClick = {
-                                backStack.add(ProgressKey)
-                            }
-                        )
-                    }
-
-                    is FoodPickerKey -> NavEntry(key) {
-                        FoodPickerScreen(
-                            onFoodAdded = {_,_ ->
-                                backStack.add(DailySummaryKey)
-                            }
-                        )
-                    }
-
-                    is DailySummaryKey -> NavEntry(key) {
-                        DailySummaryScreen(
-                            onDone = {
-                                backStack.add(HomeDashKey)
-                            }
-                        )
-                    }
-
-                    is ProgressKey -> NavEntry(key) {
-                        ProgressScreen()
                     }
 
                     else -> NavEntry(Unit) { Text("Unknown Screen") }

@@ -27,6 +27,7 @@ import com.example.gharkafit.ui.theme.GharKaFitTheme
 
 @Composable
 fun PersonalizedPlanScreen(
+    onStartTrackingClick: ()-> Unit
 ) {
 
     LazyColumn(
@@ -147,7 +148,7 @@ fun PersonalizedPlanScreen(
 
             Button(
                 onClick = {
-
+                        onStartTrackingClick()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -178,12 +179,12 @@ fun SuggestionItem(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun PersonalizedPlanScreenPreview() {
-
-    GharKaFitTheme {
-
-        PersonalizedPlanScreen()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PersonalizedPlanScreenPreview() {
+//
+//    GharKaFitTheme {
+//
+//        PersonalizedPlanScreen()
+//    }
+//}

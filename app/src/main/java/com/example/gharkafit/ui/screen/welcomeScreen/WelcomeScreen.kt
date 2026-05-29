@@ -29,9 +29,10 @@ import androidx.compose.ui.unit.dp
 import com.example.gharkafit.R
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Preview(showBackground = true)
 @Composable
-fun WelcomeScreen() {
+fun WelcomeScreen(
+    onStartClick: ()-> Unit
+) {
     Column {
         Column(
             modifier = Modifier
@@ -80,7 +81,7 @@ fun WelcomeScreen() {
                 ) {
                     Spacer(modifier = Modifier.height(12.dp))
                     Button(
-                        onClick = {},
+                        onClick = { onStartClick() },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
                             containerColor =  MaterialTheme.colorScheme.primary

@@ -1,21 +1,31 @@
 package com.example.gharkafit.ui.navKeys
 
-object UserDetailKey
+object WelcomeKey
 
-object ActivityLevelKey
+object OnboardingKey
 
-object GoalSelectionKey
+object HealthAnalysisKey
 
-object DietHabitKey
+object PersonalizedPlanKey
 
-object BMIScreenKey
+object DashboardKey
 
-object ResultBMIKey
-
-object HomeDashKey
-
-object FoodPickerKey
-
-object DailySummaryKey
-
-object ProgressKey
+//object UserDetailKey
+//
+//object ActivityLevelKey
+//
+//object GoalSelectionKey
+//
+//object DietHabitKey
+//
+//object BMIScreenKey
+//
+//object ResultBMIKey
+//
+//object HomeDashKey
+//
+//object FoodPickerKey
+//
+//object DailySummaryKey
+//
+//object ProgressKey

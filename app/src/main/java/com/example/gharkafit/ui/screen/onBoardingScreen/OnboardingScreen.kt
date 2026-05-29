@@ -40,7 +40,7 @@ import com.example.gharkafit.ui.theme.GharKaFitTheme
 
 @Composable
 fun OnboardingScreen(
-    modifier: Modifier = Modifier
+    onContinueClick: ()->Unit
 ) {
 
     var name by remember { mutableStateOf("") }
@@ -65,7 +65,7 @@ fun OnboardingScreen(
     }
 
     LazyColumn(
-        modifier = modifier,
+        modifier = Modifier,
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
@@ -346,7 +346,7 @@ fun OnboardingScreen(
 
             Button(
                 onClick = {
-
+                    onContinueClick()
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor =  MaterialTheme.colorScheme.primary
@@ -371,6 +371,8 @@ fun OnboardingScreen(
 fun OnboardingScreenPreview() {
 
     GharKaFitTheme {
-        OnboardingScreen()
+        OnboardingScreen(
+            onContinueClick = {}
+        )
     }
 }

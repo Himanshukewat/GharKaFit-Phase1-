@@ -28,7 +28,8 @@ fun HealthAnalysisScreen(
     recommendedWeight: String,
     calories: Int,
     protein: Int,
-    suggestions: List<String>
+    suggestions: List<String>,
+    onViewPlanClick: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -188,7 +189,7 @@ fun HealthAnalysisScreen(
 
             Button(
                 onClick = {
-
+                        onViewPlanClick()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -221,22 +222,22 @@ fun SuggestionItem(
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun HealthAnalysisScreenPreview() {
-
-    GharKaFitTheme {
-        HealthAnalysisScreen(
-            bmi = 17.4,
-            bmiStatus = "Normal Weight ✅",
-            healthyRange = "18.5 - 24.9",
-            recommendedWeight = "58kg - 68kg",
-            calories = 2400,
-            protein = 95,
-            suggestions = listOf(
-                "Increase protein intake",
-                "Stay hydrated"
-            )
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HealthAnalysisScreenPreview() {
+//
+//    GharKaFitTheme {
+//        HealthAnalysisScreen(
+//            bmi = 17.4,
+//            bmiStatus = "Normal Weight ✅",
+//            healthyRange = "18.5 - 24.9",
+//            recommendedWeight = "58kg - 68kg",
+//            calories = 2400,
+//            protein = 95,
+//            suggestions = listOf(
+//                "Increase protein intake",
+//                "Stay hydrated"
+//            )
+//        )
+//    }
+//}
