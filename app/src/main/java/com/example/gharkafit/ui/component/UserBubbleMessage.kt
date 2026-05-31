@@ -53,7 +53,9 @@ fun UserMessageBubble(
 @Preview(showBackground = true)
 @Composable
 private fun Prev() {
+    GharKaFitTheme {
         UserMessageBubble(
             "Hello aaj meine breakFast mein IK glass milk liya"
         )
+    }
 }

@@ -46,6 +46,8 @@ private val LightColorScheme = lightColorScheme(
 
     onPrimary = Color.White,
 
+    primaryContainer = PrimaryContainer,
+
     onSurface = DarkText
 )
 @Composable

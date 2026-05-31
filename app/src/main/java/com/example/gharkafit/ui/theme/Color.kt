@@ -16,6 +16,8 @@ val LightGreenSurfaceVariant = Color(0xFFE8F5E9)
 
 val DarkText = Color(0xFF1B1B1B)
 
+val PrimaryContainer = Color(0xFFC8E6C9)
+
 
 // DARK THEME
 
