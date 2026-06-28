@@ -12,6 +12,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.gharkafit.ui.navKeys.*
+import com.example.gharkafit.ui.screen.dashBoardScreen.DashboardScreen
 import com.example.gharkafit.ui.screen.healthAnalysicsScreen.HealthAnalysisScreen
 import com.example.gharkafit.ui.screen.onBoardingScreen.OnboardingScreen
 import com.example.gharkafit.ui.screen.personalizedScreen.PersonalizedPlanScreen
@@ -79,6 +80,26 @@ fun MainApp() {
                         PersonalizedPlanScreen(
                             onStartTrackingClick = {
                                 backStack.add(DashboardKey)
+                            }
+                        )
+                    }
+
+                    is DashboardKey -> NavEntry(key) {
+                        DashboardScreen(
+                            userName = "Himanshu",
+                            caloriesConsumed = 1200,
+                            caloriesTarget = 2100,
+                            proteinConsumed = 55,
+                            proteinTarget = 95,
+                            dailyTip = "Try to include a protein source in every meal today.",
+                            breakfastAdded = true,
+                            lunchAdded = false,
+                            dinnerAdded = false,
+                            onAddMealClick = {
+                                backStack.add(MealInsightsKey)
+                            },
+                            onViewProgressClick = {
+                                backStack.add(ProgressKey)
                             }
                         )
                     }

@@ -10,6 +10,10 @@ object PersonalizedPlanKey
 
 object DashboardKey
 
+object MealInsightsKey
+
+object ProgressKey
+
 //object UserDetailKey
 //
 //object ActivityLevelKey

@@ -33,7 +33,9 @@ fun DashboardScreen(
     dailyTip: String,
     breakfastAdded: Boolean,
     lunchAdded: Boolean,
-    dinnerAdded: Boolean
+    dinnerAdded: Boolean,
+    onAddMealClick: () -> Unit,
+    onViewProgressClick: () -> Unit
 ) {
     val caloriesLeft = caloriesTarget - caloriesConsumed
     val proteinLeft = proteinTarget - proteinConsumed
@@ -102,13 +104,13 @@ fun DashboardScreen(
                 ) {
 
                     Button(
-                        onClick = {}, modifier = Modifier.weight(1f)
+                        onClick = { onAddMealClick() }, modifier = Modifier.weight(1f)
                     ) {
                         Text("Add Meal")
                     }
 
                     Button(
-                        onClick = {}, modifier = Modifier.weight(1f)
+                        onClick = { onViewProgressClick() }, modifier = Modifier.weight(1f)
                     ) {
                         Text("View Progress")
                     }
@@ -192,7 +194,9 @@ fun DashboardPreview() {
             breakfastAdded = true,
             lunchAdded = false,
             dinnerAdded = false,
-            dailyTip = "Try to include a protein source in every meal today."
+            dailyTip = "Try to include a protein source in every meal today.",
+            onAddMealClick = {},
+            onViewProgressClick = {}
         )
     }
 }
