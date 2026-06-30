@@ -36,16 +36,16 @@ import com.example.gharkafit.model.Gender
 import com.example.gharkafit.model.Goal
 import com.example.gharkafit.ui.component.SelectionCard
 import com.example.gharkafit.ui.theme.GharKaFitTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gharkafit.viewmodel.OnboardingViewModel
 
 @Composable
 fun OnboardingScreen(
     onContinueClick: ()->Unit
 ) {
 
-    var name by remember { mutableStateOf("") }
-    var age by remember { mutableStateOf("") }
-    var height by remember{ mutableStateOf("") }
-    var weight by rememberSaveable { mutableStateOf("") }
+    val viewModel: OnboardingViewModel = viewModel()
+    val uiState = viewModel.uiState
 
     var selectedGender by remember {
         mutableStateOf(Gender.MALE)
@@ -109,16 +109,16 @@ fun OnboardingScreen(
                     )
 
                     OutlinedTextField(
-                        value = name, onValueChange = {
-                        name = it
+                        value = uiState.name, onValueChange = {
+                        viewModel.updateName(it)
                     }, label = {
                         Text("Name")
                     }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp)
                     )
 
                     OutlinedTextField(
-                        value = age, onValueChange = {
-                        age = it
+                        value = uiState.age, onValueChange = {
+                        viewModel.updateAge(it)
                     }, label = {
                         Text("Age")
                     }, keyboardOptions = KeyboardOptions(
@@ -173,8 +173,8 @@ fun OnboardingScreen(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
 
-                        OutlinedTextField(value = height, onValueChange = {
-                            height = it
+                        OutlinedTextField(value = uiState.height, onValueChange = {
+                            viewModel.updateHeight(it)
                         }, label = {
                             Text("Height")
                         }, suffix = {
@@ -184,8 +184,8 @@ fun OnboardingScreen(
                         ), modifier = Modifier.weight(1f), shape = RoundedCornerShape(18.dp))
 
                         OutlinedTextField(
-                            value = weight, onValueChange = {
-                            weight = it
+                            value = uiState.weight, onValueChange = {
+                            viewModel.updateWeight(it)
                         }, label = {
                             Text("Weight")
                         }, suffix = {
