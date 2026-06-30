@@ -17,6 +17,9 @@ import com.example.gharkafit.ui.screen.healthAnalysicsScreen.HealthAnalysisScree
 import com.example.gharkafit.ui.screen.onBoardingScreen.OnboardingScreen
 import com.example.gharkafit.ui.screen.personalizedScreen.PersonalizedPlanScreen
 import com.example.gharkafit.ui.screen.welcomeScreen.WelcomeScreen
+import com.example.gharkafit.ui.screen.mealInsightScreen.MealInsightScreen
+import com.example.gharkafit.ui.screen.mealInsightScreen.MealAnalysis
+import com.example.gharkafit.ui.screen.progressScreen.ProgressScreen
 
 @Composable
 fun MainApp() {
@@ -101,6 +104,64 @@ fun MainApp() {
                             onViewProgressClick = {
                                 backStack.add(ProgressKey)
                             }
+                        )
+                    }
+
+                    is MealInsightsKey -> NavEntry(key) {
+                        MealInsightScreen(
+                            userMessages = listOf(
+                                "Aaj breakfast me 500ml milk liya",
+                                "Lunch me 4 roti aur paneer bhurji li"
+                            ),
+
+                            analyses = listOf(
+                                MealAnalysis(
+                                    title = "🥛 Breakfast Analysis",
+                                    calories = "250 kcal",
+                                    protein = "16 g",
+                                    carbs = "24 g",
+                                    fat = "8 g",
+                                    insight = "✅ Good protein source"
+                                ),
+                                MealAnalysis(
+                                    title = "🍽 Lunch Analysis",
+                                    calories = "700 kcal",
+                                    protein = "30 g",
+                                    carbs = "75 g",
+                                    fat = "25 g",
+                                    insight = "⚠ Roti quantity slightly high"
+                                )
+                            ),
+
+                            summaryCalories = "950 kcal",
+                            summaryProtein = "46 g",
+                            summaryCarbs = "99 g",
+                            summaryFat = "33 g",
+
+                            suggestions = listOf(
+                                "Add salad",
+                                "Include protein source",
+                                "Keep dinner light"
+                            ),
+
+                            totalCalories = "2050 kcal",
+                            totalProtein = "92 g",
+
+                            strength = "Protein target achieved",
+                            improvement = "Water intake low",
+                            tomorrowFocus = "Add fruit in breakfast"
+                        )
+                    }
+
+                    is ProgressKey -> NavEntry(key) {
+                        ProgressScreen(
+                            goal = "Fat Loss",
+                            targetWeight = 60,
+                            currentWeight = 65,
+                            mealsLogged = 12,
+                            proteinTargetDays = 4,
+                            caloriesTargetDays = 3,
+                            weeklyInsight = "You are consistent with protein, but dinner calories are usually high."
                         )
                     }
 
