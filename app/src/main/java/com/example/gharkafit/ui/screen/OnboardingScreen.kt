@@ -47,21 +47,6 @@ fun OnboardingScreen(
     val viewModel: OnboardingViewModel = viewModel()
     val uiState = viewModel.uiState
 
-    var selectedGender by remember {
-        mutableStateOf(Gender.MALE)
-    }
-
-    var selectedGoal by remember {
-        mutableStateOf(Goal.FAT_LOSS)
-    }
-
-    var selectedActivity by remember {
-        mutableStateOf(ActivityLevel.MODERATE)
-    }
-
-    var selectedDiet by remember {
-        mutableStateOf(DietHabit.HOME)
-    }
 
     LazyColumn(
         modifier = Modifier,
@@ -135,14 +120,14 @@ fun OnboardingScreen(
                     ) {
 
                         SelectionCard(
-                            title = "Male", isSelected = selectedGender == Gender.MALE, onClick = {
-                                selectedGender = Gender.MALE
+                            title = "Male", isSelected = uiState.gender == Gender.MALE, onClick = {
+                                 viewModel.updateGender(Gender.MALE)
                             }, modifier = Modifier.weight(1f)
                         )
 
                         SelectionCard(
-                            title = "Female", isSelected = selectedGender == Gender.FEMALE, onClick = {
-                                selectedGender = Gender.FEMALE
+                            title = "Female", isSelected = uiState.gender == Gender.FEMALE, onClick = {
+                                viewModel.updateGender(Gender.FEMALE)
                             }, modifier = Modifier.weight(1f)
                         )
                     }
@@ -221,25 +206,25 @@ fun OnboardingScreen(
                     GoalCard(
                         title = "Fat Loss",
                         description = "Lose weight while maintaining muscle",
-                        isSelected = selectedGoal == Goal.FAT_LOSS,
+                        isSelected = uiState.goal == Goal.FAT_LOSS,
                         onClick = {
-                            selectedGoal = Goal.FAT_LOSS
+                            viewModel.updateGoal(Goal.FAT_LOSS)
                         })
 
                     GoalCard(
                         title = "Maintain",
                         description = "Stay healthy and active",
-                        isSelected = selectedGoal == Goal.MAINTAIN,
+                        isSelected = uiState.goal == Goal.MAINTAIN,
                         onClick = {
-                            selectedGoal = Goal.MAINTAIN
+                            viewModel.updateGoal(Goal.MAINTAIN)
                         })
 
                     GoalCard(
                         title = "Muscle Gain",
                         description = "Increase strength and muscle mass",
-                        isSelected = selectedGoal == Goal.MUSCLE_GAIN,
+                        isSelected = uiState.goal == Goal.MUSCLE_GAIN,
                         onClick = {
-                            selectedGoal = Goal.MUSCLE_GAIN
+                            viewModel.updateGoal(Goal.MUSCLE_GAIN)
                         })
                 }
             }
@@ -267,25 +252,25 @@ fun OnboardingScreen(
                     GoalCard(
                         title = "Mostly Sitting",
                         description = "Desk work and low movement",
-                        isSelected = selectedActivity == ActivityLevel.SEDENTARY,
+                        isSelected = uiState.activityLevel == ActivityLevel.SEDENTARY,
                         onClick = {
-                            selectedActivity = ActivityLevel.SEDENTARY
+                            viewModel.updateActivity(ActivityLevel.SEDENTARY)
                         })
 
                     GoalCard(
                         title = "Lightly Active",
                         description = "Walks and light daily activity",
-                        isSelected = selectedActivity == ActivityLevel.MODERATE,
+                        isSelected = uiState.activityLevel == ActivityLevel.MODERATE,
                         onClick = {
-                            selectedActivity = ActivityLevel.MODERATE
+                            viewModel.updateActivity(ActivityLevel.MODERATE)
                         })
 
                     GoalCard(
                         title = "Very Active",
                         description = "Workout and high daily movement",
-                        isSelected = selectedActivity == ActivityLevel.ACTIVE,
+                        isSelected = uiState.activityLevel == ActivityLevel.ACTIVE,
                         onClick = {
-                            selectedActivity = ActivityLevel.ACTIVE
+                            viewModel.updateActivity(ActivityLevel.ACTIVE)
                         })
                 }
             }
@@ -314,25 +299,25 @@ fun OnboardingScreen(
                     DietCard (
                         title = "Mostly Home Food",
                         description = "Roti, sabzi, dal, rice",
-                        isSelected = selectedDiet == DietHabit.HOME,
+                        isSelected = uiState.dietHabit == DietHabit.HOME,
                         onClick = {
-                            selectedDiet = DietHabit.HOME
+                            viewModel.updateDiet(DietHabit.HOME)
                         })
 
                     DietCard(
                         title = "Mixed Diet",
                         description = "Some home food and some outside food",
-                        isSelected = selectedDiet == DietHabit.MIXED,
+                        isSelected = uiState.dietHabit == DietHabit.MIXED,
                         onClick = {
-                            selectedDiet = DietHabit.MIXED
+                            viewModel.updateDiet(DietHabit.MIXED)
                         })
 
                     DietCard (
                         title = "Mostly Processed Food",
                         description = "Fast food and packaged snacks",
-                        isSelected = selectedDiet == DietHabit.PROCESSED,
+                        isSelected = uiState.dietHabit == DietHabit.PROCESSED,
                         onClick = {
-                            selectedDiet = DietHabit.PROCESSED
+                            viewModel.updateDiet(DietHabit.PROCESSED)
                         })
                 }
             }
