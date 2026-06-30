@@ -9,6 +9,8 @@ import com.example.gharkafit.model.DietHabit
 import com.example.gharkafit.model.Gender
 import com.example.gharkafit.model.Goal
 import com.example.gharkafit.model.OnboardingUiState
+import com.example.gharkafit.core.Calculator
+import com.example.gharkafit.data.user.UserEntity
 
 class OnboardingViewModel : ViewModel() {
 
@@ -45,5 +47,39 @@ class OnboardingViewModel : ViewModel() {
 
     fun updateDiet(diet: DietHabit) {
         uiState = uiState.copy(dietHabit = diet)
+    }
+
+    fun createUserEntity(): UserEntity {
+
+        val age = uiState.age.toInt()
+        val height = uiState.height.toDouble()
+        val weight = uiState.weight.toDouble()
+
+        val calories = Calculator.calculateDailyCalories(
+            weightKg = weight,
+            heightCm = height,
+            age = age,
+            gender = uiState.gender.name,
+            activityLevel = uiState.activityLevel.name,
+            goal = uiState.goal.name
+        )
+
+        val protein = Calculator.calculateDailyProtein(
+            weightKg = weight,
+            goal = uiState.goal.name
+        )
+
+        return UserEntity(
+            name = uiState.name,
+            age = age,
+            gender = uiState.gender.name,
+            heightCm = height,
+            weightKg = weight,
+            goal = uiState.goal.name,
+            dietHabit = uiState.dietHabit.name,
+            activityLevel = uiState.activityLevel.name,
+            targetCalories = calories,
+            targetProtein = protein
+        )
     }
 }
