@@ -1,4 +1,4 @@
-package com.example.gharkafit.ui.screen.dashBoardScreen
+package com.example.gharkafit.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

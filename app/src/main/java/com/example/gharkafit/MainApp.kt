@@ -12,14 +12,14 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.gharkafit.ui.navKeys.*
-import com.example.gharkafit.ui.screen.dashBoardScreen.DashboardScreen
-import com.example.gharkafit.ui.screen.healthAnalysicsScreen.HealthAnalysisScreen
-import com.example.gharkafit.ui.screen.onBoardingScreen.OnboardingScreen
-import com.example.gharkafit.ui.screen.personalizedScreen.PersonalizedPlanScreen
-import com.example.gharkafit.ui.screen.welcomeScreen.WelcomeScreen
-import com.example.gharkafit.ui.screen.mealInsightScreen.MealInsightScreen
-import com.example.gharkafit.ui.screen.mealInsightScreen.MealAnalysis
-import com.example.gharkafit.ui.screen.progressScreen.ProgressScreen
+import com.example.gharkafit.ui.screen.DashboardScreen
+import com.example.gharkafit.ui.screen.HealthAnalysisScreen
+import com.example.gharkafit.ui.screen.OnboardingScreen
+import com.example.gharkafit.ui.screen.PersonalizedPlanScreen
+import com.example.gharkafit.ui.screen.WelcomeScreen
+import com.example.gharkafit.ui.screen.MealInsightScreen
+import com.example.gharkafit.ui.screen.MealAnalysis
+import com.example.gharkafit.ui.screen.ProgressScreen
 
 @Composable
 fun MainApp() {
