@@ -50,6 +50,39 @@ class OnboardingViewModel : ViewModel() {
         uiState = uiState.copy(dietHabit = diet)
     }
 
+    fun validateInput(): String? {
+
+        if (uiState.name.isBlank()) {
+            return "Please enter your name"
+        }
+
+        if (uiState.age.isBlank()) {
+            return "Please enter your age"
+        }
+
+        if (uiState.height.isBlank()) {
+            return "Please enter your height"
+        }
+
+        if (uiState.weight.isBlank()) {
+            return "Please enter your weight"
+        }
+
+        if (uiState.age.toIntOrNull() == null || uiState.age.toInt() <= 0) {
+            return "Enter a valid age"
+        }
+
+        if (uiState.height.toDoubleOrNull() == null || uiState.height.toDouble() <= 0) {
+            return "Enter a valid height"
+        }
+
+        if (uiState.weight.toDoubleOrNull() == null || uiState.weight.toDouble() <= 0) {
+            return "Enter a valid weight"
+        }
+
+        return null
+    }
+
     fun createUserEntity(): UserEntity {
 
         val age = uiState.age.trim().toInt()

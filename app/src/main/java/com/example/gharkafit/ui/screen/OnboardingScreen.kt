@@ -35,14 +35,17 @@ import com.example.gharkafit.ui.theme.GharKaFitTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.viewmodel.OnboardingViewModel
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun OnboardingScreen(
-    onContinueClick: (UserEntity) -> Unit) {
+    onContinueClick: (UserEntity) -> Unit)
+{
 
     val viewModel: OnboardingViewModel = viewModel()
     val uiState = viewModel.uiState
-
+    val context = LocalContext.current
 
     LazyColumn(
         modifier = Modifier,
@@ -326,13 +329,23 @@ fun OnboardingScreen(
 
             Button(
                 onClick = {
-
-                    val user = viewModel.createUserEntity()
-
-                    Log.d("USER_DATA", user.toString())
-
-                    onContinueClick(user)
+                    val error = viewModel.validateInput()
+                    if (error == null) {
+                        val user = viewModel.createUserEntity()
+                        Log.d("USER_DATA", user.toString())
+                        onContinueClick(user)
+                    } else {
+                        Toast.makeText(
+                            context,
+                            error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 },
+//                onClick = {
+//                    val user = viewModel.createUserEntity()
+//                    onContinueClick(user)
+//                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor =  MaterialTheme.colorScheme.primary
                 ),
