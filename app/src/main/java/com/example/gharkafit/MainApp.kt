@@ -89,22 +89,25 @@ fun MainApp() {
                     }
 
                     is PersonalizedPlanKey -> NavEntry(key) {
-
+                        val user = key.user
                         PersonalizedPlanScreen(
                             user = key.user,
                             onStartTrackingClick = {
-                                backStack.add(DashboardKey)
+                                backStack.add(
+                                    DashboardKey(user)
+                                )
                             },
                         )
                     }
 
                     is DashboardKey -> NavEntry(key) {
+                        val user = key.user
                         DashboardScreen(
-                            userName = "Himanshu",
+                            userName = user.name,
                             caloriesConsumed = 1200,
-                            caloriesTarget = 2100,
+                            caloriesTarget = user.targetCalories,
                             proteinConsumed = 55,
-                            proteinTarget = 95,
+                            proteinTarget = user.targetProtein.toInt(),
                             dailyTip = "Try to include a protein source in every meal today.",
                             breakfastAdded = true,
                             lunchAdded = false,

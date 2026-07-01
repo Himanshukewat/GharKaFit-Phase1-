@@ -13,7 +13,9 @@ data class PersonalizedPlanKey(
     val user: UserEntity
 )
 
-object DashboardKey
+data class DashboardKey(
+    val user: UserEntity
+)
 
 object MealInsightsKey
 

@@ -12,7 +12,7 @@ interface UserDao {
     suspend fun insertUser(user: UserEntity)
 
     @Query("SELECT * FROM users LIMIT 1")
-    suspend fun getUser(): UserEntity
+    suspend fun getUser(): UserEntity?
 
     @Update
     suspend fun updateUser(user: UserEntity)
