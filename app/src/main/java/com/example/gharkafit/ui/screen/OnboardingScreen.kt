@@ -344,7 +344,6 @@ fun OnboardingScreen(
                     if (error == null) {
                         val user = viewModel.createUserEntity()
                         viewModel.saveUser(user)
-                        viewModel.checkUser()
                         Log.d("USER_DATA", user.toString())
                         onContinueClick(user)
                     } else {
