@@ -33,12 +33,12 @@ import com.example.gharkafit.model.Goal
 import com.example.gharkafit.ui.component.SelectionCard
 import com.example.gharkafit.ui.theme.GharKaFitTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.viewmodel.OnboardingViewModel
 
 @Composable
 fun OnboardingScreen(
-    onContinueClick: ()->Unit
-) {
+    onContinueClick: (UserEntity) -> Unit) {
 
     val viewModel: OnboardingViewModel = viewModel()
     val uiState = viewModel.uiState
@@ -331,7 +331,7 @@ fun OnboardingScreen(
 
                     Log.d("USER_DATA", user.toString())
 
-                    onContinueClick()
+                    onContinueClick(user)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor =  MaterialTheme.colorScheme.primary

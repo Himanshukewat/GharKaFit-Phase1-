@@ -11,6 +11,7 @@ import com.example.gharkafit.model.Goal
 import com.example.gharkafit.model.OnboardingUiState
 import com.example.gharkafit.core.Calculator
 import com.example.gharkafit.data.user.UserEntity
+import com.example.gharkafit.data.user.UserRepository
 
 class OnboardingViewModel : ViewModel() {
 
@@ -51,9 +52,9 @@ class OnboardingViewModel : ViewModel() {
 
     fun createUserEntity(): UserEntity {
 
-        val age = uiState.age.toInt()
-        val height = uiState.height.toDouble()
-        val weight = uiState.weight.toDouble()
+        val age = uiState.age.trim().toInt()
+        val height = uiState.height.trim().toDouble()
+        val weight = uiState.weight.trim().toDouble()
 
         val calories = Calculator.calculateDailyCalories(
             weightKg = weight,

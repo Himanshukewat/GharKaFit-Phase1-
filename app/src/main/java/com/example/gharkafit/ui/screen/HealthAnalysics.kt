@@ -17,7 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.gharkafit.core.Calculator
 import com.example.gharkafit.ui.component.AnalysisCard
+import kotlinx.coroutines.NonCancellable.key
 
 @Composable
 fun HealthAnalysisScreen(
@@ -206,37 +208,3 @@ fun HealthAnalysisScreen(
         }
     }
 }
-
-
-
-//@Composable
-//fun SuggestionItem(
-//    text: String
-//) {
-//    Text(
-//        text = "✔ $text",
-//        style = MaterialTheme.typography.bodyLarge
-//    )
-//}
-
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun HealthAnalysisScreenPreview() {
-//
-//    GharKaFitTheme {
-//        HealthAnalysisScreen(
-//            bmi = 17.4,
-//            bmiStatus = "Normal Weight ✅",
-//            healthyRange = "18.5 - 24.9",
-//            recommendedWeight = "58kg - 68kg",
-//            calories = 2400,
-//            protein = 95,
-//            suggestions = listOf(
-//                "Increase protein intake",
-//                "Stay hydrated"
-//            )
-//        )
-//    }
-//}

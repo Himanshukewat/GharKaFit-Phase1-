@@ -18,13 +18,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.ui.component.FoodChip
 import com.example.gharkafit.ui.component.PlanCard
 import com.example.gharkafit.ui.component.TargetItem
 
 @Composable
 fun PersonalizedPlanScreen(
-    onStartTrackingClick: ()-> Unit
+    user: UserEntity,
+    onStartTrackingClick: () -> Unit
 ) {
 
     LazyColumn(
@@ -59,7 +61,7 @@ fun PersonalizedPlanScreen(
             ) {
 
                 Text(
-                    text = "Fat Loss",
+                    text = user.goal.replace("_", " "),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
@@ -86,15 +88,15 @@ fun PersonalizedPlanScreen(
                 ) {
 
                     TargetItem(
-                        label = "Calories", value = "2100 kcal"
+                        label = "Calories", value =  "${user.targetCalories} kcal"
                     )
 
                     TargetItem(
-                        label = "Protein", value = "95 g"
+                        label = "Protein", value = "${user.targetProtein.toInt()} g"
                     )
 
                     TargetItem(
-                        label = "Water", value = "3L"
+                        label = "Water", value = "4L"
                     )
                 }
             }
@@ -175,13 +177,3 @@ fun SuggestionItem(
     )
 }
 
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PersonalizedPlanScreenPreview() {
-//
-//    GharKaFitTheme {
-//
-//        PersonalizedPlanScreen()
-//    }
-//}

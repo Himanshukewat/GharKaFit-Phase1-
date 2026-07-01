@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDe
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.example.gharkafit.core.Calculator
 import com.example.gharkafit.ui.navKeys.*
 import com.example.gharkafit.ui.screen.DashboardScreen
 import com.example.gharkafit.ui.screen.HealthAnalysisScreen
@@ -20,7 +21,7 @@ import com.example.gharkafit.ui.screen.WelcomeScreen
 import com.example.gharkafit.ui.screen.MealInsightScreen
 import com.example.gharkafit.ui.screen.MealAnalysis
 import com.example.gharkafit.ui.screen.ProgressScreen
-
+import com.example.gharkafit.core.bmiMessage
 @Composable
 fun MainApp() {
 
@@ -55,35 +56,45 @@ fun MainApp() {
 
                     is OnboardingKey -> NavEntry(key) {
                         OnboardingScreen(
-                            onContinueClick = {
-                                backStack.add(HealthAnalysisKey)
+                            onContinueClick = { user ->
+                                backStack.add(
+                                    HealthAnalysisKey(user)
+                                )
                             }
                         )
                     }
 
                     is HealthAnalysisKey -> NavEntry(key) {
+                        val user = key.user
+                        val bmi = Calculator.calculateBMI(
+                            weightKg = user.weightKg,
+                            heightCm = user.heightCm
+                        )
+                        val bmiStatus = bmiMessage(bmi)
                         HealthAnalysisScreen(
-                            bmi = 17.4,
-                            bmiStatus = "Normal Weight ✅",
+                            bmi = bmi,
+                            bmiStatus = bmiStatus,
                             healthyRange = "18.5 - 24.9",
                             recommendedWeight = "58kg - 68kg",
-                            calories = 2400,
-                            protein = 95,
+                            calories = user.targetCalories,
+                            protein = user.targetProtein.toInt(),
                             suggestions = listOf(
                                 "Increase protein intake",
                                 "Stay hydrated"
                             ),
                             onViewPlanClick = {
-                                backStack.add(PersonalizedPlanKey)
+                                backStack.add(PersonalizedPlanKey(user))
                             }
                         )
                     }
 
                     is PersonalizedPlanKey -> NavEntry(key) {
+
                         PersonalizedPlanScreen(
+                            user = key.user,
                             onStartTrackingClick = {
                                 backStack.add(DashboardKey)
-                            }
+                            },
                         )
                     }
 

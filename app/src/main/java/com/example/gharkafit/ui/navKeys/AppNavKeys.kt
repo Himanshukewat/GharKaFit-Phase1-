@@ -1,12 +1,17 @@
 package com.example.gharkafit.ui.navKeys
 
+import com.example.gharkafit.data.user.UserEntity
+
 object WelcomeKey
 
 object OnboardingKey
 
-object HealthAnalysisKey
-
-object PersonalizedPlanKey
+data class HealthAnalysisKey(
+    val user: UserEntity
+)
+data class PersonalizedPlanKey(
+    val user: UserEntity
+)
 
 object DashboardKey
 
