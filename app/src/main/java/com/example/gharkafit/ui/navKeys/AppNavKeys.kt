@@ -19,7 +19,9 @@ data class DashboardKey(
 
 object MealInsightsKey
 
-object ProgressKey
+data class ProgressKey(
+    val user: UserEntity
+)
 
 //object UserDetailKey
 //

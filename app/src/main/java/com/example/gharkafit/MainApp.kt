@@ -116,7 +116,9 @@ fun MainApp() {
                                 backStack.add(MealInsightsKey)
                             },
                             onViewProgressClick = {
-                                backStack.add(ProgressKey)
+                                backStack.add(
+                                    ProgressKey(user)
+                                )
                             }
                         )
                     }
@@ -168,10 +170,11 @@ fun MainApp() {
                     }
 
                     is ProgressKey -> NavEntry(key) {
+                        val user = key.user
                         ProgressScreen(
-                            goal = "Fat Loss",
+                            goal = user.goal.replace("_", " "),
                             targetWeight = 60,
-                            currentWeight = 65,
+                            currentWeight = user.weightKg.toInt(),
                             mealsLogged = 12,
                             proteinTargetDays = 4,
                             caloriesTargetDays = 3,
