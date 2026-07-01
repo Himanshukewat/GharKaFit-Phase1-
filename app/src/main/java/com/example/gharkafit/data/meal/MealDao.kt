@@ -13,6 +13,9 @@ interface MealDao {
 
     @Query("SELECT * FROM meal_logs")
     suspend fun getTodayMeals(): List<MealLogEntity>
+    /*
+    * Ye actually "today" nahi la raha,ye saare meals la raha hai.
+    * */
 
     @Delete
     suspend fun deleteMeal(meal: MealLogEntity)

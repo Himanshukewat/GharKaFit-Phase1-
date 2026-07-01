@@ -1,0 +1,26 @@
+package com.example.gharkafit.data.meal
+
+class MealRepository(
+    private val mealDao: MealDao
+) {
+
+    suspend fun insertMeal(meal: MealLogEntity) {
+        mealDao.insertMeal(meal)
+    }
+
+    suspend fun getTodayMeals(): List<MealLogEntity> {
+        return mealDao.getTodayMeals()
+    }
+
+    suspend fun deleteMeal(meal: MealLogEntity) {
+        mealDao.deleteMeal(meal)
+    }
+
+    suspend fun getTotalCalories(): Int {
+        return getTodayMeals().sumOf { it.calories }
+    }
+
+    suspend fun getTotalProtein(): Double {
+        return getTodayMeals().sumOf { it.protein }
+    }
+}

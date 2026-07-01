@@ -27,6 +27,14 @@ import com.example.gharkafit.ui.component.SummaryCard
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.gharkafit.ui.component.UserMessageBubble
 import com.example.gharkafit.ui.theme.GharKaFitTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import com.example.gharkafit.data.MainDatabase
+import com.example.gharkafit.data.meal.MealLogEntity
+import com.example.gharkafit.data.meal.MealRepository
+import com.example.gharkafit.viewmodel.MealViewModel
+import com.example.gharkafit.viewmodel.MealViewModelFactory
 
 
 data class MealAnalysis(
@@ -57,6 +65,13 @@ fun MealInsightScreen(
     tomorrowFocus: String
 ) {
 
+    val context = LocalContext.current
+
+    val database = remember { MainDatabase.getDatabase(context) }
+    val repository = remember { MealRepository(database.mealDao()) }
+    val factory = remember { MealViewModelFactory(repository) }
+    val viewModel: MealViewModel = viewModel(factory = factory)
+
     var mealText by remember { mutableStateOf("") }
     var messages by remember { mutableStateOf(userMessages) }
 
@@ -81,6 +96,18 @@ fun MealInsightScreen(
                 },
                 onSend = {
                     if (mealText.isNotBlank()) {
+                        val meal = MealLogEntity(
+                            foodName = mealText,
+                            mealType = "Unknown",
+                            quantity = 1.0,
+                            date = System.currentTimeMillis().toString(),
+                            calories = 0,
+                            protein = 0.0,
+                            carbs = 0.0,
+                            fat = 0.0
+                        )
+                        viewModel.saveMeal(meal)
+                        viewModel.checkMeals()
                         messages = messages + mealText
                         mealText = ""
                     }
