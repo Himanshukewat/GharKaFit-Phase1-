@@ -36,16 +36,22 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.viewmodel.OnboardingViewModel
 import android.widget.Toast
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import com.example.gharkafit.data.MainDatabase
+import com.example.gharkafit.data.user.UserRepository
+import com.example.gharkafit.viewmodel.OnboardingViewModelFactory
 
 @Composable
 fun OnboardingScreen(
-    onContinueClick: (UserEntity) -> Unit)
-{
-
-    val viewModel: OnboardingViewModel = viewModel()
-    val uiState = viewModel.uiState
+    onContinueClick: (UserEntity) -> Unit
+) {
     val context = LocalContext.current
+    val database = remember { MainDatabase.getDatabase(context) }
+    val repository = remember { UserRepository(database.userDao()) }
+    val factory = remember { OnboardingViewModelFactory(repository) }
+    val viewModel: OnboardingViewModel = viewModel(factory = factory)
+    val uiState = viewModel.uiState
 
     LazyColumn(
         modifier = Modifier,
@@ -94,20 +100,20 @@ fun OnboardingScreen(
 
                     OutlinedTextField(
                         value = uiState.name, onValueChange = {
-                        viewModel.updateName(it)
-                    }, label = {
-                        Text("Name")
-                    }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp)
+                            viewModel.updateName(it)
+                        }, label = {
+                            Text("Name")
+                        }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp)
                     )
 
                     OutlinedTextField(
                         value = uiState.age, onValueChange = {
-                        viewModel.updateAge(it)
-                    }, label = {
-                        Text("Age")
-                    }, keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number
-                    ), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp)
+                            viewModel.updateAge(it)
+                        }, label = {
+                            Text("Age")
+                        }, keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        ), modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp)
                     )
 
                     Text(
@@ -120,14 +126,17 @@ fun OnboardingScreen(
 
                         SelectionCard(
                             title = "Male", isSelected = uiState.gender == Gender.MALE, onClick = {
-                                 viewModel.updateGender(Gender.MALE)
+                                viewModel.updateGender(Gender.MALE)
                             }, modifier = Modifier.weight(1f)
                         )
 
                         SelectionCard(
-                            title = "Female", isSelected = uiState.gender == Gender.FEMALE, onClick = {
+                            title = "Female",
+                            isSelected = uiState.gender == Gender.FEMALE,
+                            onClick = {
                                 viewModel.updateGender(Gender.FEMALE)
-                            }, modifier = Modifier.weight(1f)
+                            },
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }
@@ -157,7 +166,8 @@ fun OnboardingScreen(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
 
-                        OutlinedTextField(value = uiState.height, onValueChange = {
+                        OutlinedTextField(
+                            value = uiState.height, onValueChange = {
                             viewModel.updateHeight(it)
                         }, label = {
                             Text("Height")
@@ -165,18 +175,19 @@ fun OnboardingScreen(
                             Text("cm")
                         }, keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number
-                        ), modifier = Modifier.weight(1f), shape = RoundedCornerShape(18.dp))
+                        ), modifier = Modifier.weight(1f), shape = RoundedCornerShape(18.dp)
+                        )
 
                         OutlinedTextField(
                             value = uiState.weight, onValueChange = {
-                            viewModel.updateWeight(it)
-                        }, label = {
-                            Text("Weight")
-                        }, suffix = {
-                            Text("kg")
-                        }, keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number
-                        ), modifier = Modifier.weight(1f), shape = RoundedCornerShape(18.dp)
+                                viewModel.updateWeight(it)
+                            }, label = {
+                                Text("Weight")
+                            }, suffix = {
+                                Text("kg")
+                            }, keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number
+                            ), modifier = Modifier.weight(1f), shape = RoundedCornerShape(18.dp)
                         )
                     }
                 }
@@ -295,7 +306,7 @@ fun OnboardingScreen(
                         text = "Diet Style", style = MaterialTheme.typography.titleLarge
                     )
 
-                    DietCard (
+                    DietCard(
                         title = "Mostly Home Food",
                         description = "Roti, sabzi, dal, rice",
                         isSelected = uiState.dietHabit == DietHabit.HOME,
@@ -311,7 +322,7 @@ fun OnboardingScreen(
                             viewModel.updateDiet(DietHabit.MIXED)
                         })
 
-                    DietCard (
+                    DietCard(
                         title = "Mostly Processed Food",
                         description = "Fast food and packaged snacks",
                         isSelected = uiState.dietHabit == DietHabit.PROCESSED,
@@ -332,6 +343,8 @@ fun OnboardingScreen(
                     val error = viewModel.validateInput()
                     if (error == null) {
                         val user = viewModel.createUserEntity()
+                        viewModel.saveUser(user)
+                        viewModel.checkUser()
                         Log.d("USER_DATA", user.toString())
                         onContinueClick(user)
                     } else {
@@ -347,7 +360,7 @@ fun OnboardingScreen(
 //                    onContinueClick(user)
 //                },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor =  MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.primary
                 ),
                 modifier = Modifier
                     .fillMaxWidth()

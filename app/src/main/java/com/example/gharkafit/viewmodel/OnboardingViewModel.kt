@@ -1,9 +1,11 @@
 package com.example.gharkafit.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.gharkafit.model.ActivityLevel
 import com.example.gharkafit.model.DietHabit
 import com.example.gharkafit.model.Gender
@@ -12,8 +14,12 @@ import com.example.gharkafit.model.OnboardingUiState
 import com.example.gharkafit.core.Calculator
 import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.data.user.UserRepository
+import kotlinx.coroutines.launch
 
-class OnboardingViewModel : ViewModel() {
+class OnboardingViewModel(
+    private val repository: UserRepository
+) : ViewModel() {
+
 
     var uiState by mutableStateOf(OnboardingUiState())
         private set
@@ -116,4 +122,28 @@ class OnboardingViewModel : ViewModel() {
             targetProtein = protein
         )
     }
+
+    fun saveUser(user: UserEntity) {
+        viewModelScope.launch {
+            repository.insertUser(user)
+        }
+    }
+
+//    fun checkUser() {
+//        viewModelScope.launch {
+//            val user = repository.getUser()
+//            Log.d("ROOM_USER", user.toString())
+//        }
+//    }
+      /** for onboarding screen
+    fun hasUser(
+        onResult: (Boolean) -> Unit
+    ) {
+        viewModelScope.launch {
+            onResult(
+                repository.hasUser()
+            )
+        }
+    }
+    */
 }
