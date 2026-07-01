@@ -58,6 +58,7 @@ fun MealInsightScreen(
 ) {
 
     var mealText by remember { mutableStateOf("") }
+    var messages by remember { mutableStateOf(userMessages) }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.onPrimary,
@@ -73,14 +74,16 @@ fun MealInsightScreen(
         },
 
         bottomBar = {
-
             MealInputBar(
                 mealText = mealText,
                 onValueChange = {
                     mealText = it
                 },
                 onSend = {
-
+                    if (mealText.isNotBlank()) {
+                        messages = messages + mealText
+                        mealText = ""
+                    }
                 }
             )
         }
@@ -103,23 +106,22 @@ fun MealInsightScreen(
         ) {
 
             items(
-                count = userMessages.size
+                count = messages.size
             ) { index ->
-
                 UserMessageBubble(
-                    message = userMessages[index]
+                    message = messages[index]
                 )
-
                 Spacer( modifier = Modifier.height(8.dp) )
-
-                AnalysisFoodCard(
-                    title = analyses[index].title,
-                    calories = analyses[index].calories,
-                    protein = analyses[index].protein,
-                    carbs = analyses[index].carbs,
-                    fat = analyses[index].fat,
-                    insight = analyses[index].insight
-                )
+                if (index < analyses.size) {
+                    AnalysisFoodCard(
+                        title = analyses[index].title,
+                        calories = analyses[index].calories,
+                        protein = analyses[index].protein,
+                        carbs = analyses[index].carbs,
+                        fat = analyses[index].fat,
+                        insight = analyses[index].insight
+                    )
+                }
             }
 
             item {
