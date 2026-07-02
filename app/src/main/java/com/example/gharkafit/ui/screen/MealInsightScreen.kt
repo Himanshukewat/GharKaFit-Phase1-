@@ -1,5 +1,6 @@
 package com.example.gharkafit.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -28,9 +29,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.gharkafit.ui.component.UserMessageBubble
 import com.example.gharkafit.ui.theme.GharKaFitTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.example.gharkafit.data.MainDatabase
+import com.example.gharkafit.data.food.FoodRepository
 import com.example.gharkafit.data.meal.MealLogEntity
 import com.example.gharkafit.data.meal.MealRepository
 import com.example.gharkafit.viewmodel.MealViewModel
@@ -68,8 +69,10 @@ fun MealInsightScreen(
     val context = LocalContext.current
 
     val database = remember { MainDatabase.getDatabase(context) }
-    val repository = remember { MealRepository(database.mealDao()) }
-    val factory = remember { MealViewModelFactory(repository) }
+    val mealRepository = remember { MealRepository(database.mealDao()) }
+
+    val foodRepository = remember { FoodRepository(database.foodDao()) }
+    val factory = remember { MealViewModelFactory(mealRepository,foodRepository) }
     val viewModel: MealViewModel = viewModel(factory = factory)
 
     var mealText by remember { mutableStateOf("") }
@@ -96,20 +99,24 @@ fun MealInsightScreen(
                 },
                 onSend = {
                     if (mealText.isNotBlank()) {
-                        val meal = MealLogEntity(
-                            foodName = mealText,
-                            mealType = "Unknown",
-                            quantity = 1.0,
-                            date = System.currentTimeMillis().toString(),
-                            calories = 0,
-                            protein = 0.0,
-                            carbs = 0.0,
-                            fat = 0.0
-                        )
-                        viewModel.saveMeal(meal)
-                        viewModel.checkMeals()
-                        messages = messages + mealText
-                        mealText = ""
+                        viewModel.analyzeMeal(mealText) { food ->
+//                            Log.d("FOOD_RESULT", food.toString())
+                            val meal = MealLogEntity(
+                                foodName = mealText,
+                                mealType = "Unknown",
+                                quantity = 1.0,
+                                date = System.currentTimeMillis().toString(),
+                                calories = food?.calories ?: 0,
+                                protein = food?.protein ?: 0.0,
+                                carbs = food?.carbs ?: 0.0,
+                                fat = food?.fat ?: 0.0
+                            )
+//                            Log.d("MEAL_TO_SAVE", meal.toString())
+                            viewModel.saveMeal(meal)
+//                            viewModel.checkMeals()
+                            messages = messages + mealText
+                            mealText = ""
+                        }
                     }
                 }
             )
@@ -190,54 +197,54 @@ fun MealInsightScreen(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun MealInsightScreenPreview() {
-
-    GharKaFitTheme {
-        MealInsightScreen(
-            userMessages = listOf(
-                "Aaj breakfast me 500ml milk liya",
-                "Lunch me 4 roti aur paneer bhurji li"
-            ),
-            analyses = listOf(
-                MealAnalysis(
-                    title = "🥛 Breakfast Analysis",
-                    calories = "250 kcal",
-                    protein = "16 g",
-                    carbs = "24 g",
-                    fat = "8 g",
-                    insight = "✅ Good protein source"
-                ),
-                MealAnalysis(
-                    title = "🍽 Lunch Analysis",
-                    calories = "700 kcal",
-                    protein = "30 g",
-                    carbs = "75 g",
-                    fat = "25 g",
-                    insight = "⚠ Roti quantity slightly high"
-                )
-            ),
-
-            summaryCalories = "950 kcal",
-            summaryProtein = "46 g",
-            summaryCarbs = "99 g",
-            summaryFat = "33 g",
-
-            suggestions = listOf(
-                "Add salad",
-                "Include protein source",
-                "Keep dinner light"
-            ),
-
-            totalCalories = "2050 kcal",
-            totalProtein = "92 g",
-
-            strength = "Protein target achieved",
-
-            improvement = "Water intake low",
-
-            tomorrowFocus = "Add fruit in breakfast"
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun MealInsightScreenPreview() {
+//
+//    GharKaFitTheme {
+//        MealInsightScreen(
+//            userMessages = listOf(
+//                "Aaj breakfast me 500ml milk liya",
+//                "Lunch me 4 roti aur paneer bhurji li"
+//            ),
+//            analyses = listOf(
+//                MealAnalysis(
+//                    title = "🥛 Breakfast Analysis",
+//                    calories = "250 kcal",
+//                    protein = "16 g",
+//                    carbs = "24 g",
+//                    fat = "8 g",
+//                    insight = "✅ Good protein source"
+//                ),
+//                MealAnalysis(
+//                    title = "🍽 Lunch Analysis",
+//                    calories = "700 kcal",
+//                    protein = "30 g",
+//                    carbs = "75 g",
+//                    fat = "25 g",
+//                    insight = "⚠ Roti quantity slightly high"
+//                )
+//            ),
+//
+//            summaryCalories = "950 kcal",
+//            summaryProtein = "46 g",
+//            summaryCarbs = "99 g",
+//            summaryFat = "33 g",
+//
+//            suggestions = listOf(
+//                "Add salad",
+//                "Include protein source",
+//                "Keep dinner light"
+//            ),
+//
+//            totalCalories = "2050 kcal",
+//            totalProtein = "92 g",
+//
+//            strength = "Protein target achieved",
+//
+//            improvement = "Water intake low",
+//
+//            tomorrowFocus = "Add fruit in breakfast"
+//        )
+//    }
+//}
