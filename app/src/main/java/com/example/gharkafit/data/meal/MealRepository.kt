@@ -23,4 +23,12 @@ class MealRepository(
     suspend fun getTotalProtein(): Double {
         return getTodayMeals().sumOf { it.protein }
     }
+
+    suspend fun getAllMeals(): List<MealLogEntity> {
+        return mealDao.getAllMeals()
+    }
+
+    suspend fun hasMeal(mealType: String): Boolean {
+        return mealDao.getMealCount(mealType) > 0
+    }
 }

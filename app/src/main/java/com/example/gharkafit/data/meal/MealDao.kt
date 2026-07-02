@@ -16,6 +16,11 @@ interface MealDao {
     /*
     * Ye actually "today" nahi la raha,ye saare meals la raha hai.
     * */
+    @Query("SELECT COUNT(*) FROM meal_logs WHERE meal_type = :mealType")
+    suspend fun getMealCount(mealType: String): Int
+
+    @Query("SELECT * FROM meal_logs ORDER BY meal_id DESC")
+    suspend fun getAllMeals(): List<MealLogEntity>
 
     @Delete
     suspend fun deleteMeal(meal: MealLogEntity)

@@ -9,13 +9,15 @@ import com.example.gharkafit.data.food.FoodRepository
 import com.example.gharkafit.data.meal.MealLogEntity
 import com.example.gharkafit.data.meal.MealRepository
 import kotlinx.coroutines.launch
+import com.example.gharkafit.core.MealAnalyzer
+import com.example.gharkafit.model.MealAnalysisResult
 
 class MealViewModel(
     private val mealRepository: MealRepository,
     private val foodRepository: FoodRepository
 ) : ViewModel() {
 
-
+    private val mealAnalyzer = MealAnalyzer()
     fun saveMeal(meal: MealLogEntity) {
         viewModelScope.launch {
             mealRepository.insertMeal(meal)
@@ -48,27 +50,24 @@ class MealViewModel(
 
     fun analyzeMeal(
         input: String,
-        onResult: (FoodEntity?) -> Unit
+        onResult: (MealAnalysisResult) -> Unit
     ) {
         viewModelScope.launch {
             val words = MealParser.parseMeal(input)
-//            Log.d("PARSER", words.toString())
             var food: FoodEntity? = null
             for (word in words) {
                 food = foodRepository.getFoodByName(word)
-//                Log.d("MATCH", "$word -> $food")
+
                 if (food != null) {
                     break
                 }
             }
-
-            onResult(food)
+            val result = mealAnalyzer.analyze(food)
+            onResult(result)
         }
     }
 
-    fun getTotalCalories(
-        onResult: (Int) -> Unit
-    ) {
+    fun getTotalCalories(onResult: (Int) -> Unit) {
         viewModelScope.launch {
             onResult(
                 mealRepository.getTotalCalories()
@@ -76,12 +75,29 @@ class MealViewModel(
         }
     }
 
-    fun getTotalProtein(
-        onResult: (Double) -> Unit
-    ) {
+    fun getTotalProtein(onResult: (Double) -> Unit) {
         viewModelScope.launch {
             onResult(
                 mealRepository.getTotalProtein()
+            )
+        }
+    }
+
+    fun getAllMeals(onResult: (List<MealLogEntity>) -> Unit) {
+        viewModelScope.launch {
+            onResult(
+                mealRepository.getAllMeals()
+            )
+        }
+    }
+
+    fun hasMeal(
+        mealType: String,
+        onResult: (Boolean) -> Unit
+    ) {
+        viewModelScope.launch {
+            onResult(
+                mealRepository.hasMeal(mealType)
             )
         }
     }

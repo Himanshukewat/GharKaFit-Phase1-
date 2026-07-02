@@ -109,9 +109,6 @@ fun MainApp() {
                             proteinConsumed = 0,
                             proteinTarget = user.targetProtein.toInt(),
                             dailyTip = "Try to include a protein source in every meal today.",
-                            breakfastAdded = true,
-                            lunchAdded = false,
-                            dinnerAdded = false,
                             onAddMealClick = {
                                 backStack.add(MealInsightsKey)
                             },

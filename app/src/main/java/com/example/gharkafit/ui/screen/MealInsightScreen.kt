@@ -76,6 +76,7 @@ fun MealInsightScreen(
     val viewModel: MealViewModel = viewModel(factory = factory)
 
     var mealText by remember { mutableStateOf("") }
+    var selectedMealType by remember { mutableStateOf("Breakfast") }
     var messages by remember { mutableStateOf(userMessages) }
 
     Scaffold(
@@ -93,6 +94,10 @@ fun MealInsightScreen(
 
         bottomBar = {
             MealInputBar(
+                selectedMealType = selectedMealType,
+                onMealTypeChange = {
+                    selectedMealType = it
+                },
                 mealText = mealText,
                 onValueChange = {
                     mealText = it
@@ -103,7 +108,7 @@ fun MealInsightScreen(
 //                            Log.d("FOOD_RESULT", food.toString())
                             val meal = MealLogEntity(
                                 foodName = mealText,
-                                mealType = "Unknown",
+                                mealType = selectedMealType,
                                 quantity = 1.0,
                                 date = System.currentTimeMillis().toString(),
                                 calories = food?.calories ?: 0,

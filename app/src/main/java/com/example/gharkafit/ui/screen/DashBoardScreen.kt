@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gharkafit.data.MainDatabase
 import com.example.gharkafit.data.food.FoodRepository
+import com.example.gharkafit.data.meal.MealLogEntity
 import com.example.gharkafit.data.meal.MealRepository
 import com.example.gharkafit.ui.component.DashboardCard
 import com.example.gharkafit.ui.component.MealStatusItem
@@ -44,9 +46,6 @@ fun DashboardScreen(
     proteinConsumed: Int,
     proteinTarget: Int,
     dailyTip: String,
-    breakfastAdded: Boolean,
-    lunchAdded: Boolean,
-    dinnerAdded: Boolean,
     onAddMealClick: () -> Unit,
     onViewProgressClick: () -> Unit
 ) {
@@ -70,6 +69,10 @@ fun DashboardScreen(
     val caloriesLeft = caloriesTarget - caloriesConsumed
     val proteinLeft = proteinTarget - proteinConsumed
     val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+    var meals by remember { mutableStateOf<List<MealLogEntity>>(emptyList()) }
+    var breakfastDone by remember { mutableStateOf(false) }
+    var lunchDone by remember { mutableStateOf(false) }
+    var dinnerDone by remember { mutableStateOf(false) }
 
     val greeting = when {
         hour < 12 -> "Good Morning"
@@ -83,6 +86,20 @@ fun DashboardScreen(
         }
         viewModel.getTotalProtein {
             consumedProtein = it
+        }
+        viewModel.getAllMeals {
+            meals = it
+        }
+        viewModel.hasMeal("Breakfast") {
+            breakfastDone = it
+        }
+
+        viewModel.hasMeal("Lunch") {
+            lunchDone = it
+        }
+
+        viewModel.hasMeal("Dinner") {
+            dinnerDone = it
         }
     }
 
@@ -163,17 +180,17 @@ fun DashboardScreen(
             ) {
                 MealStatusItem(
                     mealName = "🍳 Breakfast",
-                    isAdded = breakfastAdded
+                    isAdded = breakfastDone
                 )
 
                 MealStatusItem(
                     mealName = "🍛 Lunch",
-                    isAdded = lunchAdded
+                    isAdded = lunchDone
                 )
 
                 MealStatusItem(
                     mealName = "🌙 Dinner",
-                    isAdded = dinnerAdded
+                    isAdded = dinnerDone
                 )
             }
         }
@@ -219,23 +236,3 @@ fun DashboardScreen(
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun DashboardPreview() {
-    GharKaFitTheme {
-        DashboardScreen(
-            userName = "Himanshu",
-            caloriesConsumed = 1200,
-            caloriesTarget = 2100,
-            proteinConsumed = 55,
-            proteinTarget = 95,
-            breakfastAdded = true,
-            lunchAdded = false,
-            dinnerAdded = false,
-            dailyTip = "Try to include a protein source in every meal today.",
-            onAddMealClick = {},
-            onViewProgressClick = {}
-        )
-    }
-}
