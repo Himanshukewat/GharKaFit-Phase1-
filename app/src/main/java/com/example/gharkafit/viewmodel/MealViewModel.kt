@@ -65,4 +65,24 @@ class MealViewModel(
             onResult(food)
         }
     }
+
+    fun getTotalCalories(
+        onResult: (Int) -> Unit
+    ) {
+        viewModelScope.launch {
+            onResult(
+                mealRepository.getTotalCalories()
+            )
+        }
+    }
+
+    fun getTotalProtein(
+        onResult: (Double) -> Unit
+    ) {
+        viewModelScope.launch {
+            onResult(
+                mealRepository.getTotalProtein()
+            )
+        }
+    }
 }

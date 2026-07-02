@@ -12,14 +12,27 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gharkafit.data.MainDatabase
+import com.example.gharkafit.data.food.FoodRepository
+import com.example.gharkafit.data.meal.MealRepository
 import com.example.gharkafit.ui.component.DashboardCard
 import com.example.gharkafit.ui.component.MealStatusItem
 import com.example.gharkafit.ui.component.ProgressCard
 import com.example.gharkafit.ui.component.RemainingProgress
 import com.example.gharkafit.ui.theme.GharKaFitTheme
+import com.example.gharkafit.viewmodel.MealViewModel
+import com.example.gharkafit.viewmodel.MealViewModelFactory
 import java.util.Calendar
 
 @Composable
@@ -37,6 +50,23 @@ fun DashboardScreen(
     onAddMealClick: () -> Unit,
     onViewProgressClick: () -> Unit
 ) {
+
+    val context = LocalContext.current
+
+    val database = remember { MainDatabase.getDatabase(context) }
+    val mealRepository = remember { MealRepository(database.mealDao()) }
+    val foodRepository = remember { FoodRepository(database.foodDao()) }
+
+    val factory = remember { MealViewModelFactory(
+            mealRepository,
+            foodRepository
+        )
+    }
+
+    val viewModel: MealViewModel = viewModel( factory = factory)
+    var consumedCalories by remember { mutableIntStateOf(caloriesConsumed) }
+    var consumedProtein by remember { mutableDoubleStateOf(proteinConsumed.toDouble()) }
+
     val caloriesLeft = caloriesTarget - caloriesConsumed
     val proteinLeft = proteinTarget - proteinConsumed
     val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
@@ -45,6 +75,15 @@ fun DashboardScreen(
         hour < 12 -> "Good Morning"
         hour < 17 -> "Good Afternoon"
         else -> "Good Evening"
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getTotalCalories {
+            consumedCalories = it
+        }
+        viewModel.getTotalProtein {
+            consumedProtein = it
+        }
     }
 
     LazyColumn(
@@ -80,13 +119,13 @@ fun DashboardScreen(
                     ProgressCard(
                         modifier = Modifier.weight(1f),
                         title = "Calories",
-                        current = caloriesConsumed,
+                        current = consumedCalories,
                         target = caloriesTarget
                     )
                     ProgressCard(
                         modifier = Modifier.weight(1f),
                         title = "Protein",
-                        current = proteinConsumed,
+                        current = consumedProtein.toInt(),
                         target = proteinTarget
                     )
                 }

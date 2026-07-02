@@ -104,9 +104,9 @@ fun MainApp() {
                         val user = key.user
                         DashboardScreen(
                             userName = user.name,
-                            caloriesConsumed = 1200,
+                            caloriesConsumed = 0,
                             caloriesTarget = user.targetCalories,
-                            proteinConsumed = 55,
+                            proteinConsumed = 0,
                             proteinTarget = user.targetProtein.toInt(),
                             dailyTip = "Try to include a protein source in every meal today.",
                             breakfastAdded = true,
