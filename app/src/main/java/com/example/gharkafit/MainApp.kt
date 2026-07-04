@@ -122,47 +122,15 @@ fun MainApp() {
 
                     is MealInsightsKey -> NavEntry(key) {
                         MealInsightScreen(
-                            userMessages = listOf(
-                                "Aaj breakfast me 500ml milk liya",
-                                "Lunch me 4 roti aur paneer bhurji li"
-                            ),
-
-                            analyses = listOf(
-                                MealAnalysis(
-                                    title = "🥛 Breakfast Analysis",
-                                    calories = "250 kcal",
-                                    protein = "16 g",
-                                    carbs = "24 g",
-                                    fat = "8 g",
-                                    insight = "✅ Good protein source"
-                                ),
-                                MealAnalysis(
-                                    title = "🍽 Lunch Analysis",
-                                    calories = "700 kcal",
-                                    protein = "30 g",
-                                    carbs = "75 g",
-                                    fat = "25 g",
-                                    insight = "⚠ Roti quantity slightly high"
-                                )
-                            ),
-
-                            summaryCalories = "950 kcal",
-                            summaryProtein = "46 g",
-                            summaryCarbs = "99 g",
-                            summaryFat = "33 g",
-
+                            userMessages = emptyList(),
+                            analyses = emptyList(),
                             suggestions = listOf(
                                 "Add salad",
                                 "Include protein source",
                                 "Keep dinner light"
                             ),
-
-                            totalCalories = "2050 kcal",
-                            totalProtein = "92 g",
-
-                            strength = "Protein target achieved",
-                            improvement = "Water intake low",
-                            tomorrowFocus = "Add fruit in breakfast"
+                            totalCalories = "0 kcal",
+                            totalProtein = "0 g"
                         )
                     }
 

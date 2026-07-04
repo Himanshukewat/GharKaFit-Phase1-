@@ -31,4 +31,12 @@ class MealRepository(
     suspend fun hasMeal(mealType: String): Boolean {
         return mealDao.getMealCount(mealType) > 0
     }
+
+    suspend fun getTotalCarbs(): Double {
+        return mealDao.getTodayMeals().sumOf { it.carbs }
+    }
+
+    suspend fun getTotalFat(): Double {
+        return mealDao.getTodayMeals().sumOf { it.fat }
+    }
 }

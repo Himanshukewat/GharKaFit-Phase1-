@@ -10,7 +10,11 @@ import com.example.gharkafit.data.meal.MealLogEntity
 import com.example.gharkafit.data.meal.MealRepository
 import kotlinx.coroutines.launch
 import com.example.gharkafit.core.MealAnalyzer
+import com.example.gharkafit.data.user.UserEntity
+import com.example.gharkafit.data.user.UserRepository
 import com.example.gharkafit.model.MealAnalysisResult
+import com.example.gharkafit.core.DailySummary
+import com.example.gharkafit.core.DailySummaryGenerator
 
 class MealViewModel(
     private val mealRepository: MealRepository,
@@ -98,6 +102,57 @@ class MealViewModel(
         viewModelScope.launch {
             onResult(
                 mealRepository.hasMeal(mealType)
+            )
+        }
+    }
+
+    fun getUser(repository: UserRepository,
+                onResult: (UserEntity?) -> Unit) {
+        viewModelScope.launch {
+            onResult(
+                repository.getUser()
+            )
+        }
+    }
+
+    private val dailySummaryGenerator = DailySummaryGenerator()
+    fun generateSummary(
+        calories: Int,
+        calorieTarget: Int,
+        protein: Double,
+        proteinTarget: Double
+    ): DailySummary {
+
+        return dailySummaryGenerator.generate(
+            calories = calories,
+            calorieTarget = calorieTarget,
+            protein = protein,
+            proteinTarget = proteinTarget
+        )
+    }
+
+    fun getTotalCarbs(
+        onResult: (Double) -> Unit) {
+        viewModelScope.launch {
+            onResult(
+                mealRepository.getTotalCarbs()
+            )
+        }
+    }
+
+    fun getTotalFat(
+        onResult: (Double) -> Unit ){
+        viewModelScope.launch {
+            onResult(
+                mealRepository.getTotalFat()
+            )
+        }
+    }
+
+    fun getMealCount(onResult: (Int) -> Unit) {
+        viewModelScope.launch {
+            onResult(
+                mealRepository.getAllMeals().size
             )
         }
     }

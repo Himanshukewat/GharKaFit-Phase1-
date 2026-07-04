@@ -1,6 +1,5 @@
 package com.example.gharkafit.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -14,26 +13,28 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gharkafit.core.DailySummaryGenerator
+import com.example.gharkafit.data.MainDatabase
+import com.example.gharkafit.data.food.FoodRepository
+import com.example.gharkafit.data.meal.MealLogEntity
+import com.example.gharkafit.data.meal.MealRepository
+import com.example.gharkafit.data.user.UserEntity
+import com.example.gharkafit.data.user.UserRepository
 import com.example.gharkafit.ui.component.AnalysisFoodCard
 import com.example.gharkafit.ui.component.DailySummaryCard
 import com.example.gharkafit.ui.component.MealInputBar
 import com.example.gharkafit.ui.component.SuggestionCard
 import com.example.gharkafit.ui.component.SummaryCard
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.gharkafit.ui.component.UserMessageBubble
-import com.example.gharkafit.ui.theme.GharKaFitTheme
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.ui.platform.LocalContext
-import com.example.gharkafit.data.MainDatabase
-import com.example.gharkafit.data.food.FoodRepository
-import com.example.gharkafit.data.meal.MealLogEntity
-import com.example.gharkafit.data.meal.MealRepository
 import com.example.gharkafit.viewmodel.MealViewModel
 import com.example.gharkafit.viewmodel.MealViewModelFactory
 
@@ -54,35 +55,69 @@ fun MealInsightScreen(
     modifier: Modifier = Modifier,
     userMessages: List<String>,
     analyses: List<MealAnalysis>,
-    summaryCalories: String,
-    summaryProtein: String,
-    summaryCarbs: String,
-    summaryFat: String,
     suggestions: List<String>,
     totalCalories: String,
     totalProtein: String,
-    strength: String,
-    improvement: String,
-    tomorrowFocus: String
 ) {
 
     val context = LocalContext.current
 
     val database = remember { MainDatabase.getDatabase(context) }
     val mealRepository = remember { MealRepository(database.mealDao()) }
+    val userRepository = remember { UserRepository(database.userDao()) }
 
     val foodRepository = remember { FoodRepository(database.foodDao()) }
-    val factory = remember { MealViewModelFactory(mealRepository,foodRepository) }
+    val factory = remember { MealViewModelFactory(mealRepository, foodRepository) }
     val viewModel: MealViewModel = viewModel(factory = factory)
 
+    var user by remember { mutableStateOf<UserEntity?>(null) }
     var mealText by remember { mutableStateOf("") }
     var selectedMealType by remember { mutableStateOf("Breakfast") }
     var messages by remember { mutableStateOf(userMessages) }
+    var totalCaloriesValue by remember { mutableStateOf(0) }
+    var totalProteinValue by remember { mutableStateOf(0.0) }
+    var totalCarbsValue by remember { mutableStateOf(0.0) }
+    var totalFatValue by remember { mutableStateOf(0.0) }
+
+    val dailySummary = remember(
+        totalCalories,
+        totalProtein,
+        user
+    ) {
+        viewModel.generateSummary(
+            calories = totalCalories.replace(" kcal", "").toIntOrNull() ?: 0,
+            calorieTarget = user?.targetCalories ?: 0,
+            protein = totalProtein.replace(" g", "").toDoubleOrNull() ?: 0.0,
+            proteinTarget = user?.targetProtein ?: 0.0
+        )
+    }
+
+    fun refreshNutritionData() {
+        viewModel.getTotalCalories {
+            totalCaloriesValue = it
+        }
+        viewModel.getTotalProtein {
+            totalProteinValue = it
+        }
+        viewModel.getTotalCarbs {
+            totalCarbsValue = it
+        }
+        viewModel.getTotalFat {
+            totalFatValue = it
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getUser(userRepository) {
+            user = it
+        }
+        refreshNutritionData()
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.onPrimary,
 
-                topBar = {
+        topBar = {
             TopAppBar(
                 title = {
                     Text(
@@ -118,6 +153,7 @@ fun MealInsightScreen(
                             )
 //                            Log.d("MEAL_TO_SAVE", meal.toString())
                             viewModel.saveMeal(meal)
+                            refreshNutritionData()
 //                            viewModel.checkMeals()
                             messages = messages + mealText
                             mealText = ""
@@ -150,7 +186,7 @@ fun MealInsightScreen(
                 UserMessageBubble(
                     message = messages[index]
                 )
-                Spacer( modifier = Modifier.height(8.dp) )
+                Spacer(modifier = Modifier.height(8.dp))
                 if (index < analyses.size) {
                     AnalysisFoodCard(
                         title = analyses[index].title,
@@ -166,10 +202,10 @@ fun MealInsightScreen(
             item {
 
                 SummaryCard(
-                    calories = summaryCalories,
-                    protein = summaryProtein,
-                    carbs = summaryCarbs,
-                    fat = summaryFat
+                    calories = "$totalCaloriesValue kcal",
+                    protein = "${totalProteinValue} g",
+                    carbs = "${totalCarbsValue} g",
+                    fat = "${totalFatValue} g"
                 )
             }
 
@@ -183,11 +219,11 @@ fun MealInsightScreen(
             item {
 
                 DailySummaryCard(
-                    totalCalories = totalCalories,
-                    totalProtein = totalProtein,
-                    strength = strength,
-                    improvement = improvement,
-                    tomorrowFocus = tomorrowFocus
+                    totalCalories = "$totalCaloriesValue kcal",
+                    totalProtein = "${totalProteinValue} g",
+                    strength = dailySummary.strength,
+                    improvement = dailySummary.improvement,
+                    tomorrowFocus = dailySummary.tomorrowFocus
                 )
             }
 
