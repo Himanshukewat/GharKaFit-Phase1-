@@ -59,9 +59,11 @@ fun PersonalizedPlanScreen(
             PlanCard(
                 title = "Your Goal"
             ) {
-
                 Text(
-                    text = user.goal.replace("_", " "),
+                    text = user.goal.replace("_", " ")
+                    .lowercase()
+                    .replaceFirstChar { it.uppercase() }
+                    ?: "--",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary

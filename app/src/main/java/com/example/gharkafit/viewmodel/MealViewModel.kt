@@ -16,6 +16,8 @@ import com.example.gharkafit.model.MealAnalysisResult
 import com.example.gharkafit.core.DailySummary
 import com.example.gharkafit.core.DailySummaryGenerator
 
+
+//rename this vm is used for dashboard , mealInsight , progress
 class MealViewModel(
     private val mealRepository: MealRepository,
     private val foodRepository: FoodRepository
@@ -106,12 +108,14 @@ class MealViewModel(
         }
     }
 
-    fun getUser(repository: UserRepository,
-                onResult: (UserEntity?) -> Unit) {
+    fun getUser(
+        repository: UserRepository,
+        onResult: (UserEntity?) -> Unit
+    ) {
         viewModelScope.launch {
-            onResult(
-                repository.getUser()
-            )
+            val user = repository.getUser()
+            Log.d("USER_DATA", user.toString())
+            onResult(user)
         }
     }
 

@@ -12,6 +12,7 @@ import com.example.gharkafit.model.Gender
 import com.example.gharkafit.model.Goal
 import com.example.gharkafit.model.OnboardingUiState
 import com.example.gharkafit.core.Calculator
+import com.example.gharkafit.core.TargetWeightCalculator
 import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.data.user.UserRepository
 import kotlinx.coroutines.launch
@@ -109,22 +110,46 @@ class OnboardingViewModel(
             goal = uiState.goal.name
         )
 
+        //🤖 Auto Calculate (BMI based)
+        //✍️ Set My Own Target Weight
+
+        Log.d("HEIGHT", height.toString())
+        Log.d("WEIGHT", weight.toString())
+        Log.d("GOAL", uiState.goal.name)
+
+        val targetWeight = TargetWeightCalculator.calculate(
+            heightCm = height,
+            currentWeight = weight,
+            goal = uiState.goal.name
+        )
+
+        val waterTarget = when (uiState.activityLevel.name) {
+            "SEDENTARY" -> 2.5
+            "LIGHT" -> 3.0
+            "ACTIVE" -> 4.0
+            else -> 3.0
+        }
+
         return UserEntity(
             name = uiState.name,
             age = age,
             gender = uiState.gender.name,
             heightCm = height,
             weightKg = weight,
+            startWeight = weight,
+            targetWeight = targetWeight,
             goal = uiState.goal.name,
             dietHabit = uiState.dietHabit.name,
             activityLevel = uiState.activityLevel.name,
             targetCalories = calories,
-            targetProtein = protein
+            targetProtein = protein,
+            waterTarget = waterTarget
         )
     }
 
     fun saveUser(user: UserEntity) {
         viewModelScope.launch {
+            repository.deleteAllUsers()
             repository.insertUser(user)
         }
     }

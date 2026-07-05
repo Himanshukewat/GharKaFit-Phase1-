@@ -19,20 +19,56 @@ import androidx.compose.ui.unit.dp
 import com.example.gharkafit.ui.component.ProgressInfoCard
 import com.example.gharkafit.ui.component.ProgressStat
 import com.example.gharkafit.ui.theme.GharKaFitTheme
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+import com.example.gharkafit.data.MainDatabase
+import com.example.gharkafit.data.food.FoodRepository
+import com.example.gharkafit.data.meal.MealRepository
+import com.example.gharkafit.data.user.UserEntity
+import com.example.gharkafit.data.user.UserRepository
+import com.example.gharkafit.viewmodel.MealViewModel
+import com.example.gharkafit.viewmodel.MealViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProgressScreen(
     modifier: Modifier = Modifier,
-    goal: String,
-    targetWeight: Int,
-    currentWeight: Int,
-    mealsLogged: Int,
-    proteinTargetDays: Int,
-    caloriesTargetDays: Int,
-    weeklyInsight: String
 ) {
-    val remainingWeight = currentWeight - targetWeight
+    val context = LocalContext.current
+
+    val database = remember { MainDatabase.getDatabase(context) }
+    val mealRepository = remember { MealRepository(database.mealDao()) }
+    val foodRepository = remember { FoodRepository(database.foodDao()) }
+    val userRepository = remember { UserRepository(database.userDao()) }
+    val factory = remember { MealViewModelFactory(
+            mealRepository,
+            foodRepository
+        )
+    }
+    val viewModel: MealViewModel = viewModel(factory = factory)
+
+    var user by remember { mutableStateOf<UserEntity?>(null) }
+
+    var totalMeals by remember { mutableStateOf(0) }
+    val remainingWeight = kotlin.math.abs(
+        (user?.weightKg ?: 0.0) -
+                (user?.targetWeight ?: 0.0)
+    )
+
+    LaunchedEffect(Unit) {
+        viewModel.getUser(userRepository) {
+            user = it
+        }
+        viewModel.getMealCount {
+            totalMeals = it
+        }
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -65,52 +101,56 @@ fun ProgressScreen(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
                 ) {
                     Text(
-                        text = goal,
+                        text = user?.goal
+                            ?.replace("_", " ")
+                            ?.lowercase()
+                            ?.replaceFirstChar { it.uppercase() }
+                            ?: "--",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.primary
                     )
 
                     Text(
-                        text = "Target: $targetWeight kg",
+                        text = "Target: ${String.format("%.1f", user?.targetWeight ?: 0.0)} kg",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
             }
 
             item { ProgressInfoCard(title = "Weight Progress") {
-                    Text(
-                        text = "Current Weight: $currentWeight kg",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                Text(
+                    text = "Current Weight: ${String.format("%.1f", user?.weightKg ?: 0.0)} kg",
+                    style = MaterialTheme.typography.bodyLarge
+                )
 
-                    Text(
-                        text = "Goal Weight: $targetWeight kg",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                Text(
+                    text = "Goal Weight: ${String.format("%.1f", user?.targetWeight ?: 0.0)} kg",
+                    style = MaterialTheme.typography.bodyLarge
+                )
 
-                    Text(
-                        text = "Progress: $remainingWeight kg remaining",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                Text(
+                    text = "Progress: ${String.format("%.1f", remainingWeight)} kg remaining",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
                 }
             }
 
             item { ProgressInfoCard(title = "This Week") {
                     ProgressStat(
                         label = "Meals Logged",
-                        value = "$mealsLogged"
+                        value = "$totalMeals"
                     )
-
+//TODO date-wise tracking when this is dynamic
                     ProgressStat(
                         label = "Protein Target Met",
-                        value = "$proteinTargetDays days"
+                        value = "Coming Soon"
                     )
 
                     ProgressStat(
                         label = "Calories Target Met",
-                        value = "$caloriesTargetDays days"
+                        value = "Coming Soon"
                     )
                 }
             }
@@ -118,7 +158,7 @@ fun ProgressScreen(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant
             ) {
                     Text(
-                        text = weeklyInsight,
+                        text = "Weekly insights will appear after you consistently log meals for 7 days.",
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -133,22 +173,5 @@ fun ProgressScreen(
                 }
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun ProgressScreenPreview() {
-    GharKaFitTheme {
-        ProgressScreen(
-            goal = "Fat Loss",
-            targetWeight = 60,
-            currentWeight = 65,
-            mealsLogged = 12,
-            proteinTargetDays = 4,
-            caloriesTargetDays = 3,
-            weeklyInsight = "You are consistent with protein, but dinner calories are usually high."
-        )
     }
 }

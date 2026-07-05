@@ -10,10 +10,13 @@ interface UserDao {
 
     @Insert
     suspend fun insertUser(user: UserEntity)
-
-    @Query("SELECT * FROM users LIMIT 1")
+// TODO for future make multiple user with login page
+    @Query("SELECT * FROM users ORDER BY user_id DESC LIMIT 1")
     suspend fun getUser(): UserEntity?
 
     @Update
     suspend fun updateUser(user: UserEntity)
+
+    @Query("DELETE FROM users")
+    suspend fun deleteAllUsers()
 }

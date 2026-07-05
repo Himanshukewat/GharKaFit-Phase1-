@@ -29,6 +29,15 @@ data class UserEntity(
     @ColumnInfo(name = "goal")
     val goal: String,
 
+    @ColumnInfo(name = "start_weight")
+    val startWeight: Double,
+
+    @ColumnInfo(name = "target_weight")
+    val targetWeight: Double,
+
+    @ColumnInfo(name = "water_target")
+    val waterTarget: Double,
+
     @ColumnInfo(name = "diet_habit")
     val dietHabit: String,
 

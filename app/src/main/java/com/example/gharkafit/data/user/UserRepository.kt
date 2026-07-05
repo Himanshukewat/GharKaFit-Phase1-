@@ -19,4 +19,7 @@ class UserRepository(
     suspend fun hasUser(): Boolean {
         return userDao.getUser() != null
     }
+    suspend fun deleteAllUsers() {
+        userDao.deleteAllUsers()
+    }
 }

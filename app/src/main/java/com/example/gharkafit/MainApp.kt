@@ -135,15 +135,8 @@ fun MainApp() {
                     }
 
                     is ProgressKey -> NavEntry(key) {
-                        val user = key.user
                         ProgressScreen(
-                            goal = user.goal.replace("_", " "),
-                            targetWeight = 60,
-                            currentWeight = user.weightKg.toInt(),
-                            mealsLogged = 12,
-                            proteinTargetDays = 4,
-                            caloriesTargetDays = 3,
-                            weeklyInsight = "You are consistent with protein, but dinner calories are usually high."
+                             modifier = Modifier
                         )
                     }
 
