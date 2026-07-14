@@ -22,6 +22,7 @@ room_version = "2.8.4"
 material3 = "1.4.0"
 runtime = "1.11.2"
 cameraCamera2Pipe = "1.6.1"
+runtimeVersion = "1.11.4"
 
 [libraries]
 androidx-compose-material3-android = { module = "androidx.compose.material3:material3-android", version.ref = "material3Android" }
@@ -56,6 +57,7 @@ androidx-compose-foundation-layout = { group = "androidx.compose.foundation", na
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 androidx-camera-camera2-pipe = { group = "androidx.camera", name = "camera-camera2-pipe", version.ref = "cameraCamera2Pipe" }
+androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtimeVersion" }
 
 
 [plugins]

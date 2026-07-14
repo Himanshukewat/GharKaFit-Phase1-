@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.camera.camera2.pipe)
+    implementation(libs.androidx.runtime)
 
     //testing
     testImplementation(libs.junit)

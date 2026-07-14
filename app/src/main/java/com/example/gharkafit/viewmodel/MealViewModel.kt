@@ -15,6 +15,7 @@ import com.example.gharkafit.data.user.UserRepository
 import com.example.gharkafit.model.MealAnalysisResult
 import com.example.gharkafit.core.DailySummary
 import com.example.gharkafit.core.DailySummaryGenerator
+import com.example.gharkafit.core.MealInsightGenerator
 
 
 //rename this vm is used for dashboard , mealInsight , progress
@@ -24,9 +25,13 @@ class MealViewModel(
 ) : ViewModel() {
 
     private val mealAnalyzer = MealAnalyzer()
-    fun saveMeal(meal: MealLogEntity) {
+    fun saveMeal(
+        meal: MealLogEntity,
+        onComplete: () -> Unit
+    ) {
         viewModelScope.launch {
             mealRepository.insertMeal(meal)
+            onComplete()
         }
     }
 
@@ -134,6 +139,8 @@ class MealViewModel(
             proteinTarget = proteinTarget
         )
     }
+
+    private val mealInsightGenerator = MealInsightGenerator()
 
     fun getTotalCarbs(
         onResult: (Double) -> Unit) {

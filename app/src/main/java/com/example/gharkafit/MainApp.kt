@@ -122,15 +122,11 @@ fun MainApp() {
 
                     is MealInsightsKey -> NavEntry(key) {
                         MealInsightScreen(
-                            userMessages = emptyList(),
-                            analyses = emptyList(),
                             suggestions = listOf(
                                 "Add salad",
                                 "Include protein source",
                                 "Keep dinner light"
                             ),
-                            totalCalories = "0 kcal",
-                            totalProtein = "0 g"
                         )
                     }
 

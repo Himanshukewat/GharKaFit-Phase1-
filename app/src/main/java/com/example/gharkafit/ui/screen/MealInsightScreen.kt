@@ -37,6 +37,8 @@ import com.example.gharkafit.ui.component.SummaryCard
 import com.example.gharkafit.ui.component.UserMessageBubble
 import com.example.gharkafit.viewmodel.MealViewModel
 import com.example.gharkafit.viewmodel.MealViewModelFactory
+import com.example.gharkafit.core.MealInsightGenerator
+import com.example.gharkafit.model.MealAnalysisResult
 
 
 data class MealAnalysis(
@@ -53,11 +55,7 @@ data class MealAnalysis(
 @Composable
 fun MealInsightScreen(
     modifier: Modifier = Modifier,
-    userMessages: List<String>,
-    analyses: List<MealAnalysis>,
     suggestions: List<String>,
-    totalCalories: String,
-    totalProtein: String,
 ) {
 
     val context = LocalContext.current
@@ -69,25 +67,27 @@ fun MealInsightScreen(
     val foodRepository = remember { FoodRepository(database.foodDao()) }
     val factory = remember { MealViewModelFactory(mealRepository, foodRepository) }
     val viewModel: MealViewModel = viewModel(factory = factory)
+    val insightGenerator = remember { MealInsightGenerator() }
 
     var user by remember { mutableStateOf<UserEntity?>(null) }
     var mealText by remember { mutableStateOf("") }
     var selectedMealType by remember { mutableStateOf("Breakfast") }
-    var messages by remember { mutableStateOf(userMessages) }
+//    var messages by remember { mutableStateOf(userMessages) }
+    var meals by remember { mutableStateOf<List<MealLogEntity>>(emptyList()) }
     var totalCaloriesValue by remember { mutableStateOf(0) }
     var totalProteinValue by remember { mutableStateOf(0.0) }
     var totalCarbsValue by remember { mutableStateOf(0.0) }
     var totalFatValue by remember { mutableStateOf(0.0) }
 
     val dailySummary = remember(
-        totalCalories,
-        totalProtein,
+        totalCaloriesValue,
+        totalProteinValue,
         user
     ) {
         viewModel.generateSummary(
-            calories = totalCalories.replace(" kcal", "").toIntOrNull() ?: 0,
+            calories = totalCaloriesValue,
             calorieTarget = user?.targetCalories ?: 0,
-            protein = totalProtein.replace(" g", "").toDoubleOrNull() ?: 0.0,
+            protein = totalProteinValue,
             proteinTarget = user?.targetProtein ?: 0.0
         )
     }
@@ -110,6 +110,9 @@ fun MealInsightScreen(
     LaunchedEffect(Unit) {
         viewModel.getUser(userRepository) {
             user = it
+        }
+        viewModel.getMeals {
+            meals = it
         }
         refreshNutritionData()
     }
@@ -152,10 +155,14 @@ fun MealInsightScreen(
                                 fat = food?.fat ?: 0.0
                             )
 //                            Log.d("MEAL_TO_SAVE", meal.toString())
-                            viewModel.saveMeal(meal)
-                            refreshNutritionData()
+                            viewModel.saveMeal(meal) {
+                                viewModel.getMeals {
+                                    meals = it
+                                }
+                                refreshNutritionData()
+                            }
 //                            viewModel.checkMeals()
-                            messages = messages + mealText
+//                            messages = messages + mealText
                             mealText = ""
                         }
                     }
@@ -180,23 +187,55 @@ fun MealInsightScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
+//            items(
+//                count = messages.size
+//            ) { index ->
+//                UserMessageBubble(
+//                    message = messages[index]
+//                )
+//                Spacer(modifier = Modifier.height(8.dp))
+//                if (index < analyses.size) {
+//                    AnalysisFoodCard(
+//                        title = analyses[index].title,
+//                        calories = analyses[index].calories,
+//                        protein = analyses[index].protein,
+//                        carbs = analyses[index].carbs,
+//                        fat = analyses[index].fat,
+//                        insight = analyses[index].insight
+//                    )
+//                }
+//            }
+
+            // meal show from room data base
             items(
-                count = messages.size
+                count = meals.size
             ) { index ->
+
+                val meal = meals[index]
+
+                val result = MealAnalysisResult(
+                    foodName = meal.foodName,
+                    quantity = meal.quantity,
+                    unit = "Serving",
+                    calories = meal.calories,
+                    protein = meal.protein,
+                    carbs = meal.carbs,
+                    fat = meal.fat,
+                    source = "DATABASE"
+                )
+                val insight = insightGenerator.generate(result)
                 UserMessageBubble(
-                    message = messages[index]
+                    message = meal.foodName
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                if (index < analyses.size) {
-                    AnalysisFoodCard(
-                        title = analyses[index].title,
-                        calories = analyses[index].calories,
-                        protein = analyses[index].protein,
-                        carbs = analyses[index].carbs,
-                        fat = analyses[index].fat,
-                        insight = analyses[index].insight
-                    )
-                }
+                AnalysisFoodCard(
+                    title = meal.mealType,
+                    calories = "${meal.calories} kcal",
+                    protein = "${meal.protein} g",
+                    carbs = "${meal.carbs} g",
+                    fat = "${meal.fat} g",
+                    insight = insight
+                )
             }
 
             item {
