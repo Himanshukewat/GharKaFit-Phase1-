@@ -6,9 +6,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,7 +52,8 @@ fun DashboardScreen(
     proteinTarget: Int,
     dailyTip: String,
     onAddMealClick: () -> Unit,
-    onViewProgressClick: () -> Unit
+    onViewProgressClick: () -> Unit,
+    onProfileClick: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -109,19 +115,30 @@ fun DashboardScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Text(
+                        text = "$greeting $userName 👋",
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                    Text(
+                        text = "Let's stay consistent today",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                IconButton(
+                    onClick = onProfileClick
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AccountCircle,
+                        contentDescription = "Profile"
+                    )
+                }
 
-            Column {
-
-                Text(
-                    text = "$greeting $userName 👋",
-                    style = MaterialTheme.typography.headlineSmall
-                )
-
-                Text(
-                    text = "Let's stay consistent today",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
         }
 
@@ -223,7 +240,6 @@ fun DashboardScreen(
             }
         }
         item {
-
             DashboardCard(
                 title = "Daily Tip"
             ) {

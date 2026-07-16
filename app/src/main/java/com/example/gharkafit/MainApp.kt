@@ -22,6 +22,9 @@ import com.example.gharkafit.ui.screen.MealInsightScreen
 import com.example.gharkafit.ui.screen.MealAnalysis
 import com.example.gharkafit.ui.screen.ProgressScreen
 import com.example.gharkafit.core.bmiMessage
+import com.example.gharkafit.ui.screen.EditProfileScreen
+import com.example.gharkafit.ui.screen.ProfileScreen
+
 @Composable
 fun MainApp() {
 
@@ -116,6 +119,9 @@ fun MainApp() {
                                 backStack.add(
                                     ProgressKey(user)
                                 )
+                            },
+                            onProfileClick = {
+                                backStack.add(ProfileKey)
                             }
                         )
                     }
@@ -132,8 +138,20 @@ fun MainApp() {
 
                     is ProgressKey -> NavEntry(key) {
                         ProgressScreen(
-                             modifier = Modifier
+                            modifier = Modifier
                         )
+                    }
+
+                    is ProfileKey -> NavEntry(key) {
+                        ProfileScreen(
+                            onEditProfile = {
+                                backStack.add(EditProfileKey)
+                            }
+                        )
+                    }
+
+                    is EditProfileKey -> NavEntry(key) {
+                        EditProfileScreen()
                     }
 
                     else -> NavEntry(Unit) { Text("Unknown Screen") }
