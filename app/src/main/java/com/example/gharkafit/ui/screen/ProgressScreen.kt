@@ -54,6 +54,8 @@ fun ProgressScreen(
     val viewModel: MealViewModel = viewModel(factory = factory)
 
     var user by remember { mutableStateOf<UserEntity?>(null) }
+    var proteinTargetDays by remember { mutableStateOf(0) }
+    var calorieTargetDays by remember { mutableStateOf(0) }
 
     var totalMeals by remember { mutableStateOf(0) }
     val remainingWeight = kotlin.math.abs(
@@ -62,9 +64,16 @@ fun ProgressScreen(
     )
 
     LaunchedEffect(Unit) {
-        viewModel.getUser(userRepository) {
-            user = it
+        viewModel.getUser(userRepository) { userData ->
+            user = userData
+            if (userData != null) {
+                viewModel.getWeeklyStats(userData) { stats ->
+                    proteinTargetDays = stats.first
+                    calorieTargetDays = stats.second
+                }
+            }
         }
+
         viewModel.getMealCount {
             totalMeals = it
         }
@@ -145,12 +154,12 @@ fun ProgressScreen(
 //TODO date-wise tracking when this is dynamic
                     ProgressStat(
                         label = "Protein Target Met",
-                        value = "Coming Soon"
+                        value = "$proteinTargetDays days"
                     )
 
                     ProgressStat(
                         label = "Calories Target Met",
-                        value = "Coming Soon"
+                        value = "$calorieTargetDays days"
                     )
                 }
             }

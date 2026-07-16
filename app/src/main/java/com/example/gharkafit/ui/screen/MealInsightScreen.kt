@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gharkafit.core.DailySummaryGenerator
+import com.example.gharkafit.core.DateUtils
 import com.example.gharkafit.data.MainDatabase
 import com.example.gharkafit.data.food.FoodRepository
 import com.example.gharkafit.data.meal.MealLogEntity
@@ -148,7 +149,7 @@ fun MealInsightScreen(
                                 foodName = mealText,
                                 mealType = selectedMealType,
                                 quantity = 1.0,
-                                date = System.currentTimeMillis().toString(),
+                                date = DateUtils.today(),
                                 calories = food?.calories ?: 0,
                                 protein = food?.protein ?: 0.0,
                                 carbs = food?.carbs ?: 0.0,

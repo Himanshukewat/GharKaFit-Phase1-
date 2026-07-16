@@ -8,20 +8,20 @@ class MealRepository(
         mealDao.insertMeal(meal)
     }
 
-    suspend fun getTodayMeals(): List<MealLogEntity> {
-        return mealDao.getTodayMeals()
+    suspend fun getTodayMeals(date: String): List<MealLogEntity> {
+        return mealDao.getTodayMeals(date)
     }
 
     suspend fun deleteMeal(meal: MealLogEntity) {
         mealDao.deleteMeal(meal)
     }
 
-    suspend fun getTotalCalories(): Int {
-        return getTodayMeals().sumOf { it.calories }
+    suspend fun getTotalCalories(date: String): Int {
+        return getTodayMeals(date).sumOf { it.calories }
     }
 
-    suspend fun getTotalProtein(): Double {
-        return getTodayMeals().sumOf { it.protein }
+    suspend fun getTotalProtein(date: String): Double {
+        return getTodayMeals(date).sumOf { it.protein }
     }
 
     suspend fun getAllMeals(): List<MealLogEntity> {
@@ -32,11 +32,23 @@ class MealRepository(
         return mealDao.getMealCount(mealType) > 0
     }
 
-    suspend fun getTotalCarbs(): Double {
-        return mealDao.getTodayMeals().sumOf { it.carbs }
+    suspend fun getTotalCarbs(date: String): Double {
+        return mealDao.getTodayMeals(date).sumOf { it.carbs }
     }
 
-    suspend fun getTotalFat(): Double {
-        return mealDao.getTodayMeals().sumOf { it.fat }
+    suspend fun getTotalFat(date: String): Double {
+        return mealDao.getTodayMeals(date).sumOf { it.fat }
+    }
+
+    suspend fun getLast7Dates(): List<String> {
+        return mealDao.getLast7Dates()
+    }
+
+    suspend fun getCaloriesByDate(date: String): Int {
+        return mealDao.getCaloriesByDate(date) ?: 0
+    }
+
+    suspend fun getProteinByDate(date: String): Double {
+        return mealDao.getProteinByDate(date) ?: 0.0
     }
 }

@@ -15,6 +15,7 @@ import com.example.gharkafit.data.user.UserRepository
 import com.example.gharkafit.model.MealAnalysisResult
 import com.example.gharkafit.core.DailySummary
 import com.example.gharkafit.core.DailySummaryGenerator
+import com.example.gharkafit.core.DateUtils
 import com.example.gharkafit.core.MealInsightGenerator
 
 
@@ -40,14 +41,14 @@ class MealViewModel(
     ) {
         viewModelScope.launch {
             onResult(
-                mealRepository.getTodayMeals()
+                mealRepository.getTodayMeals(DateUtils.today())
             )
         }
     }
 
     fun checkMeals() {
         viewModelScope.launch {
-            val meals = mealRepository.getTodayMeals()
+            val meals = mealRepository.getTodayMeals(DateUtils.today())
             Log.d("ROOM_MEALS", meals.toString())
         }
     }
@@ -81,7 +82,7 @@ class MealViewModel(
     fun getTotalCalories(onResult: (Int) -> Unit) {
         viewModelScope.launch {
             onResult(
-                mealRepository.getTotalCalories()
+                mealRepository.getTotalCalories(DateUtils.today())
             )
         }
     }
@@ -89,7 +90,7 @@ class MealViewModel(
     fun getTotalProtein(onResult: (Double) -> Unit) {
         viewModelScope.launch {
             onResult(
-                mealRepository.getTotalProtein()
+                mealRepository.getTotalProtein(DateUtils.today())
             )
         }
     }
@@ -146,7 +147,7 @@ class MealViewModel(
         onResult: (Double) -> Unit) {
         viewModelScope.launch {
             onResult(
-                mealRepository.getTotalCarbs()
+                mealRepository.getTotalCarbs(DateUtils.today())
             )
         }
     }
@@ -155,7 +156,7 @@ class MealViewModel(
         onResult: (Double) -> Unit ){
         viewModelScope.launch {
             onResult(
-                mealRepository.getTotalFat()
+                mealRepository.getTotalFat(DateUtils.today())
             )
         }
     }
@@ -164,6 +165,32 @@ class MealViewModel(
         viewModelScope.launch {
             onResult(
                 mealRepository.getAllMeals().size
+            )
+        }
+    }
+
+    fun getWeeklyStats(
+        user: UserEntity,
+        onResult: (Pair<Int, Int>) -> Unit
+    ) {
+        viewModelScope.launch {
+            var proteinDays = 0
+            var calorieDays = 0
+            val dates = mealRepository.getLast7Dates()
+            for (date in dates) {
+                val calories = mealRepository.getCaloriesByDate(date)
+                val protein = mealRepository.getProteinByDate(date)
+                if (calories <= user.targetCalories) {
+                    calorieDays++
+                }
+                if (protein >= user.targetProtein) {
+                    proteinDays++
+                }
+            }
+            onResult(Pair(
+                    proteinDays,
+                    calorieDays
+                )
             )
         }
     }
