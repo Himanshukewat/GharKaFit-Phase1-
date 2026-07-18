@@ -106,11 +106,8 @@ fun MainApp() {
                     is DashboardKey -> NavEntry(key) {
                         val user = key.user
                         DashboardScreen(
-                            userName = user.name,
                             caloriesConsumed = 0,
-                            caloriesTarget = user.targetCalories,
                             proteinConsumed = 0,
-                            proteinTarget = user.targetProtein.toInt(),
                             dailyTip = "Try to include a protein source in every meal today.",
                             onAddMealClick = {
                                 backStack.add(MealInsightsKey)
@@ -151,7 +148,12 @@ fun MainApp() {
                     }
 
                     is EditProfileKey -> NavEntry(key) {
-                        EditProfileScreen()
+                        EditProfileScreen(
+                            onSave = {
+                                backStack.removeAt(backStack.lastIndex)
+                            }
+
+                        )
                     }
 
                     else -> NavEntry(Unit) { Text("Unknown Screen") }

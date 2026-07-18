@@ -33,6 +33,8 @@ import com.example.gharkafit.data.MainDatabase
 import com.example.gharkafit.data.food.FoodRepository
 import com.example.gharkafit.data.meal.MealLogEntity
 import com.example.gharkafit.data.meal.MealRepository
+import com.example.gharkafit.data.user.UserEntity
+import com.example.gharkafit.data.user.UserRepository
 import com.example.gharkafit.ui.component.DashboardCard
 import com.example.gharkafit.ui.component.MealStatusItem
 import com.example.gharkafit.ui.component.ProgressCard
@@ -45,11 +47,8 @@ import java.util.Calendar
 @Composable
 fun DashboardScreen(
     modifier: Modifier = Modifier,
-    userName: String,
     caloriesConsumed: Int,
-    caloriesTarget: Int,
     proteinConsumed: Int,
-    proteinTarget: Int,
     dailyTip: String,
     onAddMealClick: () -> Unit,
     onViewProgressClick: () -> Unit,
@@ -61,6 +60,9 @@ fun DashboardScreen(
     val database = remember { MainDatabase.getDatabase(context) }
     val mealRepository = remember { MealRepository(database.mealDao()) }
     val foodRepository = remember { FoodRepository(database.foodDao()) }
+    val userRepository = remember {
+        UserRepository(database.userDao())
+    }
 
     val factory = remember { MealViewModelFactory(
             mealRepository,
@@ -71,9 +73,11 @@ fun DashboardScreen(
     val viewModel: MealViewModel = viewModel( factory = factory)
     var consumedCalories by remember { mutableIntStateOf(caloriesConsumed) }
     var consumedProtein by remember { mutableDoubleStateOf(proteinConsumed.toDouble()) }
+    var user by remember { mutableStateOf<UserEntity?>(null) }
 
-    val caloriesLeft = caloriesTarget - caloriesConsumed
-    val proteinLeft = proteinTarget - proteinConsumed
+    val caloriesLeft = (user?.targetCalories ?: 0) - consumedCalories
+
+    val proteinLeft = (user?.targetProtein?.toInt() ?: 0) - consumedProtein.toInt()
     val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
     var meals by remember { mutableStateOf<List<MealLogEntity>>(emptyList()) }
     var breakfastDone by remember { mutableStateOf(false) }
@@ -87,6 +91,9 @@ fun DashboardScreen(
     }
 
     LaunchedEffect(Unit) {
+        viewModel.getUser(userRepository) {
+            user = it
+        }
         viewModel.getTotalCalories {
             consumedCalories = it
         }
@@ -121,7 +128,7 @@ fun DashboardScreen(
             ) {
                 Column {
                     Text(
-                        text = "$greeting $userName 👋",
+                        text = "$greeting ${user?.name ?: ""} 👋",
                         style = MaterialTheme.typography.headlineSmall
                     )
                     Text(
@@ -154,14 +161,13 @@ fun DashboardScreen(
                         modifier = Modifier.weight(1f),
                         title = "Calories",
                         current = consumedCalories,
-                        target = caloriesTarget
+                        target = user?.targetCalories ?: 0
                     )
                     ProgressCard(
                         modifier = Modifier.weight(1f),
                         title = "Protein",
                         current = consumedProtein.toInt(),
-                        target = proteinTarget
-                    )
+                        target = user?.targetProtein?.toInt() ?: 0                    )
                 }
             }
         }

@@ -125,6 +125,17 @@ class MealViewModel(
         }
     }
 
+    fun updateUser(
+        repository: UserRepository,
+        user: UserEntity,
+        onComplete: () -> Unit
+    ) {
+        viewModelScope.launch {
+            repository.updateUser(user)
+            onComplete()
+        }
+    }
+
     private val dailySummaryGenerator = DailySummaryGenerator()
     fun generateSummary(
         calories: Int,
