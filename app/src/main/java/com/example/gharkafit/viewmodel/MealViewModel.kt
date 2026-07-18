@@ -205,4 +205,14 @@ class MealViewModel(
             )
         }
     }
+
+    fun deleteMeal(
+        meal: MealLogEntity,
+        onComplete: () -> Unit
+    ) {
+        viewModelScope.launch {
+            mealRepository.deleteMeal(meal)
+            onComplete()
+        }
+    }
 }

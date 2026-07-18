@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -58,6 +60,14 @@ fun MealInsightScreen(
     modifier: Modifier = Modifier,
     suggestions: List<String>,
 ) {
+
+    var showDeleteDialog by remember {
+        mutableStateOf(false)
+    }
+
+    var mealToDelete by remember {
+        mutableStateOf<MealLogEntity?>(null)
+    }
 
     val context = LocalContext.current
 
@@ -116,6 +126,47 @@ fun MealInsightScreen(
             meals = it
         }
         refreshNutritionData()
+    }
+
+    if (showDeleteDialog) {
+
+        AlertDialog(
+            onDismissRequest = {
+                showDeleteDialog = false
+            },
+            title = {
+                Text("Delete Meal")
+            },
+            text = {
+                Text("Are you sure you want to delete this meal?")
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        mealToDelete?.let {
+                            viewModel.deleteMeal(it) {
+                                viewModel.getMeals {
+                                    meals = it
+                                }
+                                refreshNutritionData()
+                            }
+                        }
+                        showDeleteDialog = false
+                    }
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        showDeleteDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 
     Scaffold(
@@ -226,7 +277,14 @@ fun MealInsightScreen(
                 )
                 val insight = insightGenerator.generate(result)
                 UserMessageBubble(
-                    message = meal.foodName
+                    message = meal.foodName,
+                    onEditClick = {
+                        // use this feature with ai
+                    },
+                    onDeleteClick = {
+                        mealToDelete = meal
+                        showDeleteDialog = true
+                    }
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 AnalysisFoodCard(
