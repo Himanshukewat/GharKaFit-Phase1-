@@ -8,6 +8,13 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
+val localProperties = Properties().apply {
+    load(rootProject.file("local.properties").inputStream())
+}
+
+val geminiApiKey = localProperties.getProperty("GEMINI_API_KEY") ?: ""
+println("Gemini Key = $geminiApiKey")
+
 android {
     namespace = "com.example.gharkafit"
     compileSdk = 36
@@ -20,19 +27,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        // api use
-        val localProperties = Properties().apply {
-            load(rootProject.file("local.properties").inputStream())
-        }
-
-        val geminiApiKey =
-            localProperties.getProperty("GEMINI_API_KEY") ?: ""
 
         buildConfigField(
             "String",
             "GEMINI_API_KEY",
             "\"$geminiApiKey\""
         )
+
     }
 
     buildTypes {
@@ -57,6 +58,27 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/INDEX.LIST",
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "META-INF/AL2.0",
+                "META-INF/LGPL2.1"
+            )
+        }
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        println("Variant = ${variant.name}")
     }
 }
 

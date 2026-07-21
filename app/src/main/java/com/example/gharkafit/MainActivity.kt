@@ -10,7 +10,7 @@ import com.example.gharkafit.ui.MainApp
 import com.example.gharkafit.ui.theme.GharKaFitTheme
 import com.example.gharkafit.viewmodel.FoodSeeder
 import kotlinx.coroutines.launch
-
+import com.example.gharkafit.BuildConfig
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
