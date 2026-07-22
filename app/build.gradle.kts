@@ -133,5 +133,5 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-    implementation("com.google.genai:google-genai-kotlin-android:0.2.0")
+    implementation(libs.google.genai)
 }

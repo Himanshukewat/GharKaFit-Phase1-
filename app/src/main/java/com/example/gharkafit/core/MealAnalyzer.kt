@@ -20,7 +20,6 @@ class MealAnalyzer {
                 protein = 0.0,
                 carbs = 0.0,
                 fat = 0.0,
-                source = "UNKNOWN"
             )
         }
 
@@ -32,7 +31,6 @@ class MealAnalyzer {
             protein = food.protein * quantity,
             carbs = food.carbs * quantity,
             fat = food.fat * quantity,
-            source = "DATABASE"
         )
     }
 }

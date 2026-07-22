@@ -1,5 +1,8 @@
 package com.example.gharkafit.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class MealAnalysisResult(
     val foodName: String,
     val quantity: Double,
@@ -7,6 +10,5 @@ data class MealAnalysisResult(
     val calories: Int,
     val protein: Double,
     val carbs: Double,
-    val fat: Double,
-    val source: String
+    val fat: Double
 )

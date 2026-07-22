@@ -8,6 +8,7 @@ import com.example.gharkafit.data.food.FoodEntity
 import com.example.gharkafit.data.food.FoodRepository
 import com.example.gharkafit.data.meal.MealLogEntity
 import com.example.gharkafit.data.meal.MealRepository
+import com.example.gharkafit.ai.GeminiRepository
 import kotlinx.coroutines.launch
 import com.example.gharkafit.core.MealAnalyzer
 import com.example.gharkafit.data.user.UserEntity
@@ -26,6 +27,7 @@ class MealViewModel(
 ) : ViewModel() {
 
     private val mealAnalyzer = MealAnalyzer()
+    private val geminiRepository = GeminiRepository()
     fun saveMeal(
         meal: MealLogEntity,
         onComplete: () -> Unit
@@ -203,6 +205,30 @@ class MealViewModel(
                     calorieDays
                 )
             )
+        }
+    }
+
+    fun analyzeMealWithAI(
+        input: String,
+        onResult: (com.example.gharkafit.ai.MealAnalysisResult) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                val result = geminiRepository.analyzeMeal(input)
+                onResult(result)
+            } catch (e: Exception) {
+                Log.e("GEMINI", "Error", e)
+                val message = when {
+                    e.message?.contains("429") == true ->
+                        "AI usage limit reached. Please try again later."
+                    e.message?.contains("Unable to resolve host") == true ->
+                        "No internet connection."
+                    else ->
+                        "Unable to analyze meal."
+                }
+                onError(message)
+            }
         }
     }
 

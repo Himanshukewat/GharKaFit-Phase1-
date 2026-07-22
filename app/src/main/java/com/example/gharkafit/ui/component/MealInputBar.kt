@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
@@ -31,6 +33,7 @@ fun MealInputBar(
     onMealTypeChange: (String) -> Unit,
     mealText: String,
     onValueChange: (String) -> Unit,
+    isLoading: Boolean,
     onSend: () -> Unit
 ) {
     Column(
@@ -86,14 +89,19 @@ fun MealInputBar(
 
             Button(
                 onClick = onSend,
-                modifier = Modifier
-                    .weight(1f),
+                enabled = !isLoading,
+                modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(20.dp)
             ) {
-                Text(
-                    text = "Send",
-                    style = MaterialTheme.typography.titleSmall
-                )
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        strokeWidth = 2.dp
+                    )
+                }
+                else {
+                    Text("Send")
+                }
             }
 
         }

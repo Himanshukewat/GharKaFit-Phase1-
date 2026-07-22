@@ -2,11 +2,14 @@ package com.example.gharkafit.ai
 
 import kotlinx.serialization.Serializable
 
+
 @Serializable
 data class MealAnalysisResult(
-    val mealName: String,
+    val foodName: String,
+    val quantity: Double,
+    val unit: String,
     val calories: Int,
     val protein: Double,
-    val quantity: String,
-    val confidence: Double
+    val carbs: Double,
+    val fat: Double
 )

@@ -1,5 +1,7 @@
 package com.example.gharkafit.ui.screen
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -89,6 +91,8 @@ fun MealInsightScreen(
     var totalProteinValue by remember { mutableStateOf(0.0) }
     var totalCarbsValue by remember { mutableStateOf(0.0) }
     var totalFatValue by remember { mutableStateOf(0.0) }
+
+    var isLoading by remember { mutableStateOf(false) }
 
     val dailySummary = remember(
         totalCaloriesValue,
@@ -185,6 +189,7 @@ fun MealInsightScreen(
         bottomBar = {
             MealInputBar(
                 selectedMealType = selectedMealType,
+                isLoading = isLoading,
                 onMealTypeChange = {
                     selectedMealType = it
                 },
@@ -193,30 +198,40 @@ fun MealInsightScreen(
                     mealText = it
                 },
                 onSend = {
+//                    Log.d("SEND", "Button Clicked")
                     if (mealText.isNotBlank()) {
-                        viewModel.analyzeMeal(mealText) { food ->
-//                            Log.d("FOOD_RESULT", food.toString())
-                            val meal = MealLogEntity(
-                                foodName = mealText,
-                                mealType = selectedMealType,
-                                quantity = 1.0,
-                                date = DateUtils.today(),
-                                calories = food?.calories ?: 0,
-                                protein = food?.protein ?: 0.0,
-                                carbs = food?.carbs ?: 0.0,
-                                fat = food?.fat ?: 0.0
-                            )
-//                            Log.d("MEAL_TO_SAVE", meal.toString())
-                            viewModel.saveMeal(meal) {
-                                viewModel.getMeals {
-                                    meals = it
+                        viewModel.analyzeMealWithAI(
+                            input = mealText,
+                            onResult = { food ->
+                                Log.d("GEMINI", "Callback reached: $food")
+                                val meal = MealLogEntity(
+                                    foodName = food.foodName,
+                                    mealType = selectedMealType,
+                                    quantity = food.quantity,
+                                    date = DateUtils.today(),
+                                    calories = food.calories,
+                                    protein = food.protein,
+                                    carbs = food.carbs,
+                                    fat = food.fat
+                                )
+                                viewModel.saveMeal(meal) {
+                                    viewModel.getMeals {
+                                        meals = it
+                                    }
+                                    refreshNutritionData()
+                                    isLoading = false
                                 }
-                                refreshNutritionData()
+                                mealText = ""
+                            },
+                            onError = { error ->
+                                isLoading = false
+                                Toast.makeText(
+                                    context,
+                                    error,
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-//                            viewModel.checkMeals()
-//                            messages = messages + mealText
-                            mealText = ""
-                        }
+                        )
                     }
                 }
             )
@@ -272,8 +287,7 @@ fun MealInsightScreen(
                     calories = meal.calories,
                     protein = meal.protein,
                     carbs = meal.carbs,
-                    fat = meal.fat,
-                    source = "DATABASE"
+                    fat = meal.fat
                 )
                 val insight = insightGenerator.generate(result)
                 UserMessageBubble(
@@ -335,55 +349,3 @@ fun MealInsightScreen(
     }
 }
 
-
-//@Preview(showBackground = true)
-//@Composable
-//fun MealInsightScreenPreview() {
-//
-//    GharKaFitTheme {
-//        MealInsightScreen(
-//            userMessages = listOf(
-//                "Aaj breakfast me 500ml milk liya",
-//                "Lunch me 4 roti aur paneer bhurji li"
-//            ),
-//            analyses = listOf(
-//                MealAnalysis(
-//                    title = "🥛 Breakfast Analysis",
-//                    calories = "250 kcal",
-//                    protein = "16 g",
-//                    carbs = "24 g",
-//                    fat = "8 g",
-//                    insight = "✅ Good protein source"
-//                ),
-//                MealAnalysis(
-//                    title = "🍽 Lunch Analysis",
-//                    calories = "700 kcal",
-//                    protein = "30 g",
-//                    carbs = "75 g",
-//                    fat = "25 g",
-//                    insight = "⚠ Roti quantity slightly high"
-//                )
-//            ),
-//
-//            summaryCalories = "950 kcal",
-//            summaryProtein = "46 g",
-//            summaryCarbs = "99 g",
-//            summaryFat = "33 g",
-//
-//            suggestions = listOf(
-//                "Add salad",
-//                "Include protein source",
-//                "Keep dinner light"
-//            ),
-//
-//            totalCalories = "2050 kcal",
-//            totalProtein = "92 g",
-//
-//            strength = "Protein target achieved",
-//
-//            improvement = "Water intake low",
-//
-//            tomorrowFocus = "Add fruit in breakfast"
-//        )
-//    }
-//}
