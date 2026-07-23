@@ -111,7 +111,10 @@ class MealViewModel(
     ) {
         viewModelScope.launch {
             onResult(
-                mealRepository.hasMeal(mealType)
+                mealRepository.hasMeal(
+                    mealType,
+                    DateUtils.today()
+                )
             )
         }
     }

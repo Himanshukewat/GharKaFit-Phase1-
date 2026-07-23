@@ -26,6 +26,7 @@ fun HealthAnalysisScreen(
     bmi: Double,
     bmiStatus: String,
     healthyRange: String,
+    currentWeight: Double,
     recommendedWeight: String,
     calories: Int,
     protein: Int,
@@ -106,7 +107,6 @@ fun HealthAnalysisScreen(
             AnalysisCard(
                 title = "Recommended Weight Range"
             ) {
-
                 Text(
                     text = recommendedWeight,
                     style = MaterialTheme.typography.headlineSmall,
@@ -116,7 +116,14 @@ fun HealthAnalysisScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Based on your height.",
+                    text = "Current Weight : ${currentWeight.toInt()} kg",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = "Healthy range based on your height.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

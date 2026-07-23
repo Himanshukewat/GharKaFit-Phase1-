@@ -1,7 +1,7 @@
 package com.example.gharkafit.model
 
 enum class Goal {
-    FAT_LOSS,
+    WEIGHT_LOSS,
     MUSCLE_GAIN,
     MAINTAIN
 }

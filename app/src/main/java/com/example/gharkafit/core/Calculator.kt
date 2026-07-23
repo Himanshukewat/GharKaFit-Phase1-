@@ -80,43 +80,103 @@ object Calculator {
         bmi: Double,
         goal: String
     ): List<String> {
-
         val suggestions = mutableListOf<String>()
-
         when {
             bmi < 18.5 -> {
                 suggestions.add("Increase calorie intake")
                 suggestions.add("Eat protein-rich meals")
             }
-
             bmi > 25 -> {
                 suggestions.add("Maintain a calorie deficit")
                 suggestions.add("Walk daily")
             }
-
             else -> {
                 suggestions.add("Maintain a balanced diet")
                 suggestions.add("Stay hydrated")
             }
         }
-
         when (goal) {
-
-            "Weight Loss" -> {
+            "WEIGHT_LOSS" -> {
                 suggestions.add("Reduce sugary drinks")
                 suggestions.add("Exercise regularly")
             }
-
             "Muscle Gain" -> {
                 suggestions.add("Increase protein intake")
                 suggestions.add("Strength training")
             }
-
-            "Maintain" -> {
+            "MAINTAIN" -> {
                 suggestions.add("Sleep 7-8 hours")
             }
         }
-
         return suggestions
+    }
+
+    fun getGoalDescription(goal: String): String {
+        return when (goal) {
+            "WEIGHT_LOSS" ->
+                "Reduce body fat while preserving muscle mass."
+
+            "MUSCLE_GAIN" ->
+                "Build lean muscle through proper nutrition and strength training."
+
+            "MAINTAIN" ->
+                "Maintain your current weight with balanced nutrition."
+
+            else ->
+                "Follow a healthy and balanced lifestyle."
+        }
+    }
+
+    fun getFocusAreas(goal: String): List<String> {
+        return when (goal) {
+            "WEIGHT_LOSS" -> listOf(
+                "Maintain a calorie deficit",
+                "Walk 8k–10k steps daily",
+                "Increase protein intake",
+                "Reduce sugary drinks"
+            )
+            "MUSCLE_GAIN" -> listOf(
+                "Eat enough protein",
+                "Strength train regularly",
+                "Sleep 7–8 hours",
+                "Progressively increase weights"
+            )
+            "MAINTAIN" -> listOf(
+                "Eat balanced meals",
+                "Exercise regularly",
+                "Stay hydrated",
+                "Sleep 7–8 hours"
+            )
+            else -> emptyList()
+        }
+    }
+
+    fun getFoods(goal: String): List<String> {
+
+        return when(goal) {
+            "WEIGHT_LOSS" -> listOf(
+                "Paneer",
+                "Dal",
+                "Curd",
+                "Oats",
+                "Fruits"
+            )
+
+            "MUSCLE_GAIN" -> listOf(
+                "Paneer",
+                "Milk",
+                "Soy Chunks",
+                "Banana",
+                "Peanut Butter"
+            )
+            "MAINTAIN" -> listOf(
+                "Dal",
+                "Milk",
+                "Fruits",
+                "Vegetables",
+                "Paneer"
+            )
+            else -> emptyList()
+        }
     }
 }

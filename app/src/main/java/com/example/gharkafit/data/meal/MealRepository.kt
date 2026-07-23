@@ -28,8 +28,14 @@ class MealRepository(
         return mealDao.getAllMeals()
     }
 
-    suspend fun hasMeal(mealType: String): Boolean {
-        return mealDao.getMealCount(mealType) > 0
+    suspend fun hasMeal(
+        mealType: String,
+        date: String
+    ): Boolean {
+        return mealDao.getMealCount(
+            mealType,
+            date
+        ) > 0
     }
 
     suspend fun getTotalCarbs(date: String): Double {

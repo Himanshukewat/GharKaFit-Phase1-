@@ -78,6 +78,7 @@ fun MainApp() {
                             bmi = bmi,
                             bmiStatus = bmiStatus,
                             healthyRange = "18.5 - 24.9",
+                            currentWeight = user.weightKg,
                             recommendedWeight = Calculator.calculateRecommendedWeight(
                                 user.heightCm
                             ),

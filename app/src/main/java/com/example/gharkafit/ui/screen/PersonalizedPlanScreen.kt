@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.gharkafit.core.Calculator
 import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.ui.component.FoodChip
 import com.example.gharkafit.ui.component.PlanCard
@@ -72,7 +73,7 @@ fun PersonalizedPlanScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Lose fat while maintaining strength and energy.",
+                    text = Calculator.getGoalDescription(user.goal),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -82,7 +83,7 @@ fun PersonalizedPlanScreen(
         item {
 
             PlanCard(
-                title = "Daily Targets"
+                title = "Today's Targets"
             ) {
 
                 Column(
@@ -113,11 +114,9 @@ fun PersonalizedPlanScreen(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-
-                    SuggestionItem("Increase protein intake")
-                    SuggestionItem("Walk 8k steps daily")
-                    SuggestionItem("Sleep 7–8 hours")
-                    SuggestionItem("Reduce sugary drinks")
+                    Calculator.getFocusAreas(user.goal).forEach {
+                        SuggestionItem(it)
+                    }
                 }
             }
         }
@@ -133,12 +132,9 @@ fun PersonalizedPlanScreen(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-
-                    FoodChip("Paneer")
-                    FoodChip("Dal")
-                    FoodChip("Milk")
-                    FoodChip("Eggs")
-                    FoodChip("Fruits")
+                    Calculator.getFoods(user.goal).forEach {
+                        FoodChip(it)
+                    }
                 }
             }
         }
