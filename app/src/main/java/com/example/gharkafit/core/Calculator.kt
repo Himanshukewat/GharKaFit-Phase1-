@@ -66,4 +66,57 @@ object Calculator {
 
         return weightKg * multiplier
     }
+
+    fun calculateRecommendedWeight(heightCm: Double): String {
+        val heightM = heightCm / 100
+
+        val minWeight = 18.5 * heightM * heightM
+        val maxWeight = 24.9 * heightM * heightM
+
+        return "${minWeight.toInt()}kg - ${maxWeight.toInt()}kg"
+    }
+
+    fun getSuggestions(
+        bmi: Double,
+        goal: String
+    ): List<String> {
+
+        val suggestions = mutableListOf<String>()
+
+        when {
+            bmi < 18.5 -> {
+                suggestions.add("Increase calorie intake")
+                suggestions.add("Eat protein-rich meals")
+            }
+
+            bmi > 25 -> {
+                suggestions.add("Maintain a calorie deficit")
+                suggestions.add("Walk daily")
+            }
+
+            else -> {
+                suggestions.add("Maintain a balanced diet")
+                suggestions.add("Stay hydrated")
+            }
+        }
+
+        when (goal) {
+
+            "Weight Loss" -> {
+                suggestions.add("Reduce sugary drinks")
+                suggestions.add("Exercise regularly")
+            }
+
+            "Muscle Gain" -> {
+                suggestions.add("Increase protein intake")
+                suggestions.add("Strength training")
+            }
+
+            "Maintain" -> {
+                suggestions.add("Sleep 7-8 hours")
+            }
+        }
+
+        return suggestions
+    }
 }

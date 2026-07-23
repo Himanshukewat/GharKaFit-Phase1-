@@ -78,12 +78,14 @@ fun MainApp() {
                             bmi = bmi,
                             bmiStatus = bmiStatus,
                             healthyRange = "18.5 - 24.9",
-                            recommendedWeight = "58kg - 68kg",
+                            recommendedWeight = Calculator.calculateRecommendedWeight(
+                                user.heightCm
+                            ),
                             calories = user.targetCalories,
                             protein = user.targetProtein.toInt(),
-                            suggestions = listOf(
-                                "Increase protein intake",
-                                "Stay hydrated"
+                            suggestions = Calculator.getSuggestions(
+                                bmi = bmi,
+                                goal = user.goal
                             ),
                             onViewPlanClick = {
                                 backStack.add(PersonalizedPlanKey(user))
