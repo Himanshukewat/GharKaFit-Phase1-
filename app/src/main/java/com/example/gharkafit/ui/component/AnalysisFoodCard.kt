@@ -34,11 +34,17 @@ fun AnalysisFoodCard(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            Text(
+                text = "🤖 GharKaFit AI",
+                style = MaterialTheme.typography.titleMedium
+            )
 
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary
             )
+
 
             Text("Calories : $calories")
             Text("Protein : $protein")
@@ -47,7 +53,15 @@ fun AnalysisFoodCard(
 
             HorizontalDivider()
 
-            Text(insight)
+            Text(
+                text = "💡 AI Insight",
+                style = MaterialTheme.typography.titleSmall
+            )
+
+            Text(
+                text = insight,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }

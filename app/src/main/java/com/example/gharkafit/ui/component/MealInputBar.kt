@@ -78,6 +78,7 @@ fun MealInputBar(
 
             OutlinedTextField(
                 value = mealText,
+                enabled = !isLoading,
                 onValueChange = onValueChange,
                 modifier = Modifier.weight(3f),
                 singleLine = true,
@@ -93,17 +94,23 @@ fun MealInputBar(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(20.dp)
             ) {
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(20.dp),
-                        strokeWidth = 2.dp
-                    )
-                }
-                else {
-                    Text("Send")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(18.dp),
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text(
+                            text = "Send",
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
                 }
             }
-
         }
     }
 }

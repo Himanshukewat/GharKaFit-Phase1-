@@ -10,7 +10,7 @@ class GeminiRepository {
     )
     suspend fun analyzeMeal(userMessage: String): MealAnalysisResult {
 //      don't forward to ai , that received structure according to our prompt
-        Log.d("GEMINI", "Input: $userMessage")
+//        Log.d("GEMINI", "Input: $userMessage")
 
         val prompt = PromptBuilder.buildPrompt(userMessage)
         // they call gemini api

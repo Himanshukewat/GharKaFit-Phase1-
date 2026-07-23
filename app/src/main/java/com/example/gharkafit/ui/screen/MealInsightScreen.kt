@@ -200,6 +200,7 @@ fun MealInsightScreen(
                 onSend = {
 //                    Log.d("SEND", "Button Clicked")
                     if (mealText.isNotBlank()) {
+                        isLoading = true
                         viewModel.analyzeMealWithAI(
                             input = mealText,
                             onResult = { food ->
