@@ -123,4 +123,34 @@ class AuthViewModel(
             }
         )
     }
+
+    fun forgotPassword() {
+        if (uiState.email.isBlank()) {
+            uiState = uiState.copy(error = "Please enter email")
+            return
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(uiState.email).matches()) {
+            uiState = uiState.copy(error = "Enter a valid email")
+            return
+        }
+        uiState = uiState.copy(
+            isLoading = true,
+            error = null
+        )
+        repository.sendPasswordReset(
+            email = uiState.email.trim(),
+            onSuccess = {
+                uiState = uiState.copy(
+                    isLoading = false,
+                    error = "Password reset email sent."
+                )
+            },
+            onError = { message ->
+                uiState = uiState.copy(
+                    isLoading = false,
+                    error = message
+                )
+            }
+        )
+    }
 }

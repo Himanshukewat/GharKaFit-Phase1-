@@ -42,4 +42,19 @@ class AuthRepository {
     fun logout() {
         auth.signOut()
     }
+
+
+    fun sendPasswordReset(
+        email: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        auth.sendPasswordResetEmail(email)
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener {
+                onError(it.message ?: "Failed to send reset email")
+            }
+    }
 }

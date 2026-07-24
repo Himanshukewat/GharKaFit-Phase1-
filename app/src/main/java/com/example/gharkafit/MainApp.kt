@@ -195,7 +195,7 @@ fun MainApp() {
                             onLogout = {
                                 authRepository.logout()
                                 scope.launch {
-                                    userRepository.deleteAllUsers()
+//                                    userRepository.deleteAllUsers()
                                     backStack.clear()
                                     backStack.add(WelcomeKey)
                                 }
@@ -228,15 +228,20 @@ fun MainApp() {
                             onPasswordChange = viewModel::updatePassword,
 
                             onLoginClick = {
-                                Log.d("MAINAPP", "Login Click")
                                 viewModel.login {
-                                    Log.d("MAINAPP", "Navigation")
-                                    backStack.clear()
-                                    backStack.add(OnboardingKey)
+                                    scope.launch {
+                                        val user = userRepository.getUser()
+                                        backStack.clear()
+                                        if (user == null) {
+                                            backStack.add(OnboardingKey)
+                                        } else {
+                                            backStack.add(DashboardKey(user))
+                                        }
+                                    }
                                 }
                             },
                             onForgotPasswordClick = {
-
+                                viewModel.forgotPassword()
                             },
                             onSignupClick = {
                                 backStack.add(SignupKey)
