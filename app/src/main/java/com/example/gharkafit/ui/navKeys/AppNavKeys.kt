@@ -3,9 +3,14 @@ package com.example.gharkafit.ui.navKeys
 import com.example.gharkafit.data.user.UserEntity
 import kotlinx.serialization.Serializable
 
-object WelcomeKey
+@Serializable
+data object WelcomeKey
 
-object OnboardingKey
+@Serializable
+data object OnboardingKey
+
+@Serializable
+data object MealInsightsKey
 
 data class HealthAnalysisKey(
     val user: UserEntity
@@ -18,7 +23,6 @@ data class DashboardKey(
     val user: UserEntity
 )
 
-object MealInsightsKey
 
 data class ProgressKey(
     val user: UserEntity
@@ -30,22 +34,8 @@ data object EditProfileKey
 @Serializable
 data object ProfileKey
 
-//object UserDetailKey
-//
-//object ActivityLevelKey
-//
-//object GoalSelectionKey
-//
-//object DietHabitKey
-//
-//object BMIScreenKey
-//
-//object ResultBMIKey
-//
-//object HomeDashKey
-//
-//object FoodPickerKey
-//
-//object DailySummaryKey
-//
-//object ProgressKey
+@Serializable
+data object LoginKey
+
+@Serializable
+data object SignupKey

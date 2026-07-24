@@ -74,4 +74,45 @@ class AuthViewModel(
             }
         )
     }
+
+    fun login(
+        onSuccess: () -> Unit
+    ) {
+        if (uiState.email.isBlank()) {
+            uiState = uiState.copy(error = "Please enter email")
+            return
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(uiState.email).matches()) {
+            uiState = uiState.copy(error = "Enter a valid email")
+            return
+        }
+        if (uiState.password.isBlank()) {
+            uiState = uiState.copy(error = "Please enter password")
+            return
+        }
+        if (uiState.password.length < 6) {
+            uiState = uiState.copy(error = "Password must be at least 6 characters")
+            return
+        }
+        uiState = uiState.copy(
+            isLoading = true,
+            error = null
+        )
+        repository.login(
+            email = uiState.email.trim(),
+            password = uiState.password,
+            onSuccess = {
+                uiState = uiState.copy(
+                    isLoading = false
+                )
+                onSuccess()
+            },
+            onError = { message ->
+                uiState = uiState.copy(
+                    isLoading = false,
+                    error = message
+                )
+            }
+        )
+    }
 }

@@ -20,6 +20,25 @@ class AuthRepository {
                 onError(it.message ?: "Signup Failed")
             }
     }
+
+    fun login(
+        email: String,
+        password: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener {
+                onError(it.message ?: "Login Failed")
+            }
+    }
+
+    fun isLoggedIn(): Boolean {
+        return auth.currentUser != null
+    }
     fun logout() {
         auth.signOut()
     }

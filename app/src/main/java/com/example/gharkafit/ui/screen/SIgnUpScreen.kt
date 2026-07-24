@@ -104,23 +104,3 @@ fun SignupScreen(
         }
     }
 }
-
-
-@Preview(showBackground = true)
-@Composable
-fun SignupScreenPreview() {
-    GharKaFitTheme {
-        SignupScreen(
-            email = "",
-            password = "",
-            confirmPassword = "",
-            isLoading = false,
-            error = null,
-            onEmailChange = {},
-            onPasswordChange = {},
-            onConfirmPasswordChange = {},
-            onSignupClick = {},
-            onLoginClick = {}
-        )
-    }
-}

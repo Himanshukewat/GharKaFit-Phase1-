@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.MaterialTheme
@@ -18,14 +17,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.gharkafit.ui.component.AuthHeader
 import com.example.gharkafit.ui.component.AuthTextField
 import com.example.gharkafit.ui.component.ErrorText
 import com.example.gharkafit.ui.component.LoadingButton
 import com.example.gharkafit.ui.component.PasswordTextField
-import com.example.gharkafit.ui.theme.GharKaFitTheme
 
 @Composable
 fun LoginScreen(
@@ -115,24 +112,5 @@ fun LoginScreen(
                 }
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    GharKaFitTheme {
-        LoginScreen(
-            email = "",
-            password = "",
-            isLoading = false,
-            error = null,
-            onEmailChange = {},
-            onPasswordChange = {},
-            onLoginClick = {},
-            onSignupClick = {},
-            onForgotPasswordClick = {}
-        )
     }
 }

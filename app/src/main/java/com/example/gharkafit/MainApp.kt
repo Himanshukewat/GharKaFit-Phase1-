@@ -30,8 +30,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gharkafit.auth.AuthRepository
 import com.example.gharkafit.data.MainDatabase
 import com.example.gharkafit.data.user.UserRepository
+import com.example.gharkafit.ui.screen.LoginScreen
+import com.example.gharkafit.ui.screen.SignupScreen
+import com.example.gharkafit.viewmodel.AuthViewModel
+import com.example.gharkafit.viewmodel.AuthViewModelFactory
 
 @Composable
 fun MainApp() {
@@ -80,7 +85,7 @@ fun MainApp() {
                      WelcomeKey -> NavEntry(key) {
                         WelcomeScreen(
                             onStartClick = {
-                                backStack.add(OnboardingKey)
+                                backStack.add(LoginKey)
                             }
                         )
                     }
@@ -187,6 +192,60 @@ fun MainApp() {
                         )
                     }
 
+                    is LoginKey -> NavEntry(key) {
+                        val repository = remember { AuthRepository() }
+                        val factory = remember { AuthViewModelFactory(repository) }
+                        val viewModel: AuthViewModel = viewModel(factory = factory)
+
+                        LoginScreen(
+                            email = viewModel.uiState.email,
+                            password = viewModel.uiState.password,
+                            isLoading = viewModel.uiState.isLoading,
+                            error = viewModel.uiState.error,
+
+                            onEmailChange = viewModel::updateEmail,
+                            onPasswordChange = viewModel::updatePassword,
+
+                            onLoginClick = {
+                                viewModel.login {
+                                    //TODO
+                                }
+                            },
+                            onForgotPasswordClick = {
+
+                            },
+                            onSignupClick = {
+                                backStack.add(SignupKey)
+                            }
+                        )
+                    }
+
+                    is SignupKey -> NavEntry(key) {
+                        val repository = remember { AuthRepository() }
+                        val factory = remember { AuthViewModelFactory(repository) }
+                        val viewModel: AuthViewModel = viewModel(factory = factory)
+                        SignupScreen(
+                            email = viewModel.uiState.email,
+                            password = viewModel.uiState.password,
+                            confirmPassword = viewModel.uiState.confirmPassword,
+                            isLoading = viewModel.uiState.isLoading,
+                            error = viewModel.uiState.error,
+
+                            onEmailChange = viewModel::updateEmail,
+                            onPasswordChange = viewModel::updatePassword,
+                            onConfirmPasswordChange = viewModel::updateConfirmPassword,
+
+                            onSignupClick = {
+                                viewModel.signUp {
+                                    backStack.add(OnboardingKey)
+                                }
+                            },
+
+                            onLoginClick = {
+                                backStack.removeAt(backStack.lastIndex)
+                            }
+                        )
+                    }
                     else -> NavEntry(Unit) { Text("Unknown Screen") }
                 }
             }
