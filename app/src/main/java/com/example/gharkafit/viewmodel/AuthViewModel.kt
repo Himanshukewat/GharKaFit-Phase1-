@@ -1,5 +1,6 @@
 package com.example.gharkafit.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -78,6 +79,8 @@ class AuthViewModel(
     fun login(
         onSuccess: () -> Unit
     ) {
+        Log.d("LOGIN", "Login button clicked")
+
         if (uiState.email.isBlank()) {
             uiState = uiState.copy(error = "Please enter email")
             return
@@ -98,16 +101,21 @@ class AuthViewModel(
             isLoading = true,
             error = null
         )
+        Log.d("LOGIN", "Calling Firebase")
+
         repository.login(
             email = uiState.email.trim(),
             password = uiState.password,
             onSuccess = {
+                Log.d("LOGIN", "Login Success")
                 uiState = uiState.copy(
                     isLoading = false
                 )
                 onSuccess()
             },
             onError = { message ->
+                Log.d("LOGIN", "Login Error: $message")
+
                 uiState = uiState.copy(
                     isLoading = false,
                     error = message

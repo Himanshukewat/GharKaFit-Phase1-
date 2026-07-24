@@ -1,5 +1,6 @@
 package com.example.gharkafit.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -207,7 +208,9 @@ fun MainApp() {
                             onPasswordChange = viewModel::updatePassword,
 
                             onLoginClick = {
+                                Log.d("MAINAPP", "Login Click")
                                 viewModel.login {
+                                    Log.d("MAINAPP", "Navigation")
                                     backStack.clear()
                                     backStack.add(OnboardingKey)
                                 }
