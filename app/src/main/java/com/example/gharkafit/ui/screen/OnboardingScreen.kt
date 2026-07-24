@@ -38,6 +38,7 @@ import com.example.gharkafit.viewmodel.OnboardingViewModel
 import android.widget.Toast
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import com.example.gharkafit.auth.AuthRepository
 import com.example.gharkafit.data.MainDatabase
 import com.example.gharkafit.data.user.UserRepository
 import com.example.gharkafit.viewmodel.OnboardingViewModelFactory
@@ -49,7 +50,8 @@ fun OnboardingScreen(
     val context = LocalContext.current
     val database = remember { MainDatabase.getDatabase(context) }
     val repository = remember { UserRepository(database.userDao()) }
-    val factory = remember { OnboardingViewModelFactory(repository) }
+    val authRepository = remember { AuthRepository() }
+    val factory = remember { OnboardingViewModelFactory(repository,authRepository) }
     val viewModel: OnboardingViewModel = viewModel(factory = factory)
     val uiState = viewModel.uiState
 

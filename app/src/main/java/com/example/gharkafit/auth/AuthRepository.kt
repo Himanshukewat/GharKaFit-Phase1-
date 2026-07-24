@@ -57,4 +57,8 @@ class AuthRepository {
                 onError(it.message ?: "Failed to send reset email")
             }
     }
+
+    fun getUid(): String {
+        return auth.currentUser?.uid ?: ""
+    }
 }

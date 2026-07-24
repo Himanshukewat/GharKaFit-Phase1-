@@ -11,6 +11,9 @@ data class UserEntity(
     @ColumnInfo(name = "user_id")
     val userId: Int = 0,
 
+    @ColumnInfo(name = "firebase_uid")
+    val firebaseUid: String,
+
     @ColumnInfo(name = "name")
     val name: String,
 

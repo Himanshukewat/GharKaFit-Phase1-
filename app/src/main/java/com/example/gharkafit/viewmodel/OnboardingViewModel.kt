@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gharkafit.auth.AuthRepository
 import com.example.gharkafit.model.ActivityLevel
 import com.example.gharkafit.model.DietHabit
 import com.example.gharkafit.model.Gender
@@ -18,7 +19,8 @@ import com.example.gharkafit.data.user.UserRepository
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
-    private val repository: UserRepository
+    private val repository: UserRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
 
@@ -131,6 +133,7 @@ class OnboardingViewModel(
         }
 
         return UserEntity(
+            firebaseUid = authRepository.getUid(),
             name = uiState.name,
             age = age,
             gender = uiState.gender.name,

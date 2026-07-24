@@ -17,7 +17,7 @@ import com.example.gharkafit.data.user.UserEntity
         FoodEntity::class,
         MealLogEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class MainDatabase : RoomDatabase() {
@@ -39,7 +39,9 @@ abstract class MainDatabase : RoomDatabase() {
                     context.applicationContext,
                     MainDatabase::class.java,
                     "gharkafit_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
 
                 INSTANCE = instance
                 instance
