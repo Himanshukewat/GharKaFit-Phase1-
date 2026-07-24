@@ -208,7 +208,8 @@ fun MainApp() {
 
                             onLoginClick = {
                                 viewModel.login {
-                                    //TODO
+                                    backStack.clear()
+                                    backStack.add(OnboardingKey)
                                 }
                             },
                             onForgotPasswordClick = {
