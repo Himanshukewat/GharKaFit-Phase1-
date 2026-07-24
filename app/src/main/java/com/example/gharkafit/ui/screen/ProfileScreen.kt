@@ -39,7 +39,8 @@ import com.example.gharkafit.viewmodel.MealViewModelFactory
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    onEditProfile: () -> Unit
+    onEditProfile: () -> Unit,
+    onLogout: () -> Unit
 ) {
     val context = LocalContext.current
     val database = remember { MainDatabase.getDatabase(context) }
@@ -132,6 +133,14 @@ fun ProfileScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Edit Profile")
+                }
+            }
+            item {
+                Button(
+                    onClick = onLogout,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Logout")
                 }
             }
         }

@@ -38,6 +38,8 @@ import com.example.gharkafit.ui.screen.LoginScreen
 import com.example.gharkafit.ui.screen.SignupScreen
 import com.example.gharkafit.viewmodel.AuthViewModel
 import com.example.gharkafit.viewmodel.AuthViewModelFactory
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
 
 @Composable
 fun MainApp() {
@@ -45,15 +47,24 @@ fun MainApp() {
     val database = remember {
         MainDatabase.getDatabase(context)
     }
-    val repository = remember { UserRepository(database.userDao()) }
+    val userRepository = remember { UserRepository(database.userDao()) }
+    val authRepository = remember { AuthRepository() }
     var startKey by remember { mutableStateOf<Any?>(null) }
 //    val backStack = remember { mutableStateListOf<Any>(WelcomeKey) }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        val user = repository.getUser()
+
+        if (!authRepository.isLoggedIn()) {
+            startKey = WelcomeKey
+            return@LaunchedEffect
+        }
+
+        val user = userRepository.getUser()
+
         startKey =
             if (user == null)
-                WelcomeKey
+                OnboardingKey
             else
                 DashboardKey(user)
     }
@@ -180,6 +191,15 @@ fun MainApp() {
                         ProfileScreen(
                             onEditProfile = {
                                 backStack.add(EditProfileKey)
+                            },
+                            onLogout = {
+                                authRepository.logout()
+                                scope.launch {
+                                    userRepository.deleteAllUsers()
+                                    backStack.clear()
+                                    backStack.add(WelcomeKey)
+                                }
+
                             }
                         )
                     }
