@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "369996692490",
+    "project_id": "hearthdiet",
+    "storage_bucket": "hearthdiet.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369996692490:android:74de8dc5fb2de150b9f3f3",
+        "android_client_info": {
+          "package_name": "com.example.gharkafit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAUTqgLB7NO0YlK1aDCjHnayLCIyMaxiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.gharkafit" />
+                  <option name="mobileSdkAppId" value="1:369996692490:android:74de8dc5fb2de150b9f3f3" />
+                  <option name="projectId" value="hearthdiet" />
+                  <option name="projectNumber" value="369996692490" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
