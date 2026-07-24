@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,7 +30,9 @@ import com.example.gharkafit.R
 fun WelcomeScreen(
     onStartClick: ()-> Unit
 ) {
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
         Column(
             modifier = Modifier
                 .padding(16.dp)
@@ -53,14 +56,14 @@ fun WelcomeScreen(
         }
         Box(
             modifier = Modifier.fillMaxWidth()
+                .weight(1f)
         ) {
 
             Image(
                 painter = painterResource(id = R.drawable.health_image),
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(0.8f),
+                    .fillMaxWidth(),
                 contentScale = ContentScale.Crop
             )
 

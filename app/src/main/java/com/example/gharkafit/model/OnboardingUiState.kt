@@ -6,7 +6,7 @@ data class OnboardingUiState(
     val height: String = "",
     val weight: String = "",
     val gender: Gender = Gender.MALE,
-    val goal: Goal = Goal.FAT_LOSS,
+    val goal: Goal = Goal.WEIGHT_LOSS,
     val activityLevel: ActivityLevel = ActivityLevel.MODERATE,
     val dietHabit: DietHabit = DietHabit.HOME
 )

@@ -24,12 +24,40 @@ import com.example.gharkafit.ui.screen.ProgressScreen
 import com.example.gharkafit.core.bmiMessage
 import com.example.gharkafit.ui.screen.EditProfileScreen
 import com.example.gharkafit.ui.screen.ProfileScreen
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gharkafit.data.MainDatabase
+import com.example.gharkafit.data.user.UserRepository
 
 @Composable
 fun MainApp() {
+    val context = LocalContext.current
+    val database = remember {
+        MainDatabase.getDatabase(context)
+    }
+    val repository = remember { UserRepository(database.userDao()) }
+    var startKey by remember { mutableStateOf<Any?>(null) }
+//    val backStack = remember { mutableStateListOf<Any>(WelcomeKey) }
 
-    val backStack = remember {
-        mutableStateListOf<Any>(WelcomeKey)
+    LaunchedEffect(Unit) {
+        val user = repository.getUser()
+        startKey =
+            if (user == null)
+                WelcomeKey
+            else
+                DashboardKey(user)
+    }
+    if (startKey == null) {
+        androidx.compose.material3.CircularProgressIndicator()
+        return
+    }
+
+    val backStack = remember(startKey) {
+        mutableStateListOf(startKey!!)
     }
 
     Scaffold { paddingValues ->

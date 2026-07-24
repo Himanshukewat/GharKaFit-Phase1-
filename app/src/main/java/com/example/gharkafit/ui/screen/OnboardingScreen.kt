@@ -216,9 +216,9 @@ fun OnboardingScreen(
                     GoalCard(
                         title = "Fat Loss",
                         description = "Lose weight while maintaining muscle",
-                        isSelected = uiState.goal == Goal.FAT_LOSS,
+                        isSelected = uiState.goal == Goal.WEIGHT_LOSS,
                         onClick = {
-                            viewModel.updateGoal(Goal.FAT_LOSS)
+                            viewModel.updateGoal(Goal.WEIGHT_LOSS)
                         })
 
                     GoalCard(
