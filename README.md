@@ -1,43 +1,75 @@
-# GharKaFit – Smart Indian Diet Tracker 🏠💪
-
+# GharKaFit – AI Powered Indian Nutrition & Fitness Tracker 🏠💪
 GharKaFit is an Android app designed to help users track their nutrition using simple, real-life Indian meals instead of complex diet plans.
-🚀 Features
+> AI-powered Android nutrition tracker built using Jetpack Compose, MVVM, Room Database, and Google Gemini AI.
 
-* 📊 **BMI & Health Analysis**
+## 🚀 Features
 
-  * Calculates user's BMI and body status
+- 🤖 AI Meal Analyzer (Gemini AI)
+  - Analyze meals written in Hindi, English, or Hinglish
+  - Detect multiple food items automatically
+  - Estimate calories, protein, carbs, and fat
 
-* 🎯 **Personalized Diet Plan**
+- 📊 Health Analysis
+  - BMI Calculation
+  - Healthy Weight Range
+  - Daily Nutrition Targets
+  - Personalized Health Suggestions
 
-  * Daily calorie & protein targets based on:
+- 🎯 Personalized Plan
+  - Goal-based recommendations
+  - Daily calorie & protein targets
+  - Food recommendations
+  - Focus areas based on fitness goal
 
-    * Goal (Fat Loss / Muscle Gain / Maintain)
-    * Activity Level
+- 🍽️ Meal Tracking
+  - Add meals manually or using AI
+  - Track calories and protein
+  - Delete meals
+  - Dashboard meal status
 
-* 🍽️ **Food Tracking**
+- 📈 Progress Tracking
+  - Daily nutrition summary
+  - Weekly progress insights
+  - Consistency tracking
 
-  * Add meals easily
-  * Track calories and protein intake
-
-* 📈 **Daily Summary**
-
-  * Compare consumed vs target calories & protein
-  * Smart feedback system
-
-* 📊 **Progress Insights**
-
-  * Weekly averages
-  * Consistency tracking
+- 👤 Profile Management
+  - Edit profile
+  - Auto-save user data
+  - Auto-login on app restart
 
 ---
 
+## ✨ Highlights
+
+- AI-powered natural language meal analysis
+- Supports Indian meals and Hinglish input
+- Personalized nutrition calculations
+- Offline-first using Room Database
+- Clean MVVM Architecture
+
+---
 ## 🧠 Tech Stack
 
-* Kotlin
-* Jetpack Compose
-* MVVM Architecture
-* Room Database
-* Navigation3 (type-safe navigation)
+- Kotlin
+- Jetpack Compose
+- Material 3
+- MVVM Architecture
+- Room Database
+- Repository Pattern
+- Navigation3
+- Kotlin Coroutines
+- Google Gemini AI API
+
+---
+
+## 🏗 Architecture
+
+- MVVM Architecture
+- Repository Pattern
+- Room Database
+- State-driven UI with Jetpack Compose
+- Reusable UI Components
+- Clean Separation of Concerns
 
 ---
 
@@ -63,26 +95,28 @@ Users can log real Indian meals instead of complex food databases.
 
 ---
 
-## 🔮 Future Improvements
+## 🚀 Version
 
-* AI-based meal input (natural language)
-* Weekly progress graphs
-* Meal history tracking
-* Smart food recommendations
-* Better UI & animations
+### ✅ Version 1 Completed
+
+Currently working on Version 2:
+
+- Authentication
+- Backend Integration
+- Cloud Sync
 
 ---
+
+## ⚙️ Installation
+1. Clone the repository
+2. Open the project in Android Studio
+3. Add your Gemini API Key in `local.properties`
+4. Build & Run
 
 ## 👨‍💻 Author
 
 Himanshu
 B.Tech Student | Aspiring Software Engineer
-
----
-
-## ⭐ Project Status
-
-Currently in development (Version 2 in progress)
 
 ---
 
