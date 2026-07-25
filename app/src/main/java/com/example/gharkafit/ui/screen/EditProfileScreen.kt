@@ -39,6 +39,7 @@ import com.example.gharkafit.core.TargetWeightCalculator
 import com.example.gharkafit.data.MainDatabase
 import com.example.gharkafit.data.food.FoodRepository
 import com.example.gharkafit.data.meal.MealRepository
+import com.example.gharkafit.data.remote.FirestoreRepository
 import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.data.user.UserRepository
 import com.example.gharkafit.model.ActivityLevel
@@ -63,10 +64,13 @@ fun EditProfileScreen(
     val mealRepository = remember { MealRepository(database.mealDao()) }
     val foodRepository = remember { FoodRepository(database.foodDao()) }
     val userRepository = remember { UserRepository(database.userDao()) }
+    val firestoreRepository = remember { FirestoreRepository() }
+
     val factory = remember {
         MealViewModelFactory(
             mealRepository,
-            foodRepository
+            foodRepository,
+            firestoreRepository
         )
     }
     val viewModel: MealViewModel = viewModel(factory = factory)

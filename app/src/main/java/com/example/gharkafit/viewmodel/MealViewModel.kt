@@ -18,12 +18,14 @@ import com.example.gharkafit.core.DailySummary
 import com.example.gharkafit.core.DailySummaryGenerator
 import com.example.gharkafit.core.DateUtils
 import com.example.gharkafit.core.MealInsightGenerator
+import com.example.gharkafit.data.remote.FirestoreRepository
 
 
 //rename this vm is used for dashboard , mealInsight , progress
 class MealViewModel(
     private val mealRepository: MealRepository,
-    private val foodRepository: FoodRepository
+    private val foodRepository: FoodRepository,
+    private val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
 
     private val mealAnalyzer = MealAnalyzer()
@@ -136,8 +138,18 @@ class MealViewModel(
         onComplete: () -> Unit
     ) {
         viewModelScope.launch {
+            // Room update
             repository.updateUser(user)
-            onComplete()
+            // Firestore update
+            firestoreRepository.saveUser(
+                user = user,
+                onSuccess = {
+                    onComplete()
+                },
+                onError = {
+                    Log.e("FIRESTORE", it)
+                }
+            )
         }
     }
 

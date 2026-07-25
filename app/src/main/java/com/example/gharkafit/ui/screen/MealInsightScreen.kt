@@ -43,6 +43,7 @@ import com.example.gharkafit.ui.component.UserMessageBubble
 import com.example.gharkafit.viewmodel.MealViewModel
 import com.example.gharkafit.viewmodel.MealViewModelFactory
 import com.example.gharkafit.core.MealInsightGenerator
+import com.example.gharkafit.data.remote.FirestoreRepository
 import com.example.gharkafit.model.MealAnalysisResult
 
 
@@ -78,7 +79,15 @@ fun MealInsightScreen(
     val userRepository = remember { UserRepository(database.userDao()) }
 
     val foodRepository = remember { FoodRepository(database.foodDao()) }
-    val factory = remember { MealViewModelFactory(mealRepository, foodRepository) }
+    val firestoreRepository = remember { FirestoreRepository() }
+
+    val factory = remember {
+        MealViewModelFactory(
+            mealRepository,
+            foodRepository,
+            firestoreRepository
+        )
+    }
     val viewModel: MealViewModel = viewModel(factory = factory)
     val insightGenerator = remember { MealInsightGenerator() }
 
