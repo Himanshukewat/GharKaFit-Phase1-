@@ -5,11 +5,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.gharkafit.auth.AuthRepository
+import com.example.gharkafit.data.remote.FirestoreRepository
+import com.example.gharkafit.data.user.UserRepository
 import com.example.gharkafit.model.AuthUiState
+import kotlinx.coroutines.launch
 
 class AuthViewModel(
-    private val repository: AuthRepository
+    private val repository: AuthRepository,
+    private val userRepository: UserRepository,
+    private val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
 
     var uiState by mutableStateOf(AuthUiState())
@@ -102,16 +108,37 @@ class AuthViewModel(
             error = null
         )
         Log.d("LOGIN", "Calling Firebase")
-
         repository.login(
             email = uiState.email.trim(),
             password = uiState.password,
             onSuccess = {
                 Log.d("LOGIN", "Login Success")
-                uiState = uiState.copy(
-                    isLoading = false
+                val uid = repository.getUid()
+                firestoreRepository.getUser(
+                    uid = uid,
+                    onSuccess = { user ->
+                        if (user != null) {
+                            viewModelScope.launch {
+                                userRepository.replaceUser(user)
+                                uiState = uiState.copy(
+                                    isLoading = false
+                                )
+                                onSuccess()
+                            }
+                        } else {
+                            uiState = uiState.copy(
+                                isLoading = false
+                            )
+                            onSuccess()
+                        }
+                    },
+                    onError = { message ->
+                        uiState = uiState.copy(
+                            isLoading = false,
+                            error = message
+                        )
+                    }
                 )
-                onSuccess()
             },
             onError = { message ->
                 Log.d("LOGIN", "Login Error: $message")

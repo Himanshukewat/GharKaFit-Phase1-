@@ -40,6 +40,7 @@ import com.example.gharkafit.viewmodel.AuthViewModel
 import com.example.gharkafit.viewmodel.AuthViewModelFactory
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.gharkafit.data.remote.FirestoreRepository
 
 @Composable
 fun MainApp() {
@@ -49,6 +50,17 @@ fun MainApp() {
     }
     val userRepository = remember { UserRepository(database.userDao()) }
     val authRepository = remember { AuthRepository() }
+    val firestoreRepository = remember { FirestoreRepository() }
+
+    val factory = remember {
+        AuthViewModelFactory(
+            authRepository,
+            userRepository,
+            firestoreRepository
+        )
+    }
+
+    val viewModel: AuthViewModel = viewModel(factory = factory)
     var startKey by remember { mutableStateOf<Any?>(null) }
 //    val backStack = remember { mutableStateListOf<Any>(WelcomeKey) }
     val scope = rememberCoroutineScope()
@@ -215,7 +227,7 @@ fun MainApp() {
 
                     is LoginKey -> NavEntry(key) {
                         val repository = remember { AuthRepository() }
-                        val factory = remember { AuthViewModelFactory(repository) }
+                        val factory = remember { AuthViewModelFactory(repository, userRepository, firestoreRepository) }
                         val viewModel: AuthViewModel = viewModel(factory = factory)
 
                         LoginScreen(
@@ -251,7 +263,7 @@ fun MainApp() {
 
                     is SignupKey -> NavEntry(key) {
                         val repository = remember { AuthRepository() }
-                        val factory = remember { AuthViewModelFactory(repository) }
+                        val factory = remember { AuthViewModelFactory(repository,userRepository,firestoreRepository) }
                         val viewModel: AuthViewModel = viewModel(factory = factory)
                         SignupScreen(
                             email = viewModel.uiState.email,

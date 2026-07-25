@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+
 @Entity(tableName = "users")
 data class UserEntity(
 
@@ -12,45 +13,44 @@ data class UserEntity(
     val userId: Int = 0,
 
     @ColumnInfo(name = "firebase_uid")
-    val firebaseUid: String,
+    val firebaseUid: String = "",
 
     @ColumnInfo(name = "name")
-    val name: String,
+    val name: String = "",
 
     @ColumnInfo(name = "age")
-    val age: Int,
+    val age: Int = 0,
 
     @ColumnInfo(name = "gender")
-    val gender: String,
+    val gender: String = "",
 
     @ColumnInfo(name = "height_cm")
-    val heightCm: Double,
+    val heightCm: Double = 0.0,
 
     @ColumnInfo(name = "weight_kg")
-    val weightKg: Double,
+    val weightKg: Double = 0.0,
 
     @ColumnInfo(name = "goal")
-    val goal: String,
+    val goal: String = "",
 
     @ColumnInfo(name = "start_weight")
-    val startWeight: Double,
+    val startWeight: Double = 0.0,
 
     @ColumnInfo(name = "target_weight")
-    val targetWeight: Double,
+    val targetWeight: Double = 0.0,
 
     @ColumnInfo(name = "water_target")
-    val waterTarget: Double,
+    val waterTarget: Double = 0.0,
 
     @ColumnInfo(name = "diet_habit")
-    val dietHabit: String,
-
+    val dietHabit: String = "",
 
     @ColumnInfo(name = "activity_level")
-    val activityLevel: String,
+    val activityLevel: String = "",
 
     @ColumnInfo(name = "target_calories")
-    val targetCalories: Int,
+    val targetCalories: Int = 0,
 
     @ColumnInfo(name = "target_protein")
-    val targetProtein: Double
+    val targetProtein: Double = 0.0
 )

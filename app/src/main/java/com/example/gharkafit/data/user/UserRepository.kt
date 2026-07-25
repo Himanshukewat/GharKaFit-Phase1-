@@ -22,4 +22,9 @@ class UserRepository(
     suspend fun deleteAllUsers() {
         userDao.deleteAllUsers()
     }
+
+    suspend fun replaceUser(user: UserEntity) {
+        userDao.deleteAllUsers()
+        userDao.insertUser(user)
+    }
 }
