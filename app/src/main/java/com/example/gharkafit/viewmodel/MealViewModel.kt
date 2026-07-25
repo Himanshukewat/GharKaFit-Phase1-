@@ -44,8 +44,11 @@ class MealViewModel(
             // Firestore Save
             mealFirestoreRepository.saveMeal(
                 meal = meal,
-                onSuccess = {
-                    onComplete()
+                onSuccess = { updatedMeal ->
+                    viewModelScope.launch {
+                        mealRepository.insertMeal(updatedMeal)
+                        onComplete()
+                    }
                 },
                 onError = {
                     Log.e("MEAL_SYNC", it)
@@ -266,9 +269,17 @@ class MealViewModel(
         meal: MealLogEntity,
         onComplete: () -> Unit
     ) {
-        viewModelScope.launch {
-            mealRepository.deleteMeal(meal)
-            onComplete()
-        }
+        mealFirestoreRepository.deleteMeal(
+            meal = meal,
+            onSuccess = {
+                viewModelScope.launch {
+                    mealRepository.deleteMeal(meal)
+                    onComplete()
+                }
+            },
+            onError = {
+                Log.e("DELETE_MEAL", it)
+            }
+        )
     }
 }

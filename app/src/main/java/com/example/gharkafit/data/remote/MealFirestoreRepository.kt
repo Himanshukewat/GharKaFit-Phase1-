@@ -7,16 +7,23 @@ class MealFirestoreRepository {
     private val firestore = FirebaseFirestore.getInstance()
     fun saveMeal(
         meal: MealLogEntity,
-        onSuccess: () -> Unit,
+        onSuccess: (MealLogEntity) -> Unit,
         onError: (String) -> Unit
     ) {
-        firestore
+        val docRef = firestore
             .collection("users")
             .document(meal.firebaseUid)
             .collection("meals")
-            .add(meal)
+            .document()
+
+        val updatedMeal = meal.copy(
+            firestoreId = docRef.id
+        )
+
+        docRef
+            .set(updatedMeal)
             .addOnSuccessListener {
-                onSuccess()
+                onSuccess(updatedMeal)
             }
             .addOnFailureListener {
                 onError(it.message ?: "Failed")
@@ -42,6 +49,7 @@ class MealFirestoreRepository {
 
                     val meal = MealLogEntity(
                         mealId = 0,
+                        firestoreId = document.id,
                         firebaseUid = document.getString("firebaseUid") ?: "",
                         foodName = document.getString("foodName") ?: "",
                         mealType = document.getString("mealType") ?: "",
@@ -61,6 +69,29 @@ class MealFirestoreRepository {
             }
             .addOnFailureListener {
                 onError(it.message ?: "Failed to fetch meals")
+            }
+    }
+
+
+    fun deleteMeal(
+        meal: MealLogEntity,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        android.util.Log.d("DELETE_MEAL", "UID = ${meal.firebaseUid}")
+        android.util.Log.d("DELETE_MEAL", "FirestoreId = ${meal.firestoreId}")
+
+        firestore
+            .collection("users")
+            .document(meal.firebaseUid)
+            .collection("meals")
+            .document(meal.firestoreId)
+            .delete()
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener {
+                onError(it.message ?: "Failed")
             }
     }
 }
