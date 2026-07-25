@@ -57,4 +57,9 @@ class MealRepository(
     suspend fun getProteinByDate(date: String): Double {
         return mealDao.getProteinByDate(date) ?: 0.0
     }
+
+    suspend fun replaceMeals(meals: List<MealLogEntity>) {
+        mealDao.deleteAllMeals()
+        mealDao.insertMeals(meals)
+    }
 }

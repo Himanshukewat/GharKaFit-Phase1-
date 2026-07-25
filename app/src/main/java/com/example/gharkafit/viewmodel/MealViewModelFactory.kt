@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.gharkafit.data.food.FoodRepository
 import com.example.gharkafit.data.meal.MealRepository
 import com.example.gharkafit.data.remote.FirestoreRepository
+import com.example.gharkafit.data.remote.MealFirestoreRepository
 
 class MealViewModelFactory(
     private val mealRepository: MealRepository,
     private val foodRepository: FoodRepository,
-    private val firestoreRepository: FirestoreRepository
+    private val firestoreRepository: FirestoreRepository,
+    private val mealFirestoreRepository: MealFirestoreRepository
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -19,7 +21,8 @@ class MealViewModelFactory(
             return MealViewModel(
                 mealRepository,
                 foodRepository,
-                firestoreRepository
+                firestoreRepository,
+                mealFirestoreRepository
             ) as T
         }
 

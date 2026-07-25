@@ -7,7 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gharkafit.auth.AuthRepository
+import com.example.gharkafit.data.meal.MealRepository
 import com.example.gharkafit.data.remote.FirestoreRepository
+import com.example.gharkafit.data.remote.MealFirestoreRepository
 import com.example.gharkafit.data.user.UserRepository
 import com.example.gharkafit.model.AuthUiState
 import kotlinx.coroutines.launch
@@ -15,7 +17,9 @@ import kotlinx.coroutines.launch
 class AuthViewModel(
     private val repository: AuthRepository,
     private val userRepository: UserRepository,
-    private val firestoreRepository: FirestoreRepository
+    private val firestoreRepository: FirestoreRepository,
+    private val mealRepository: MealRepository,
+    private val mealFirestoreRepository: MealFirestoreRepository
 ) : ViewModel() {
 
     var uiState by mutableStateOf(AuthUiState())
@@ -119,20 +123,48 @@ class AuthViewModel(
                     onSuccess = { user ->
                         if (user != null) {
                             viewModelScope.launch {
+                                // 1. User Room me save
                                 userRepository.replaceUser(user)
-                                uiState = uiState.copy(
-                                    isLoading = false
+                                // 2. Fir Meals fetch karo
+                                mealFirestoreRepository.getMeals(
+                                    uid = uid,
+                                    onSuccess = { meals ->
+                                        Log.d("MEAL_FETCH", "Fetched ${meals.size} meals")
+
+                                        viewModelScope.launch {
+                                            // 3. Meals Room me save
+                                            mealRepository.replaceMeals(meals)
+                                            Log.d("MEAL_FETCH", "Meals saved in Room")
+
+                                            // 4. Ab Dashboard kholo
+                                            uiState = uiState.copy(
+                                                isLoading = false
+                                            )
+                                            onSuccess()
+                                        }
+                                    },
+                                    onError = { message ->
+                                        Log.e("MEAL_FETCH", message)
+
+                                        uiState = uiState.copy(
+                                            isLoading = false,
+                                            error = message
+                                        )
+                                    }
                                 )
-                                onSuccess()
                             }
+
                         } else {
+
                             uiState = uiState.copy(
                                 isLoading = false
                             )
+
                             onSuccess()
                         }
                     },
                     onError = { message ->
+
                         uiState = uiState.copy(
                             isLoading = false,
                             error = message

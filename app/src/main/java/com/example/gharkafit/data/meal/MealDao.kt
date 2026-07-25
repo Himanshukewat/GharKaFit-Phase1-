@@ -34,4 +34,10 @@ interface MealDao {
 
     @Delete
     suspend fun deleteMeal(meal: MealLogEntity)
+
+    @Insert
+    suspend fun insertMeals(meals: List<MealLogEntity>)
+
+    @Query("DELETE FROM meal_logs")
+    suspend fun deleteAllMeals()
 }

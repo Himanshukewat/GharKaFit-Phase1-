@@ -34,6 +34,7 @@ import com.example.gharkafit.data.food.FoodRepository
 import com.example.gharkafit.data.meal.MealLogEntity
 import com.example.gharkafit.data.meal.MealRepository
 import com.example.gharkafit.data.remote.FirestoreRepository
+import com.example.gharkafit.data.remote.MealFirestoreRepository
 import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.data.user.UserRepository
 import com.example.gharkafit.ui.component.DashboardCard
@@ -65,12 +66,14 @@ fun DashboardScreen(
         UserRepository(database.userDao())
     }
     val firestoreRepository = remember { FirestoreRepository() }
+    val mealFirestoreRepository = remember { MealFirestoreRepository() }
 
     val factory = remember {
         MealViewModelFactory(
             mealRepository,
             foodRepository,
-            firestoreRepository
+            firestoreRepository,
+            mealFirestoreRepository
         )
     }
 

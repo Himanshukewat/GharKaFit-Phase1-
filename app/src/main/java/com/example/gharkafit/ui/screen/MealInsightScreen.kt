@@ -45,6 +45,8 @@ import com.example.gharkafit.viewmodel.MealViewModelFactory
 import com.example.gharkafit.core.MealInsightGenerator
 import com.example.gharkafit.data.remote.FirestoreRepository
 import com.example.gharkafit.model.MealAnalysisResult
+import com.example.gharkafit.auth.AuthRepository
+import com.example.gharkafit.data.remote.MealFirestoreRepository
 
 
 data class MealAnalysis(
@@ -80,12 +82,15 @@ fun MealInsightScreen(
 
     val foodRepository = remember { FoodRepository(database.foodDao()) }
     val firestoreRepository = remember { FirestoreRepository() }
+    val authRepository = remember { AuthRepository() }
+    val mealFirestoreRepository = remember { MealFirestoreRepository() }
 
     val factory = remember {
         MealViewModelFactory(
             mealRepository,
             foodRepository,
-            firestoreRepository
+            firestoreRepository,
+            mealFirestoreRepository
         )
     }
     val viewModel: MealViewModel = viewModel(factory = factory)
@@ -215,6 +220,7 @@ fun MealInsightScreen(
                             onResult = { food ->
                                 Log.d("GEMINI", "Callback reached: $food")
                                 val meal = MealLogEntity(
+                                    firebaseUid = authRepository.getUid(),
                                     foodName = food.foodName,
                                     mealType = selectedMealType,
                                     quantity = food.quantity,

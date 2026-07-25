@@ -40,7 +40,9 @@ import com.example.gharkafit.viewmodel.AuthViewModel
 import com.example.gharkafit.viewmodel.AuthViewModelFactory
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.gharkafit.data.meal.MealRepository
 import com.example.gharkafit.data.remote.FirestoreRepository
+import com.example.gharkafit.data.remote.MealFirestoreRepository
 
 @Composable
 fun MainApp() {
@@ -51,12 +53,16 @@ fun MainApp() {
     val userRepository = remember { UserRepository(database.userDao()) }
     val authRepository = remember { AuthRepository() }
     val firestoreRepository = remember { FirestoreRepository() }
+    val mealFirestoreRepository = remember { MealFirestoreRepository() }
+    val mealRepository = remember { MealRepository(database.mealDao()) }
 
     val factory = remember {
         AuthViewModelFactory(
             authRepository,
             userRepository,
-            firestoreRepository
+            firestoreRepository,
+            mealRepository,
+            mealFirestoreRepository
         )
     }
 
@@ -226,8 +232,15 @@ fun MainApp() {
                     }
 
                     is LoginKey -> NavEntry(key) {
-                        val repository = remember { AuthRepository() }
-                        val factory = remember { AuthViewModelFactory(repository, userRepository, firestoreRepository) }
+                        val factory = remember {
+                            AuthViewModelFactory(
+                                authRepository,
+                                userRepository,
+                                firestoreRepository,
+                                mealRepository,
+                                mealFirestoreRepository
+                            )
+                        }
                         val viewModel: AuthViewModel = viewModel(factory = factory)
 
                         LoginScreen(
@@ -262,8 +275,15 @@ fun MainApp() {
                     }
 
                     is SignupKey -> NavEntry(key) {
-                        val repository = remember { AuthRepository() }
-                        val factory = remember { AuthViewModelFactory(repository,userRepository,firestoreRepository) }
+                        val factory = remember {
+                            AuthViewModelFactory(
+                                authRepository,
+                                userRepository,
+                                firestoreRepository,
+                                mealRepository,
+                                mealFirestoreRepository
+                            )
+                        }
                         val viewModel: AuthViewModel = viewModel(factory = factory)
                         SignupScreen(
                             email = viewModel.uiState.email,
