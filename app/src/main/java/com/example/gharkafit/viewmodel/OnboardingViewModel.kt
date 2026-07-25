@@ -14,13 +14,16 @@ import com.example.gharkafit.model.Goal
 import com.example.gharkafit.model.OnboardingUiState
 import com.example.gharkafit.core.Calculator
 import com.example.gharkafit.core.TargetWeightCalculator
+import com.example.gharkafit.data.remote.FirestoreRepository
 import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.data.user.UserRepository
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
     private val repository: UserRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val firestoreRepository: FirestoreRepository
+
 ) : ViewModel() {
 
 
@@ -149,11 +152,28 @@ class OnboardingViewModel(
             waterTarget = waterTarget
         )
     }
+    fun saveUser(
+        user: UserEntity,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
 
-    fun saveUser(user: UserEntity) {
         viewModelScope.launch {
             repository.deleteAllUsers()
             repository.insertUser(user)
+            firestoreRepository.saveUser(
+                user = user,
+                onSuccess = {
+                    onSuccess()
+                },
+                onError = { message ->
+                    onError(message)
+                }
+            )
+//            firestoreRepository.testFirestore(
+//                onSuccess = { Log.d("TEST", "OK") },
+//                onError = { Log.d("TEST", it) }
+//            )
         }
     }
 

@@ -136,9 +136,11 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-    // ai
-    implementation(libs.google.genai)
-    // firebase
+    //ai
+    implementation(libs.google.genai) {
+        exclude(group = "io.grpc")
+    }
+    //firebase
     implementation(platform("com.google.firebase:firebase-bom:34.16.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")

@@ -40,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.example.gharkafit.auth.AuthRepository
 import com.example.gharkafit.data.MainDatabase
+import com.example.gharkafit.data.remote.FirestoreRepository
 import com.example.gharkafit.data.user.UserRepository
 import com.example.gharkafit.viewmodel.OnboardingViewModelFactory
 
@@ -51,7 +52,8 @@ fun OnboardingScreen(
     val database = remember { MainDatabase.getDatabase(context) }
     val repository = remember { UserRepository(database.userDao()) }
     val authRepository = remember { AuthRepository() }
-    val factory = remember { OnboardingViewModelFactory(repository,authRepository) }
+    val firestoreRepository = remember { FirestoreRepository() }
+    val factory = remember { OnboardingViewModelFactory(repository,authRepository, firestoreRepository) }
     val viewModel: OnboardingViewModel = viewModel(factory = factory)
     val uiState = viewModel.uiState
 
@@ -345,9 +347,20 @@ fun OnboardingScreen(
                     val error = viewModel.validateInput()
                     if (error == null) {
                         val user = viewModel.createUserEntity()
-                        viewModel.saveUser(user)
-                        Log.d("USER_DATA", user.toString())
-                        onContinueClick(user)
+                        viewModel.saveUser(
+                            user = user,
+                            onSuccess = {
+                                Log.d("FIRESTORE", "User saved successfully")
+                                onContinueClick(user)
+                            },
+                            onError = { message ->
+                                Toast.makeText(
+                                    context,
+                                    message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        )
                     } else {
                         Toast.makeText(
                             context,
@@ -374,17 +387,5 @@ fun OnboardingScreen(
                 )
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun OnboardingScreenPreview() {
-
-    GharKaFitTheme {
-        OnboardingScreen(
-            onContinueClick = {}
-        )
     }
 }
