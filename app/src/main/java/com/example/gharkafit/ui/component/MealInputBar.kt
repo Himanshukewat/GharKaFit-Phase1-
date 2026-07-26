@@ -42,33 +42,10 @@ fun MealInputBar(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(
-            text = "Meal Type",
-            style = MaterialTheme.typography.titleSmall
+        MealTypeSelector(
+            selectedMealType = selectedMealType,
+            onMealTypeChange = onMealTypeChange
         )
-
-        Spacer(modifier = Modifier.height(4.dp))
-        FlowRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            listOf(
-                "Breakfast",
-                "Lunch",
-                "Dinner",
-                "Snack"
-            ).forEach { type ->
-                FilterChip(
-                    selected = selectedMealType == type,
-                    onClick = {
-                        onMealTypeChange(type)
-                    },
-                    label = {
-                        Text(type)
-                    }
-                )
-            }
-        }
         Row(
             modifier = Modifier
                 .fillMaxWidth(),

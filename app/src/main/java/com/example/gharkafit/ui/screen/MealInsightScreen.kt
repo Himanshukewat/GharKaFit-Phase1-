@@ -3,6 +3,7 @@ package com.example.gharkafit.ui.screen
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -26,27 +28,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.gharkafit.core.DailySummaryGenerator
+import com.example.gharkafit.auth.AuthRepository
 import com.example.gharkafit.core.DateUtils
+import com.example.gharkafit.core.MealInsightGenerator
 import com.example.gharkafit.data.MainDatabase
 import com.example.gharkafit.data.food.FoodRepository
 import com.example.gharkafit.data.meal.MealLogEntity
 import com.example.gharkafit.data.meal.MealRepository
+import com.example.gharkafit.data.remote.FirestoreRepository
+import com.example.gharkafit.data.remote.MealFirestoreRepository
 import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.data.user.UserRepository
+import com.example.gharkafit.model.MealAnalysisResult
 import com.example.gharkafit.ui.component.AnalysisFoodCard
 import com.example.gharkafit.ui.component.DailySummaryCard
 import com.example.gharkafit.ui.component.MealInputBar
+import com.example.gharkafit.ui.component.MealTypeSelector
 import com.example.gharkafit.ui.component.SuggestionCard
 import com.example.gharkafit.ui.component.SummaryCard
 import com.example.gharkafit.ui.component.UserMessageBubble
 import com.example.gharkafit.viewmodel.MealViewModel
 import com.example.gharkafit.viewmodel.MealViewModelFactory
-import com.example.gharkafit.core.MealInsightGenerator
-import com.example.gharkafit.data.remote.FirestoreRepository
-import com.example.gharkafit.model.MealAnalysisResult
-import com.example.gharkafit.auth.AuthRepository
-import com.example.gharkafit.data.remote.MealFirestoreRepository
 
 
 data class MealAnalysis(
@@ -72,6 +74,22 @@ fun MealInsightScreen(
 
     var mealToDelete by remember {
         mutableStateOf<MealLogEntity?>(null)
+    }
+// edit dialog
+    var showEditDialog by remember {
+        mutableStateOf(false)
+    }
+
+    var mealToEdit by remember {
+        mutableStateOf<MealLogEntity?>(null)
+    }
+
+    var editedMealText by remember {
+        mutableStateOf("")
+    }
+
+    var editedMealType by remember {
+        mutableStateOf("Breakfast")
     }
 
     val context = LocalContext.current
@@ -147,7 +165,6 @@ fun MealInsightScreen(
     }
 
     if (showDeleteDialog) {
-
         AlertDialog(
             onDismissRequest = {
                 showDeleteDialog = false
@@ -179,6 +196,54 @@ fun MealInsightScreen(
                 Button(
                     onClick = {
                         showDeleteDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
+    if (showEditDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showEditDialog = false
+            },
+            title = {
+                Text("Edit Meal")
+            },
+            text = {
+                Column {
+                    OutlinedTextField(
+                        value = editedMealText,
+                        onValueChange = {
+                            editedMealText = it
+                        },
+                        label = {
+                            Text("Meal")
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    MealTypeSelector (
+                        selectedMealType = editedMealType,
+                        onMealTypeChange = {
+                            editedMealType = it
+                        }
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                    }
+                ) {
+                    Text("Save")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        showEditDialog = false
                     }
                 ) {
                     Text("Cancel")
@@ -309,7 +374,10 @@ fun MealInsightScreen(
                 UserMessageBubble(
                     message = meal.foodName,
                     onEditClick = {
-                        // use this feature with ai
+                        mealToEdit = meal
+                        editedMealText = meal.foodName
+                        editedMealType = meal.mealType
+                        showEditDialog = true
                     },
                     onDeleteClick = {
                         mealToDelete = meal
