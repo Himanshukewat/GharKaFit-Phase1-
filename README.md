@@ -147,17 +147,42 @@ Unlike many traditional calorie-tracking apps, HearthDiet focuses on real Indian
 ---
 ## 📸 Screenshots
 
-<p align="center">
-  <img src="screenshots/login.png" width="220"/>
-  <img src="screenshots/dashboard.png" width="220"/>
-  <img src="screenshots/ai-meal-analyzer.png" width="220"/>
-</p>
+<div align="center">
 
-<p align="center">
-  <img src="screenshots/meal-history.png" width="220"/>
-  <img src="screenshots/progress.png" width="220"/>
-  <img src="screenshots/profile.png" width="220"/>
-</p>
+<table>
+<tr>
+<td align="center">
+<b>Login</b><br><br>
+<img src="screenshots/login.png" width="180">
+</td>
+
+<td align="center">
+<b>Dashboard</b><br><br>
+<img src="screenshots/dashboard.png" width="180">
+</td>
+
+<td align="center">
+<b>AI Meal Analyzer</b><br><br>
+<img src="screenshots/ai-meal-analyzer.png" width="180">
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<b>Progress</b><br><br>
+<img src="screenshots/progress.png" width="180">
+</td>
+
+<td align="center">
+<b>Profile</b><br><br>
+<img src="screenshots/profile.png" width="180">
+</td>
+
+</tr>
+
+</table>
+
+</div>
 
 ---
 
