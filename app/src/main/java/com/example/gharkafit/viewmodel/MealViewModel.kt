@@ -39,7 +39,7 @@ class MealViewModel(
         viewModelScope.launch {
 
             // Room Save
-            mealRepository.insertMeal(meal)
+//            mealRepository.insertMeal(meal)
 
             // Firestore Save
             mealFirestoreRepository.saveMeal(
