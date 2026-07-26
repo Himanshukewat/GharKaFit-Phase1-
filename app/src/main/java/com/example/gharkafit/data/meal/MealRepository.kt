@@ -63,7 +63,13 @@ class MealRepository(
         mealDao.insertMeals(meals)
     }
 
+    suspend fun getLast7DaysMealCount(): Int {
+        return mealDao.getLast7DaysMealCount()
+    }
+
     suspend fun updateMeal(meal: MealLogEntity) {
         mealDao.updateMeal(meal)
     }
+
+
 }

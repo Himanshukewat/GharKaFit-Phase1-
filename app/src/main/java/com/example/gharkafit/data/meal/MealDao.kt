@@ -42,6 +42,18 @@ interface MealDao {
     @Query("DELETE FROM meal_logs")
     suspend fun deleteAllMeals()
 
+    @Query("""
+    SELECT COUNT(*)
+    FROM meal_logs
+    WHERE date IN (
+        SELECT DISTINCT date
+        FROM meal_logs
+        ORDER BY date DESC
+        LIMIT 7
+    )
+""")
+    suspend fun getLast7DaysMealCount(): Int
+
     @Update
     suspend fun updateMeal(meal: MealLogEntity)
 }

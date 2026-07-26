@@ -20,6 +20,7 @@ import com.example.gharkafit.core.DateUtils
 import com.example.gharkafit.core.MealInsightGenerator
 import com.example.gharkafit.data.remote.FirestoreRepository
 import com.example.gharkafit.data.remote.MealFirestoreRepository
+import com.example.gharkafit.model.WeeklyStats
 
 
 //rename this vm is used for dashboard , mealInsight , progress
@@ -208,16 +209,16 @@ class MealViewModel(
     }
 
     fun getMealCount(onResult: (Int) -> Unit) {
-        viewModelScope.launch {
-            onResult(
-                mealRepository.getAllMeals().size
-            )
-        }
+            viewModelScope.launch {
+                onResult(
+                    mealRepository.getLast7DaysMealCount()
+                )
+            }
     }
 
     fun getWeeklyStats(
         user: UserEntity,
-        onResult: (Pair<Int, Int>) -> Unit
+        onResult: (WeeklyStats) -> Unit
     ) {
         viewModelScope.launch {
             var proteinDays = 0
@@ -226,16 +227,20 @@ class MealViewModel(
             for (date in dates) {
                 val calories = mealRepository.getCaloriesByDate(date)
                 val protein = mealRepository.getProteinByDate(date)
-                if (calories <= user.targetCalories) {
+                val minCalories = (user.targetCalories * 0.9).toInt()
+                val maxCalories = (user.targetCalories * 1.1).toInt()
+                if (calories in minCalories..maxCalories) {
                     calorieDays++
                 }
                 if (protein >= user.targetProtein) {
                     proteinDays++
                 }
             }
-            onResult(Pair(
-                    proteinDays,
-                    calorieDays
+            onResult(
+                WeeklyStats(
+                    proteinDays = proteinDays,
+                    calorieDays = calorieDays,
+                    trackedDays = dates.size
                 )
             )
         }

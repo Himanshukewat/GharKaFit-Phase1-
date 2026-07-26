@@ -64,6 +64,8 @@ fun ProgressScreen(
     var user by remember { mutableStateOf<UserEntity?>(null) }
     var proteinTargetDays by remember { mutableStateOf(0) }
     var calorieTargetDays by remember { mutableStateOf(0) }
+    var trackedDays by remember { mutableStateOf(0) }
+    var weeklyInsight by remember { mutableStateOf("") }
 
     var totalMeals by remember { mutableStateOf(0) }
     val remainingWeight = kotlin.math.abs(
@@ -76,8 +78,37 @@ fun ProgressScreen(
             user = userData
             if (userData != null) {
                 viewModel.getWeeklyStats(userData) { stats ->
-                    proteinTargetDays = stats.first
-                    calorieTargetDays = stats.second
+
+                    val proteinDays = stats.proteinDays
+                    val calorieDays = stats.calorieDays
+
+                    proteinTargetDays = proteinDays
+                    calorieTargetDays = calorieDays
+                    trackedDays = stats.trackedDays
+
+                    weeklyInsight = when {
+
+                        trackedDays == 0 ->
+                            "Start logging your meals today to unlock personalized weekly insights. 🍽️"
+
+                        trackedDays == 1 ->
+                            "You've logged meals for 1 day this week. Keep going—consistency starts with small steps! 🌱"
+
+                        trackedDays < 7 ->
+                            "You've tracked $trackedDays days this week. Keep logging daily to unlock your complete weekly report. 💪"
+
+                        proteinDays >= 6 && calorieDays >= 6 ->
+                            "Excellent work! You stayed consistent with both your calorie and protein goals this week. 🔥"
+
+                        proteinDays >= 5 ->
+                            "Great job! Your protein intake has been consistent this week. Keep it up! 💪"
+
+                        calorieDays >= 5 ->
+                            "Nice work! You stayed close to your calorie goal on most days this week. 🎯"
+
+                        else ->
+                            "You're making progress. Keep logging your meals daily to build healthier habits. 🌟"
+                    }
                 }
             }
         }
@@ -171,20 +202,20 @@ fun ProgressScreen(
                     )
                 }
             }
-            item { ProgressInfoCard(title = "Weekly Insight",
+            item { ProgressInfoCard(title = "This Week's Insight 📊",
                 containerColor = MaterialTheme.colorScheme.surfaceVariant
             ) {
-                    Text(
-                        text = "Weekly insights will appear after you consistently log meals for 7 days.",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                Text(
+                    text = weeklyInsight,
+                    style = MaterialTheme.typography.bodyLarge
+                )
                 }
             }
             item { ProgressInfoCard(title = "Keep Going 💪",
                 containerColor = MaterialTheme.colorScheme.primaryContainer
             ) {
                     Text(
-                        text = "Small daily habits create long-term results.",
+                        text = "Every healthy choice brings you one step closer to your goal.",
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
