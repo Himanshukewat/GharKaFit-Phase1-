@@ -1,6 +1,18 @@
-# GharKaFit – AI Powered Indian Nutrition & Fitness Tracker 🏠💪
-GharKaFit is an Android app designed to help users track their nutrition using simple, real-life Indian meals instead of complex diet plans.
-> AI-powered Android nutrition tracker built using Jetpack Compose, MVVM, Room Database, and Google Gemini AI.
+![Kotlin](https://img.shields.io/badge/Kotlin-2.0-purple)
+
+![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-UI-blue)
+
+![Firebase](https://img.shields.io/badge/Firebase-Firestore-orange)
+
+![Gemini AI](https://img.shields.io/badge/Google-Gemini-blue)
+
+# HearthDiet 🥗
+
+### AI-Powered Nutrition & Meal Tracking Android App
+
+HearthDiet is a modern Android application that helps users track meals, monitor nutrition, and receive personalized health insights. It combines Room Database, Firebase Cloud Firestore, and Google Gemini AI to deliver an offline-first, AI-assisted nutrition tracking experience.
+
+> **An AI-powered Android application for personalized nutrition tracking, meal analysis, and healthy lifestyle management.**
 
 ## 🚀 Features
 
@@ -8,6 +20,13 @@ GharKaFit is an Android app designed to help users track their nutrition using s
   - Analyze meals written in Hindi, English, or Hinglish
   - Detect multiple food items automatically
   - Estimate calories, protein, carbs, and fat
+ 
+- ☁️ Cloud Sync
+  - Firebase Authentication
+  - Firestore Backup & Restore
+  - Secure Firestore Security Rules
+  - Multi-device synchronization using Firebase
+  - Offline-first architecture using Room Database
 
 - 📊 Health Analysis
   - BMI Calculation
@@ -43,8 +62,9 @@ GharKaFit is an Android app designed to help users track their nutrition using s
 
 - AI-powered natural language meal analysis
 - Supports Indian meals and Hinglish input
-- Personalized nutrition calculations
-- Offline-first using Room Database
+- Offline-first architecture using Room Database
+- Cloud synchronization using Firebase Firestore
+- Multi-device data synchronization
 - Clean MVVM Architecture
 
 ---
@@ -55,23 +75,39 @@ GharKaFit is an Android app designed to help users track their nutrition using s
 - Material 3
 - MVVM Architecture
 - Room Database
-- Repository Pattern
-- Navigation3
+- Firebase Authentication
+- Cloud Firestore
+- Google Gemini AI
 - Kotlin Coroutines
-- Google Gemini AI API
+- Repository Pattern
+- Jetpack Navigation
+- Android Studio
+- Git & GitHub
 
 ---
 
 ## 🏗 Architecture
 
-- MVVM Architecture
-- Repository Pattern
-- Room Database
-- State-driven UI with Jetpack Compose
-- Reusable UI Components
-- Clean Separation of Concerns
+```text
+Jetpack Compose UI
+        │
+        ▼
+    ViewModel
+        │
+        ▼
+    Repository
+   ┌────┴────┐
+   ▼         ▼
+ Room    Firestore
+              │
+              ▼
+ Firebase Authentication
 
----
+        Google Gemini AI
+              ▲
+              │
+      AI Meal Analysis
+```
 
 ## 📐 Calculation Logic
 
@@ -87,36 +123,52 @@ GharKaFit is an Android app designed to help users track their nutrition using s
 
 ## 💡 Unique Idea
 
-Unlike typical diet apps, GharKaFit focuses on:
-
-> “Building your body using ghar ka khana”
-
-Users can log real Indian meals instead of complex food databases.
+Unlike many traditional calorie-tracking apps, HearthDiet focuses on real Indian home-cooked meals instead of complex food databases.
+> Healthy eating starts with home-cooked meals.
 
 ---
+## 🚀 Future Improvements
 
-## 🚀 Version
-
-### ✅ Version 1 Completed
-
-Currently working on Version 2:
-
-- Authentication
-- Backend Integration
-- Cloud Sync
-
+- Water Intake Tracking
+- Barcode Scanner
+- Push Notifications
+- Nutrition Charts & Analytics
+- Wear OS Support
 ---
 
 ## ⚙️ Installation
 1. Clone the repository
 2. Open the project in Android Studio
 3. Add your Gemini API Key in `local.properties`
-4. Build & Run
+4. Configure Firebase using your own `google-services.json`
+5. Build & Run
+
+
+---
+## 📸 Screenshots
+
+| Login | Dashboard | AI Meal Analyzer |
+|-------|-----------|------------------|
+| Image | Image | Image |
+
+| Progress | Profile | Meal History |
+|----------|---------|--------------|
+| Image | Image | Image |
+
+---
 
 ## 👨‍💻 Author
 
-Himanshu
-B.Tech Student | Aspiring Software Engineer
+**Himanshu Kewat**
+
+- B.Tech Computer Science
+- Aspiring Android & Software Engineer
+
+GitHub: [Himanshukewat](https://github.com/Himanshukewat)
+
+LinkedIn: [Himanshu Kewat](https://www.linkedin.com/in/kewathimanshu/)
+
+
 
 ---
 
