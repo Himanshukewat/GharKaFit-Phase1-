@@ -44,7 +44,7 @@ fun WelcomeScreen(
             )
 
             Text(
-                text = "GharKaFit 💪",
+                text = "HearthDiet 💪",
                 style = MaterialTheme.typography.headlineLarge
             )
 
