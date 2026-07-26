@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -224,7 +226,7 @@ fun MealInsightScreen(
                         }
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    MealTypeSelector (
+                    MealTypeSelector(
                         selectedMealType = editedMealType,
                         onMealTypeChange = {
                             editedMealType = it
@@ -235,9 +237,50 @@ fun MealInsightScreen(
             confirmButton = {
                 Button(
                     onClick = {
-                    }
+                        mealToEdit?.let { oldMeal ->
+                            isLoading = true
+                            viewModel.analyzeMealWithAI(
+                                input = editedMealText,
+                                onResult = { result ->
+                                    val updatedMeal = oldMeal.copy(
+                                        foodName = result.foodName,
+                                        mealType = editedMealType,
+                                        quantity = result.quantity,
+                                        calories = result.calories,
+                                        protein = result.protein,
+                                        carbs = result.carbs,
+                                        fat = result.fat
+                                    )
+                                    viewModel.updateMeal(updatedMeal) {
+                                        viewModel.getMeals {
+                                            meals = it
+                                        }
+                                        refreshNutritionData()
+                                        isLoading = false
+                                        showEditDialog = false
+                                    }
+                                },
+                                onError = { error ->
+                                    isLoading = false
+                                    Toast.makeText(
+                                        context,
+                                        error,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            )
+                        }
+                    },
+                    enabled = !isLoading
                 ) {
-                    Text("Save")
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text("Save")
+                    }
                 }
             },
             dismissButton = {

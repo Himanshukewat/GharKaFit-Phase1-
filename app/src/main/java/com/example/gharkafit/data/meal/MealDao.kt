@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface MealDao {
@@ -40,4 +41,7 @@ interface MealDao {
 
     @Query("DELETE FROM meal_logs")
     suspend fun deleteAllMeals()
+
+    @Update
+    suspend fun updateMeal(meal: MealLogEntity)
 }

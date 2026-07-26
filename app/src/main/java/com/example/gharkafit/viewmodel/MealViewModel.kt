@@ -282,4 +282,28 @@ class MealViewModel(
             }
         )
     }
+
+    fun updateMeal(
+        meal: MealLogEntity,
+        onComplete: () -> Unit
+    ) {
+        Log.d("UPDATE_MEAL", "Called")
+
+        mealFirestoreRepository.updateMeal(
+            meal = meal,
+            onSuccess = {
+                Log.d("UPDATE_MEAL", "Firestore Success")
+
+                viewModelScope.launch {
+                    mealRepository.updateMeal(meal)
+                    Log.d("UPDATE_MEAL", "Room Success")
+
+                    onComplete()
+                }
+            },
+            onError = {
+                Log.e("UPDATE_MEAL", it)
+            }
+        )
+    }
 }

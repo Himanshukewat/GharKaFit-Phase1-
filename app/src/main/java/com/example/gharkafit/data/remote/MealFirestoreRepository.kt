@@ -94,4 +94,23 @@ class MealFirestoreRepository {
                 onError(it.message ?: "Failed")
             }
     }
+
+    fun updateMeal(
+        meal: MealLogEntity,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ){
+        firestore
+            .collection("users")
+            .document(meal.firebaseUid)
+            .collection("meals")
+            .document(meal.firestoreId)
+            .set(meal)
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener {
+                onError(it.message ?: "Failed to update meal")
+            }
+    }
 }

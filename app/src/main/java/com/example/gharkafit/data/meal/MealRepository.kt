@@ -62,4 +62,8 @@ class MealRepository(
         mealDao.deleteAllMeals()
         mealDao.insertMeals(meals)
     }
+
+    suspend fun updateMeal(meal: MealLogEntity) {
+        mealDao.updateMeal(meal)
+    }
 }
