@@ -35,7 +35,7 @@ fun AnalysisFoodCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "🤖 GharKaFit AI",
+                text = "🤖 HearthDiet AI",
                 style = MaterialTheme.typography.titleMedium
             )
 
