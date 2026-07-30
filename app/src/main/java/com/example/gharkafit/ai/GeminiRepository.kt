@@ -20,6 +20,12 @@ class GeminiRepository {
         )
         // gemini json format store
         val json = response.text ?: throw Exception("Empty response from Gemini")
-        return JsonParser.parse(json)
+        Log.d("GEMINI_JSON", json)
+        return try {
+            JsonParser.parse(json)
+        } catch (e: Exception) {
+            Log.e("GEMINI_PARSE", json)
+            throw e
+        }
     }
 }

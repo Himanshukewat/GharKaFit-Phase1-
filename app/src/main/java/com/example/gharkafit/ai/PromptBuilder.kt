@@ -19,13 +19,14 @@ object PromptBuilder {
         - Do NOT return source.
         
         Meal Analysis Rules:
-        - Detect every food item mentioned in the meal.
-        - Analyze each food item internally.
-        - Detect the quantity of each food item.
-        - Estimate calories, protein, carbs, and fat for each food item individually.
-        - Sum the nutrition values of all detected food items.
-        - Return ONLY the final combined nutrition.
-        - Never include the internal food breakdown in the JSON response.
+
+        - Detect every food item mentioned in the user's meal.
+        - Return every detected food item inside the "foods" array.
+        - Estimate nutrition separately for each food item.
+        - Do not merge different foods into one item.
+        - Preserve the quantity and unit for each individual food.
+        - Calculate the total nutrition by summing all food items.
+        - Return both the foods array and the summary object.
         
         Meal Detection Rules:
 
@@ -58,9 +59,19 @@ object PromptBuilder {
           quarter = 0.25
           one and half = 1.5
         - Use the mentioned quantity whenever available.
-        - If quantity is missing, assume quantity = 1.
+        - If quantity is not mentioned, estimate a realistic standard serving size.                               
         - Detect quantity separately for every food item.
         - If different food items have different quantities, calculate nutrition separately before combining.
+        
+        - CRITICAL:
+            Never combine quantities of different foods.
+            
+            Correct:
+            2 roti + 1 bowl dal
+            
+            Incorrect:
+            3 meal
+        - If the user explicitly mentions a quantity, always return that exact quantity.
 
         Example:
         2 chapati
@@ -75,8 +86,7 @@ object PromptBuilder {
         - Prefer Indian nutrition values whenever possible.
         - Otherwise use standard nutritional database estimates.
         - Unless specified otherwise, assume food is cooked and ready to eat.
-        - Estimate restaurant dishes using common Indian serving sizes.
-        - Never average nutrition across food items.
+        - If serving size is not explicitly mentioned, estimate using a typical Indian serving size.                - Never average nutrition across food items.
         - Always sum nutrition values.
         
         Unit Rules:
@@ -93,44 +103,139 @@ object PromptBuilder {
           Juice -> glass
           Tea -> cup
           Coffee -> cup
-        - If multiple food items have different units, return:
-          quantity = 1
-          unit = "meal"
+        - Every food item must have its own quantity and unit.
+
+            Examples:
+            
+            Roti → pieces
+            Dal → bowl
+            Milk → ml
+            Paneer → g
+            
+            Never replace the quantity with 1 when the user explicitly mentioned it.
         
         Food Name Rules:
-        - foodName must contain a clean normalized meal name.
-        - Do NOT include quantity in foodName.
-        - Examples:
-          Chapati and Dal
-          Rajma Rice
-          Paneer Butter Masala
-          Masala Dosa
-          Poha
-          Fruit Salad
+        
+        Each object inside "foods" must contain only ONE normalized food name.
+        
+        Correct:
+        
+        Roti
+        Dal
+        Milk
+        Paneer Butter Masala
+        
+        Incorrect:
+        
+        Roti and Dal
+        Dal Rice
+        2 Roti
+        
+        Food Ordering Rules:
+
+        - Return the foods array in the same order in which the user mentioned them.
+
+            Example:
+
+            User:
+            Milk, 2 roti and dal
+    
+            Response order:
+            Milk
+            Roti
+            Dal
           
+        Consistency Rules:
+
+        - The values inside summary must exactly equal the sum of all foods.
+            summary.calories = sum(food.calories)
+            summary.protein = sum(food.protein)
+            summary.carbs = sum(food.carbs)
+            summary.fat = sum(food.fat)
+        
         Output Validation Rules:
         Before returning the JSON:
         - Ensure all required fields are present.
         - Ensure calories are integers.
         - Ensure protein, carbs and fat are numeric values.
         - Ensure quantity is numeric.
+        - Calories must be rounded to the nearest whole number.
+        - Protein, carbs and fat should contain at most one decimal place.
         - Ensure unit is never empty.
         - Ensure the JSON is syntactically valid.
         
         Invalid Input Rules:
-        - If the input is not a food or beverage, return the default JSON.
+        - If the input is not related to food or beverages, return:
+            
+            {
+              "foods": [],
+              "summary": {
+                "calories": 0,
+                "protein": 0.0,
+                "carbs": 0.0,
+                "fat": 0.0
+              }
+            }
         
         Return this exact JSON format:
         
         {
-          "foodName": "",
-          "quantity": 0.0,
-          "unit": "",
-          "calories": 0,
-          "protein": 0.0,
-          "carbs": 0.0,
-          "fat": 0.0
+          "foods": [
+            {
+              "foodName": "",
+              "quantity": 0.0,
+              "unit": "",
+              "calories": 0,
+              "protein": 0.0,
+              "carbs": 0.0,
+              "fat": 0.0
+            }
+          ],
+          "summary": {
+            "calories": 0,
+            "protein": 0.0,
+            "carbs": 0.0,
+            "fat": 0.0
+          }
         }
+        
+        
+        Example
+
+        User:
+        2 roti and 1 bowl dal
+
+        Response:
+
+        {
+          "foods": [
+            {
+              "foodName": "Roti",
+              "quantity": 2,
+              "unit": "pieces",
+              "calories": 240,
+              "protein": 8,
+              "carbs": 40,
+              "fat": 4
+            },
+            {
+              "foodName": "Dal",
+              "quantity": 1,
+              "unit": "bowl",
+              "calories": 180,
+              "protein": 9,
+              "carbs": 28,
+              "fat": 3
+            }
+          ],
+          "summary": {
+            "calories": 420,
+            "protein": 17,
+            "carbs": 68,
+            "fat": 7
+          }
+        }
+        
         
         User Meal:
         $userMessage
