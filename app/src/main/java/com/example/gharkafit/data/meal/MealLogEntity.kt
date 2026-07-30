@@ -17,6 +17,9 @@ data class MealLogEntity(
     @ColumnInfo(name = "firebase_uid")
     val firebaseUid: String,
 
+    @ColumnInfo(name = "user_input")
+    val userInput: String,
+
     @ColumnInfo(name = "food_name")
     val foodName: String,
 

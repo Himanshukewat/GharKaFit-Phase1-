@@ -243,6 +243,7 @@ fun MealInsightScreen(
                                 input = editedMealText,
                                 onResult = { result ->
                                     val updatedMeal = oldMeal.copy(
+                                        userInput = editedMealText,
                                         foodName = result.foodName,
                                         mealType = editedMealType,
                                         quantity = result.quantity,
@@ -329,6 +330,7 @@ fun MealInsightScreen(
                                 Log.d("GEMINI", "Callback reached: $food")
                                 val meal = MealLogEntity(
                                     firebaseUid = authRepository.getUid(),
+                                    userInput = mealText,          // ✅ Original user message
                                     foodName = food.foodName,
                                     mealType = selectedMealType,
                                     quantity = food.quantity,
@@ -415,10 +417,10 @@ fun MealInsightScreen(
                 )
                 val insight = insightGenerator.generate(result)
                 UserMessageBubble(
-                    message = meal.foodName,
+                    message = meal.userInput,
                     onEditClick = {
                         mealToEdit = meal
-                        editedMealText = meal.foodName
+                        editedMealText = meal.userInput
                         editedMealType = meal.mealType
                         showEditDialog = true
                     },
