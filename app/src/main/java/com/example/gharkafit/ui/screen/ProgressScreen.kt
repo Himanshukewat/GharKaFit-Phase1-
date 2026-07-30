@@ -12,21 +12,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.gharkafit.ui.component.ProgressInfoCard
-import com.example.gharkafit.ui.component.ProgressStat
-import com.example.gharkafit.ui.theme.GharKaFitTheme
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-
 import com.example.gharkafit.data.MainDatabase
 import com.example.gharkafit.data.food.FoodRepository
 import com.example.gharkafit.data.meal.MealRepository
@@ -34,6 +29,8 @@ import com.example.gharkafit.data.remote.FirestoreRepository
 import com.example.gharkafit.data.remote.MealFirestoreRepository
 import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.data.user.UserRepository
+import com.example.gharkafit.ui.component.ProgressInfoCard
+import com.example.gharkafit.ui.component.ProgressStat
 import com.example.gharkafit.viewmodel.MealViewModel
 import com.example.gharkafit.viewmodel.MealViewModelFactory
 
@@ -135,8 +132,9 @@ fun ProgressScreen(
                 }
             )
         },
-        containerColor = MaterialTheme.colorScheme.background)
-        { paddingValues ->
+        containerColor = MaterialTheme.colorScheme.background
+    )
+    { paddingValues ->
         LazyColumn(
             modifier = modifier
                 .fillMaxSize()
@@ -145,7 +143,8 @@ fun ProgressScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                ProgressInfoCard(title = "Current Goal",
+                ProgressInfoCard(
+                    title = "Current Goal",
                     containerColor = MaterialTheme.colorScheme.primaryContainer
                 ) {
                     Text(
@@ -166,26 +165,33 @@ fun ProgressScreen(
                 }
             }
 
-            item { ProgressInfoCard(title = "Weight Progress") {
-                Text(
-                    text = "Current Weight: ${String.format("%.1f", user?.weightKg ?: 0.0)} kg",
-                    style = MaterialTheme.typography.bodyLarge
-                )
+            item {
+                ProgressInfoCard(title = "Weight Progress") {
+                    Text(
+                        text = "Current Weight: ${String.format("%.1f", user?.weightKg ?: 0.0)} kg",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
 
-                Text(
-                    text = "Goal Weight: ${String.format("%.1f", user?.targetWeight ?: 0.0)} kg",
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                    Text(
+                        text = "Goal Weight: ${
+                            String.format(
+                                "%.1f",
+                                user?.targetWeight ?: 0.0
+                            )
+                        } kg",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
 
-                Text(
-                    text = "Progress: ${String.format("%.1f", remainingWeight)} kg remaining",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                    Text(
+                        text = "Progress: ${String.format("%.1f", remainingWeight)} kg remaining",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
 
-            item { ProgressInfoCard(title = "This Week") {
+            item {
+                ProgressInfoCard(title = "This Week") {
                     ProgressStat(
                         label = "Meals Logged",
                         value = "$totalMeals"
@@ -202,18 +208,22 @@ fun ProgressScreen(
                     )
                 }
             }
-            item { ProgressInfoCard(title = "This Week's Insight 📊",
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            ) {
-                Text(
-                    text = weeklyInsight,
-                    style = MaterialTheme.typography.bodyLarge
-                )
+            item {
+                ProgressInfoCard(
+                    title = "This Week's Insight 📊",
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ) {
+                    Text(
+                        text = weeklyInsight,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
                 }
             }
-            item { ProgressInfoCard(title = "Keep Going 💪",
-                containerColor = MaterialTheme.colorScheme.primaryContainer
-            ) {
+            item {
+                ProgressInfoCard(
+                    title = "Keep Going 💪",
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                ) {
                     Text(
                         text = "Every healthy choice brings you one step closer to your goal.",
                         style = MaterialTheme.typography.bodyLarge
