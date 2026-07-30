@@ -41,7 +41,6 @@ import com.example.gharkafit.data.remote.FirestoreRepository
 import com.example.gharkafit.data.remote.MealFirestoreRepository
 import com.example.gharkafit.data.user.UserEntity
 import com.example.gharkafit.data.user.UserRepository
-import com.example.gharkafit.model.MealAnalysisResult
 import com.example.gharkafit.ui.component.AnalysisFoodCard
 import com.example.gharkafit.ui.component.DailySummaryCard
 import com.example.gharkafit.ui.component.MealInputBar
@@ -51,6 +50,12 @@ import com.example.gharkafit.ui.component.SummaryCard
 import com.example.gharkafit.ui.component.UserMessageBubble
 import com.example.gharkafit.viewmodel.MealViewModel
 import com.example.gharkafit.viewmodel.MealViewModelFactory
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import com.example.gharkafit.ai.MealAnalysisResult
+import com.example.gharkafit.ai.FoodItemAI
+import com.example.gharkafit.ai.NutritionSummary
+import kotlinx.serialization.decodeFromString
 
 
 data class MealAnalysis(
@@ -243,13 +248,15 @@ fun MealInsightScreen(
                                 input = editedMealText,
                                 onResult = { result ->
                                     val updatedMeal = oldMeal.copy(
-                                        foodName = result.foodName,
+                                        userInput = editedMealText,
+                                        foodName = result.foods.joinToString(" + ") { it.foodName },
+                                        foodsJson = Json.encodeToString(result.foods),
                                         mealType = editedMealType,
-                                        quantity = result.quantity,
-                                        calories = result.calories,
-                                        protein = result.protein,
-                                        carbs = result.carbs,
-                                        fat = result.fat
+                                        quantity = 1.0,
+                                        calories = result.summary.calories,
+                                        protein = result.summary.protein,
+                                        carbs = result.summary.carbs,
+                                        fat = result.summary.fat
                                     )
                                     viewModel.updateMeal(updatedMeal) {
                                         viewModel.getMeals {
@@ -325,18 +332,20 @@ fun MealInsightScreen(
                         isLoading = true
                         viewModel.analyzeMealWithAI(
                             input = mealText,
-                            onResult = { food ->
-                                Log.d("GEMINI", "Callback reached: $food")
+                            onResult = { result ->
+                                Log.d("GEMINI", "Callback reached: $result")
                                 val meal = MealLogEntity(
                                     firebaseUid = authRepository.getUid(),
-                                    foodName = food.foodName,
+                                    userInput = mealText,
+                                    foodName = result.foods.joinToString(" + ") { it.foodName },
+                                    foodsJson = Json.encodeToString(result.foods),
                                     mealType = selectedMealType,
-                                    quantity = food.quantity,
+                                    quantity = 1.0,
                                     date = DateUtils.today(),
-                                    calories = food.calories,
-                                    protein = food.protein,
-                                    carbs = food.carbs,
-                                    fat = food.fat
+                                    calories = result.summary.calories,
+                                    protein = result.summary.protein,
+                                    carbs = result.summary.carbs,
+                                    fat = result.summary.fat
                                 )
                                 viewModel.saveMeal(meal) {
                                     viewModel.getMeals {
@@ -404,21 +413,28 @@ fun MealInsightScreen(
 
                 val meal = meals[index]
 
+                val foods =
+                    if (meal.foodsJson.isNotBlank()) {
+                        Json.decodeFromString<List<FoodItemAI>>(meal.foodsJson)
+                    } else {
+                        emptyList()
+                    }
+
                 val result = MealAnalysisResult(
-                    foodName = meal.foodName,
-                    quantity = meal.quantity,
-                    unit = "Serving",
-                    calories = meal.calories,
-                    protein = meal.protein,
-                    carbs = meal.carbs,
-                    fat = meal.fat
+                    foods = foods,
+                    summary = NutritionSummary(
+                        calories = meal.calories,
+                        protein = meal.protein,
+                        carbs = meal.carbs,
+                        fat = meal.fat
+                    )
                 )
                 val insight = insightGenerator.generate(result)
                 UserMessageBubble(
-                    message = meal.foodName,
+                    message = meal.userInput,
                     onEditClick = {
                         mealToEdit = meal
-                        editedMealText = meal.foodName
+                        editedMealText = meal.userInput
                         editedMealType = meal.mealType
                         showEditDialog = true
                     },

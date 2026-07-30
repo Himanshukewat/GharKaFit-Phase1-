@@ -51,7 +51,12 @@ class MealFirestoreRepository {
                         mealId = 0,
                         firestoreId = document.id,
                         firebaseUid = document.getString("firebaseUid") ?: "",
+
+                        userInput = document.getString("userInput")
+                            ?: document.getString("foodName")
+                            ?: "",
                         foodName = document.getString("foodName") ?: "",
+                        foodsJson = document.getString("foodsJson") ?: "",
                         mealType = document.getString("mealType") ?: "",
                         quantity = document.getDouble("quantity") ?: 0.0,
                         date = document.getString("date") ?: "",
