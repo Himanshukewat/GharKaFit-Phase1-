@@ -56,6 +56,7 @@ class MealFirestoreRepository {
                             ?: document.getString("foodName")
                             ?: "",
                         foodName = document.getString("foodName") ?: "",
+                        foodsJson = document.getString("foodsJson") ?: "",
                         mealType = document.getString("mealType") ?: "",
                         quantity = document.getDouble("quantity") ?: 0.0,
                         date = document.getString("date") ?: "",

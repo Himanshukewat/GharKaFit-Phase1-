@@ -26,6 +26,9 @@ data class MealLogEntity(
     @ColumnInfo(name = "meal_type")
     val mealType: String,
 
+    @ColumnInfo(name = "foods_json")
+    val foodsJson: String,
+
     @ColumnInfo(name = "quantity")
     val quantity: Double,
 
