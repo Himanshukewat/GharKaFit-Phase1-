@@ -107,7 +107,11 @@ fun MainApp() {
                 rememberViewModelStoreNavEntryDecorator()
             ),
 
-            onBack = { backStack.removeLastOrNull() },
+            onBack = {
+                if (backStack.size > 1) {
+                    backStack.removeAt(backStack.lastIndex)
+                }
+            },
 
             entryProvider = { key ->
 
@@ -162,6 +166,7 @@ fun MainApp() {
                         PersonalizedPlanScreen(
                             user = key.user,
                             onStartTrackingClick = {
+                                backStack.clear()
                                 backStack.add(
                                     DashboardKey(user)
                                 )
@@ -298,6 +303,7 @@ fun MainApp() {
 
                             onSignupClick = {
                                 viewModel.signUp {
+                                    backStack.clear()
                                     backStack.add(OnboardingKey)
                                 }
                             },
